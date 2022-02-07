@@ -4,6 +4,7 @@ import {
 } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "./pantallas/Principal";
+import Qr from "./pantallas/Qr";
 const Tab = createBottomTabNavigator();
 import { FontAwesome } from "react-native-vector-icons";
 
@@ -35,7 +36,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Escanea"
-        component={Home}
+        component={Qr}
         options={{
           
           tabBarIcon: ({ size, color }) => (
