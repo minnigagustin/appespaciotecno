@@ -4,6 +4,7 @@ import {
 } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "./pantallas/Principal";
+import Perfil from "./pantallas/Perfil";
 const Tab = createBottomTabNavigator();
 import { FontAwesome } from "react-native-vector-icons";
 
@@ -48,7 +49,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Perfil"
-        component={Home}
+        component={Perfil}
         options={{
           
           tabBarIcon: ({ size, color }) => (
