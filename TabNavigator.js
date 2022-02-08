@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  Image
+  Image, View
 } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "./pantallas/Principal";
@@ -27,7 +27,7 @@ const TabNavigator = () => {
         options={{
           
           tabBarIcon: ({ size, color }) => (
-            <FontAwesome name={"home"} color={color} size={size} />
+            <FontAwesome name={"home"} color={'#90C641'} size={size} />
           ),
           headerTitle: (props) => <LogoTitle {...props} />,
           headerTitleAlign: "center",
@@ -39,8 +39,20 @@ const TabNavigator = () => {
         component={Qr}
         options={{
           
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome name={"qrcode"} color={color} size={size} />
+          tabBarIcon: ({ size, color }) => ( <View
+            style={{
+              position: 'absolute',
+              bottom: 10, // espacio en el tab
+              height: 58,
+              width: 58,
+              borderRadius: 58,
+              elevation: 3,
+              backgroundColor: '#ffff',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <FontAwesome name={"qrcode"} color={'#4D94C1'} size={43} />
+            </View>
           ),
           headerTitle: (props) => <LogoTitle {...props} />,
           headerTitleAlign: "center",
@@ -53,7 +65,7 @@ const TabNavigator = () => {
         options={{
           
           tabBarIcon: ({ size, color }) => (
-            <FontAwesome name={"user"} color={color} size={size} />
+            <FontAwesome name={"user"} color={'#90C641'} size={size} />
           ),
           headerTitle: (props) => <LogoTitle {...props} />,
           headerTitleAlign: "center",
