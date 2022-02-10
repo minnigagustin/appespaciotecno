@@ -7,6 +7,9 @@ import Home from "./pantallas/Principal";
 import Qr from "./pantallas/Qr";
 
 import Perfil from "./pantallas/Perfil";
+import MisCursos from "./pantallas/MisCursos";
+import Favoritos from "./pantallas/Favoritos";
+
 const Tab = createBottomTabNavigator();
 import { FontAwesome } from "react-native-vector-icons";
 
@@ -74,7 +77,36 @@ const TabNavigator = () => {
           
         }}
       />
+      <Tab.Screen
+        name="MisCursos"
+        component={MisCursos}
+        options={{
+          
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome name={"user"} color={'#90C641'} size={size} />
+          ),
+          headerTitle: (props) => <LogoTitle {...props} />,
+          headerTitleAlign: "center",
+          
+        }}
+      />
+      <Tab.Screen
+        name="Favoritos"
+        component={Favoritos}
+        options={{
+          
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome name={"user"} color={'#90C641'} size={size} />
+          ),
+          headerTitle: (props) => <LogoTitle {...props} />,
+          headerTitleAlign: "center",
+          
+        }}
+      />
     </Tab.Navigator>
+
+    
+    
   );
 };
 

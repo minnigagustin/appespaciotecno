@@ -3,9 +3,8 @@ import { View, Button, Text, Image, StyleSheet, TouchableOpacity, ScrollView } f
 import Feather from "react-native-vector-icons/Feather";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
-Feather.loadFont();
 
-export default function Perfil() {
+export default function Favoritos() {
   const lista = []
 
   const [date, setDate] = useState(new Date(1598051730000));

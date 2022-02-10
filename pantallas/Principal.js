@@ -11,7 +11,6 @@ import {
 import Curso from "../componentes/curso";
 import { FontAwesome } from "react-native-vector-icons";
 
-
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
