@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
+import React, {useState} from 'react';
+import { StyleSheet, Text, View, Dimensions, Modal, Pressable } from "react-native";
 // iconos
 import { FontAwesome } from "react-native-vector-icons";
 
@@ -7,6 +8,7 @@ const height = Dimensions.get("window").height;
 
 export default function curso(props) {
   return (
+
     <View style={styles.divpadre}>
       <View style={styles.div}>
         <FontAwesome
@@ -23,7 +25,7 @@ export default function curso(props) {
         />
         <View style={{ left: -15, marginBottom: 5 }}>
           <Text style={{ fontWeight: "bold", fontSize: 24 }}>
-            Hola, {props.nombre}
+            {props.nombre}
           </Text>
           <Text style={{ fontWeight: "500", fontSize: 20 }}>
             {props.subtitulo}
@@ -67,4 +69,45 @@ const styles = StyleSheet.create({
     bottom: -20,
     height: 30,
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  }
 });

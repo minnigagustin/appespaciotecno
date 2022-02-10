@@ -79,9 +79,9 @@ export default function Perfil() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Feather name="user" size={24} color={"#0000000"}/>
+                <Feather name="user" size={24} color={"#00000"}/>
                 <Text style={styles.title_perfil}>Perfil</Text>
-                <Feather name="user" size={24} color={"#0000000"}/>
+                <Feather name="user" size={24} color={"#00000"}/>
             </View>
 
             <View style={styles.profile_content}>
@@ -92,7 +92,7 @@ export default function Perfil() {
 
             <View> 
                 <TouchableOpacity style={styles.edit_icon}> 
-                  <Feather name="edit" size={24} color={"#000000"}/>
+                  <Feather name="edit" size={24} color={"#00000"}/>
                 </TouchableOpacity>
             </View>
 
