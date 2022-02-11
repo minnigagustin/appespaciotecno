@@ -1,12 +1,10 @@
 
 import { View, Button, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
-import Feather from "react-native-vector-icons/Feather";
+import { Feather, FontAwesome } from "react-native-vector-icons";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
-Feather.loadFont();
 
 export default function Perfil() {
-  const lista = []
 
   const [date, setDate] = useState(new Date(1598051730000));
 
@@ -76,14 +74,14 @@ export default function Perfil() {
   ];
 
   return (
-  
+
     <View style={styles.container}>
       <View style={styles.header}>
-        <Feather name="user" size={24} />
+        <FontAwesome name="user" size={24} />
         <Text style={styles.title_perfil}>Perfil</Text>
-        <Feather name="user" size={24} />
-      </View>
+        <FontAwesome name="user" size={24} />
 
+    </View>
       <View>
         <TouchableOpacity style={styles.edit_icon}>
           <Feather name="edit" size={24} />
@@ -101,7 +99,7 @@ export default function Perfil() {
                 <Image
                   source={perfil.avatar}
                   style={styles.profile_image} />
-             </View>
+              </View>
 
               <Text style={styles.text_label}> Nombre y Apellido</Text>
 
@@ -114,7 +112,7 @@ export default function Perfil() {
               <TouchableOpacity onPress={showDatepicker}><Text>Cumpleaños</Text>
 
               </TouchableOpacity><Text style={styles.input_text}>{perfil.cumpleanios}</Text>
-            
+
             </>
           ))}
         </View>
@@ -131,11 +129,11 @@ export default function Perfil() {
         />
       )}
 
-        <View>
-          <TouchableOpacity style={styles.button_mostrar_cursos} onPress={cambiarMensajeCursos}></TouchableOpacity>
-          <Button title="Favoritos"></Button>
-          <Button title="Mis Cursos"></Button>
-        </View>
+      <View>
+        <TouchableOpacity style={styles.button_mostrar_cursos} onPress={cambiarMensajeCursos}></TouchableOpacity>
+        <Button title="Favoritos"></Button>
+        <Button title="Mis Cursos"></Button>
+      </View>
 
     </View>
 
