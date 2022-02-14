@@ -9,6 +9,7 @@ import Qr from "./pantallas/Qr";
 import Perfil from "./pantallas/Perfil";
 import MisCursos from "./pantallas/MisCursos";
 import Favoritos from "./pantallas/Favoritos";
+import AvanceCursos from "./pantallas/AvanceCursos";
 
 const Tab = createBottomTabNavigator();
 import { FontAwesome } from "react-native-vector-icons";
@@ -103,7 +104,21 @@ const TabNavigator = () => {
           
         }}
       />
+       <Tab.Screen
+        name="AvanceCursos"
+        component={AvanceCursos}
+        options={{
+          
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome name={"user"} color={'#90C641'} size={size} />
+          ),
+          headerTitle: (props) => <LogoTitle {...props} />,
+          headerTitleAlign: "center",
+          
+        }}
+      />
     </Tab.Navigator>
+    
 
     
     

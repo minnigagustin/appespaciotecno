@@ -6,7 +6,7 @@ import {
 
 import {FontAwesome} from "react-native-vector-icons";
 
-export default function (props){
+export default function Eliminar(props){
 
     return (
 
