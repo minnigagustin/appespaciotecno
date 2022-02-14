@@ -3,7 +3,7 @@ import { Feather, FontAwesome } from "react-native-vector-icons";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
 
-export default function Perfil() {
+export default function Perfil({navigation}) {
 
   const [date, setDate] = useState(new Date(1598051730000));
 
@@ -48,29 +48,15 @@ export default function Perfil() {
   }
 
 
-  const perfilData = [
+  const perfilData = 
     {
       nombre: "test",
       apellido: "asdasd",
       documento: "34634",
       avatar: require('../assets/image1.png'),
       cumpleanios: "30/03/2001",
-    },
-    {
-      nombre: "test32",
-      apellido: "rthrthrth",
-      documento: "2351351",
-      avatar: require('../assets/image1.png'),
-      cumpleanios: "10/05/2003",
-    },
-    {
-      nombre: "yjryjryj",
-      apellido: "zzzez",
-      documento: "1111111",
-      avatar: require('../assets/image1.png'),
-      cumpleanios: "20/04/1992",
-    },
-  ];
+    }
+  ;
 
   return (
 
@@ -90,31 +76,32 @@ export default function Perfil() {
       <ScrollView>
         <View>
 
-          {perfilData.map((perfil) => (
-            <>
+
 
 
               <View style={styles.profile_content}>
                 <Image
-                  source={perfil.avatar}
+                  source={perfilData.avatar}
                   style={styles.profile_image} />
               </View>
 
               <Text style={styles.text_label}> Nombre y Apellido</Text>
 
-              <Text style={styles.input_text}>{perfil.nombre}</Text>
+              <Text style={styles.input_text}>{perfilData.nombre}</Text>
 
               <Text style={styles.text_label}> Documento</Text>
 
-              <Text style={styles.input_text}>{perfil.documento}</Text>
+              <Text style={styles.input_text}>{perfilData.documento}</Text>
 
               <TouchableOpacity onPress={showDatepicker}><Text>Cumpleaños</Text>
 
-              </TouchableOpacity><Text style={styles.input_text}>{perfil.cumpleanios}</Text>
-
-            </>
-          ))}
+              </TouchableOpacity><Text style={styles.input_text}>{perfilData.cumpleanios}</Text> 
         </View>
+        <View style={{paddingVertical: 5}}>
+        <TouchableOpacity style={styles.button_mostrar_cursos} onPress={cambiarMensajeCursos}><Text>{mensaje_cursos}</Text></TouchableOpacity>
+        <Button title="Favoritos" onPress={() => navigation.navigate('Mis Cursos')}></Button>
+        <Button title="Mis Cursos"></Button>
+      </View>
       </ScrollView>
 
       {show && (
@@ -128,11 +115,7 @@ export default function Perfil() {
         />
       )}
 
-      <View>
-        <TouchableOpacity style={styles.button_mostrar_cursos} onPress={cambiarMensajeCursos}></TouchableOpacity>
-        <Button title="Favoritos"></Button>
-        <Button title="Mis Cursos"></Button>
-      </View>
+     
 
     </View>
 
@@ -185,6 +168,7 @@ const styles = StyleSheet.create({
   },
   button_mostrar_cursos: {
     backgroundColor: "#90C641",
+    padding: 10,
     borderRadius: 12,
     alignItems: "center"
   },

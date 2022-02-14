@@ -13,6 +13,7 @@ import AvanceCursos from "./pantallas/AvanceCursos";
 
 const Tab = createBottomTabNavigator();
 import { FontAwesome } from "react-native-vector-icons";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 function LogoTitle() {
   return (
@@ -23,6 +24,19 @@ function LogoTitle() {
   );
 }
 
+const HomeStack = createNativeStackNavigator();
+
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator screenOptions={{
+      headerShown: false
+    }}>
+      <HomeStack.Screen name="Mi Perfil" component={Perfil} />
+      <HomeStack.Screen name="Mis Cursos" component={MisCursos} />
+      <HomeStack.Screen name="Mis Favoritos" component={MisCursos} />
+    </HomeStack.Navigator>
+  );
+}
 
 const TabNavigator = () => {
   return (
@@ -66,8 +80,8 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Perfil"
-        component={Perfil}
+        name="Perfils"
+        component={HomeStackScreen}
         options={{
           
           tabBarIcon: ({ size, color }) => (
@@ -78,32 +92,7 @@ const TabNavigator = () => {
           
         }}
       />
-      <Tab.Screen
-        name="MisCursos"
-        component={MisCursos}
-        options={{
-          
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome name={"user"} color={'#90C641'} size={size} />
-          ),
-          headerTitle: (props) => <LogoTitle {...props} />,
-          headerTitleAlign: "center",
-          
-        }}
-      />
-      <Tab.Screen
-        name="Favoritos"
-        component={Favoritos}
-        options={{
-          
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome name={"user"} color={'#90C641'} size={size} />
-          ),
-          headerTitle: (props) => <LogoTitle {...props} />,
-          headerTitleAlign: "center",
-          
-        }}
-      />
+    
        <Tab.Screen
         name="AvanceCursos"
         component={AvanceCursos}

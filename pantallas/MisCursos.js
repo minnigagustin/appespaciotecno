@@ -38,7 +38,7 @@ export default function MisCursos() {
 
       <View style={styles.header}>
         <FontAwesome name="book" size={24} />
-        <Text style={styles.title_perfil}>Perfil</Text>
+        <Text style={styles.title_perfil}>Mis Cursos</Text>
         <FontAwesome name="book" size={24} />
       </View>
 
