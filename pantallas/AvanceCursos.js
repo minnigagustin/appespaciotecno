@@ -1,21 +1,37 @@
 
-import { View, Button, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import React, { useState } from 'react';
-import {ModalSolicitarEliminarCurso} from "../componentes/ModalSolicitarEliminarCurso"
-import {ModalConfirmarEliminarCurso} from "../componentes/ModalConfirmarEliminarCurso"
+import {ModalConfirmarEliminarCurso} from "../componentes/ModalConfirmarEliminarCurso";
+import {ModalSolicitarEliminarCurso} from "../componentes/ModalSolicitarEliminarCurso";
+import { useNavigation } from '@react-navigation/native';
 
-export default function AvanceCursos(props) {
+export default function AvanceCursos() {
+
+    const navigation = useNavigation()
 
 
-const [eliminarModal, setEliminarModal] = useState(false)
+    const [eliminarState, setEliminarState] = useState(false)
 
-const setEliminarVisible = () => {
-    setEliminarModal(true)
-}
+    const [solicitarState, setSolicitarState] = useState(false)
+    
+    const setEliminarCurso = () => {
+        setEliminarState(true)
+        setSolicitarState(false)
 
-const restoreModal = () => {
-    setEliminarModal(false)
-}
+        console.log(eliminarState)
+    }
+
+    const setSolicitarEliminacion = () => {
+        setSolicitarState(true)
+    }
+
+    const restoreSolicitarModal = () => {
+        setSolicitarState(false)
+    }
+
+    const restoreEliminarModal = () => {
+        setEliminarState(false)
+    }
 
   const avanceData = 
     {
@@ -56,28 +72,32 @@ const restoreModal = () => {
 
             <View style={styles.container_buttons}>
 
-                <TouchableOpacity style={styles.desvincular_style} onPress={() => setEliminarVisible()}>
+                <TouchableOpacity style={styles.desvincular_style} onPress={() =>
+                     setSolicitarEliminacion()}>
                     <Text style={styles.desvincular_text}> X Desvincularme X </Text>
                 </TouchableOpacity>
 
-                <Text style={styles.text_volver}> Volver ... </Text>
+                <Text style={styles.text_volver }> Volver ... </Text>
                 
-                <TouchableOpacity style={styles.atras_style}>
+                <TouchableOpacity style={styles.atras_style} onPress={() => navigation.navigate("MisCursos")}>
                     <Text style={styles.atras_text}> Atras </Text>
                 </TouchableOpacity>
             </View>
 
             <View>
-                {eliminarModal && <ModalConfirmarEliminarCurso 
-                    state={eliminarModal}
-                    restore={restoreModal}/>}
+                {solicitarState && <ModalSolicitarEliminarCurso 
+                    state={solicitarState}
+                    restore={restoreSolicitarModal}
+                    eliminar={setEliminarCurso}/>}
+
+                {eliminarState && <ModalConfirmarEliminarCurso 
+                    state={eliminarState}
+                    restore={restoreEliminarModal}/>}
             </View>
 
         </ScrollView>
 
     </View>
-    
-
   )
 
 
@@ -98,8 +118,7 @@ const styles = StyleSheet.create({
     },
     image_style : {
         justifyContent:"center",
-        alignContent:"center",
-        textAlign:"center"
+        alignContent:"center"
     },
     container_image : {
         justifyContent:"center",

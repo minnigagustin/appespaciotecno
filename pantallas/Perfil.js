@@ -1,35 +1,96 @@
-import { View, Button, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
-import { Feather, FontAwesome } from "react-native-vector-icons";
-import DateTimePicker from '@react-native-community/datetimepicker';
-import React, { useState } from 'react';
+import {
+  View,
+  Button,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+} from "react-native";
+import { FontAwesome } from "react-native-vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import React, { useState } from "react";
+import dataCursos from "../data/data";
+import Curso from "../componentes/curso";
 
-export default function Perfil({navigation}) {
-
+export default function Perfil({ navigation }) {
   const [date, setDate] = useState(new Date(1598051730000));
 
-  const [mode, setMode] = useState('date');
+  const [mode, setMode] = useState("date");
 
   const [show, setShow] = useState(false);
 
-  const [dateInput, setDateInput] = useState(new Date())
+  const [dateInput, setDateInput] = useState(new Date());
 
-  const [textCumpleanios, setTextCumpleanios] = useState("")
+  const [textCumpleanios, setTextCumpleanios] = useState("");
 
-  const [ocultar_cursos_state, set_ocultar_cursos_state] = useState(false)
+  const [ocultar_cursos_state, set_ocultar_cursos_state] = useState(false);
 
-  const [mensaje_cursos, set_mensaje_cursos] = useState("Mostrar todos los cursos")
+  const [mensaje_cursos_state, set_mensaje_cursos_state] = useState(
+    "Mostrar todos los cursos"
+  );
+
+  const [favoritos, setFavoritos] = useState(false)
+
+  const misCursosData = [
+    {
+      nombre: "Python",
+      subtitulo: "de junior a senior",
+      fecha: "Del 27/01 al 30/03",
+    },
+    {
+      nombre: "React",
+      subtitulo: "Probando",
+      fecha: "Del 13/01 al 20/03 - Ultimos días",
+    },
+    {
+      nombre: "Go",
+      subtitulo: "de junior a senior",
+      fecha: "Del 03/04 al 24/05",
+    },
+    { nombre: "HTML", subtitulo: "de junior a senior" },
+    {
+      nombre: "React Native",
+      subtitulo: "Probando",
+      fecha: "Del 13/01 al 20/03 - Ultimos días",
+    },
+  ];
+
+  const favoritosData = [
+    {
+      nombre: "React Native",
+      subtitulo: "Probando",
+      fecha: "Del 13/01 al 20/03 - Ultimos días",
+    },
+    {
+      nombre: "Python",
+      subtitulo: "de junior a senior",
+      fecha: "Del 27/01 al 30/03",
+    },
+    {
+      nombre: "Go",
+      subtitulo: "de junior a senior",
+      fecha: "Del 03/04 al 24/05",
+    },
+  ];
 
   const onChange = (event, selectedDate) => {
     if (selectedDate != null) {
       const currentDate = selectedDate || date;
-      setShow(Platform.OS === 'ios');
+      setShow(Platform.OS === "ios");
       setDate(currentDate);
-      setDateInput(selectedDate)
-      setTextCumpleanios(dateInput.getDate() + "/" + dateInput.getMonth() + "/" + dateInput.getUTCFullYear())
-    }
-    else {
+      setDateInput(selectedDate);
+      setTextCumpleanios(
+        dateInput.getDate() +
+          "/" +
+          dateInput.getMonth() +
+          "/" +
+          dateInput.getUTCFullYear()
+      );
+    } else {
       setTextCumpleanios(" / / ");
-      setShow(false)
+      setShow(false);
     }
   };
 
@@ -39,70 +100,84 @@ export default function Perfil({navigation}) {
   };
 
   const showDatepicker = () => {
-    showMode('date');
+    showMode("date");
   };
 
   const cambiarMensajeCursos = () => {
-    set_ocultar_cursos_state(!ocultar_cursos_state)
-    ocultar_cursos_state ? set_mensaje_cursos("Ocultar todos los cursos") : set_mensaje_cursos("Mostrar todos los cursos")
+    set_ocultar_cursos_state(!ocultar_cursos_state);
+    setFavoritos(false)
+    ocultar_cursos_state
+      ? set_mensaje_cursos_state("Mostrar todos los cursos")
+      : set_mensaje_cursos_state("Ocultar todos los cursos");
+  };
+
+  const cambiarFavoritos = () => {
+    set_ocultar_cursos_state(false)
+    setFavoritos(!favoritos)
   }
 
+  const restore = (state) => {
+    if(state === "favoritos")
+      set_ocultar_cursos_state(false)
+    else
+      setFavoritos(false)
+  }
 
-  const perfilData = 
-    {
-      nombre: "test",
-      apellido: "asdasd",
-      documento: "34634",
-      avatar: require('../assets/image1.png'),
-      cumpleanios: "30/03/2001",
-    }
-  ;
-
+  const perfilData = {
+    nombre: "test",
+    apellido: "asdasd",
+    documento: "34634",
+    avatar: require("../assets/image1.png"),
+    cumpleanios: "30/03/2001",
+  };
   return (
-
     <View style={styles.container}>
       <View style={styles.header}>
         <FontAwesome name="user" size={24} />
         <Text style={styles.title_perfil}>Perfil</Text>
         <FontAwesome name="user" size={24} />
+      </View>
 
-    </View>
       <View>
-        <TouchableOpacity style={styles.edit_icon}>
-          <Feather name="edit" size={24} />
+        <View style={styles.profile_content}>
+          <Image source={perfilData.avatar} style={styles.profile_image} />
+        </View>
+
+        <View>
+          <TouchableOpacity style={styles.edit_icon}>
+            <FontAwesome name="edit" size={24} />
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.text_label}> Nombre y Apellido</Text>
+
+        <Text style={styles.input_text}>{perfilData.nombre}</Text>
+
+        <Text style={styles.text_label}> Documento</Text>
+
+        <Text style={styles.input_text}>{perfilData.documento}</Text>
+
+        <TouchableOpacity onPress={showDatepicker}>
+          <Text>Cumpleaños</Text>
+        </TouchableOpacity>
+        <Text style={styles.input_text}>{perfilData.cumpleanios}</Text>
+      </View>
+
+      <View style={styles.container_buttons}>
+        <TouchableOpacity
+          style={styles.button_mensaje_style}
+          onPress={cambiarMensajeCursos}
+        >
+          <Text style={styles.button_text}>{mensaje_cursos_state}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button_favoritos_style}
+          onPress={cambiarFavoritos}
+        >
+          <Text style={styles.button_text}>Favoritos</Text>
         </TouchableOpacity>
       </View>
-
-      <ScrollView>
-        <View>
-
-
-
-
-              <View style={styles.profile_content}>
-                <Image
-                  source={perfilData.avatar}
-                  style={styles.profile_image} />
-              </View>
-
-              <Text style={styles.text_label}> Nombre y Apellido</Text>
-
-              <Text style={styles.input_text}>{perfilData.nombre}</Text>
-
-              <Text style={styles.text_label}> Documento</Text>
-
-              <Text style={styles.input_text}>{perfilData.documento}</Text>
-
-              <TouchableOpacity onPress={showDatepicker}><Text>Cumpleaños</Text>
-
-              </TouchableOpacity><Text style={styles.input_text}>{perfilData.cumpleanios}</Text> 
-        </View>
-        <View style={{paddingVertical: 5}}>
-        <TouchableOpacity style={styles.button_mostrar_cursos} onPress={cambiarMensajeCursos}><Text>{mensaje_cursos}</Text></TouchableOpacity>
-        <Button title="Favoritos" onPress={() => navigation.navigate('Mis Cursos')}></Button>
-        <Button title="Mis Cursos"></Button>
-      </View>
-      </ScrollView>
 
       {show && (
         <DateTimePicker
@@ -115,13 +190,35 @@ export default function Perfil({navigation}) {
         />
       )}
 
-     
+      {ocultar_cursos_state &&(
+        <FlatList
+          data={misCursosData}
+          renderItem={({ item }) => (
+            <Curso
+              nombre={item.nombre}
+              subtitulo={item.subtitulo}
+              fecha={item.fecha}
+            />
+          )}
+          keyExtractor={(item) => item.nombre}
+        />
+      )}
 
+      {favoritos &&(
+        <FlatList
+          data={favoritosData}
+          renderItem={({ item }) => (
+            <Curso
+              nombre={item.nombre}
+              subtitulo={item.subtitulo}
+              fecha={item.fecha}
+            />
+          )}
+          keyExtractor={(item) => item.nombre}
+        />
+      )}
     </View>
-
-  )
-
-
+  );
 }
 const styles = StyleSheet.create({
   container: {
@@ -129,53 +226,74 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   header_warpper: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   title_perfil: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 24,
-    justifyContent: 'space-around',
+    justifyContent: "space-around",
     paddingLeft: 10,
-    paddingRight: 10
+    paddingRight: 10,
   },
   profile_content: {
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    marginVertical: 30
+    alignItems: "center",
+    justifyContent: "space-around",
+    marginTop: 30,
+    marginBottom: 10,
   },
   text_label: {
     fontSize: 15,
     lineHeight: 17.7,
-    fontStyle: "normal"
+    fontStyle: "normal",
   },
   input_text: {
     fontSize: 18,
     fontWeight: "bold",
     lineHeight: 24.51,
     fontStyle: "normal",
-    left: 60
+    left: 60,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   edit_icon: {
     alignItems: "flex-end",
-    paddingRight: 50
+    paddingRight: 50,
   },
-  button_mostrar_cursos: {
+  button_mensaje_style: {
     backgroundColor: "#90C641",
     padding: 10,
     borderRadius: 12,
-    alignItems: "center"
+    marginHorizontal: 30,
+    borderWidth: 1,
+    borderColor: "#e3f715",
+  },
+  button_favoritos_style: {
+    backgroundColor: "#90C641",
+    padding: 10,
+    borderRadius: 12,
+    marginHorizontal: 30,
+    right: 40,
+    borderWidth: 1,
+    borderColor: "#e3f715",
   },
   button_font: {
     fontFamily: "notoserif",
     fontSize: 16,
-    fontWeight: "bold"
-  }
-
+    fontWeight: "bold",
+  },
+  container_buttons: {
+    paddingVertical: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  button_text: {
+    fontSize: 16,
+    fontFamily: "Roboto",
+    textAlign: "center",
+    color: "black",
+  },
 });
