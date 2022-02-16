@@ -1,193 +1,200 @@
-
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
-import React, { useState } from 'react';
-import {ModalConfirmarEliminarCurso} from "../componentes/ModalConfirmarEliminarCurso";
-import {ModalSolicitarEliminarCurso} from "../componentes/ModalSolicitarEliminarCurso";
-import { useNavigation } from '@react-navigation/native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import React, { useState } from "react";
+import { ModalConfirmarEliminarCurso } from "../componentes/ModalConfirmarEliminarCurso";
+import { ModalSolicitarEliminarCurso } from "../componentes/ModalSolicitarEliminarCurso";
+import { useNavigation } from "@react-navigation/native";
 
 export default function AvanceCursos() {
+  const navigation = useNavigation();
 
-    const navigation = useNavigation()
+  const [eliminarState, setEliminarState] = useState(false);
 
+  const [solicitarState, setSolicitarState] = useState(false);
 
-    const [eliminarState, setEliminarState] = useState(false)
+  const setEliminarCurso = () => {
+    setEliminarState(true);
+    setSolicitarState(false);
 
-    const [solicitarState, setSolicitarState] = useState(false)
-    
-    const setEliminarCurso = () => {
-        setEliminarState(true)
-        setSolicitarState(false)
+    console.log(eliminarState);
+  };
 
-        console.log(eliminarState)
-    }
+  const setSolicitarEliminacion = () => {
+    setSolicitarState(true);
+  };
 
-    const setSolicitarEliminacion = () => {
-        setSolicitarState(true)
-    }
+  const restoreSolicitarModal = () => {
+    setSolicitarState(false);
+  };
 
-    const restoreSolicitarModal = () => {
-        setSolicitarState(false)
-    }
+  const restoreEliminarModal = () => {
+    setEliminarState(false);
+  };
 
-    const restoreEliminarModal = () => {
-        setEliminarState(false)
-    }
-
-  const avanceData = 
-    {
-      nombre: "React",
-      imagen: require('../assets/react.png'),
-      descripcion: "Lorem ipsum dolor sit amet consectetur adipiscing elit, ligula nulla nullam penatibus dictum. Nibh leo venenatis lacus mi quisque suscipit sed penatibus quam, gravida nunc montes at mollis convallis vivamus neque tellus imperdiet, sagittis vehicula dui ac nullam sem conubia lobortis.",
-      nro_clases: 5,
-      total_clases:10
-    };
+  const avanceData = {
+    nombre: "React",
+    imagen: require("../assets/react.png"),
+    descripcion:
+      "Lorem ipsum dolor sit amet consectetur adipiscing elit, ligula nulla nullam penatibus dictum. Nibh leo venenatis lacus mi quisque suscipit sed penatibus quam, gravida nunc montes at mollis convallis vivamus neque tellus imperdiet, sagittis vehicula dui ac nullam sem conubia lobortis.",
+    nro_clases: 5,
+    total_clases: 10,
+  };
 
   return (
-  
     <View style={styles.container}>
-
       <View>
         <Text style={styles.title_style}>{avanceData.nombre}</Text>
       </View>
 
       <View style={styles.container_image}>
-        <Image style={styles.image_style}source={avanceData.imagen}/>
+        <Image style={styles.image_style} source={avanceData.imagen} />
       </View>
 
       <ScrollView>
+        <View style={styles.container_descripcion}>
+          <Text style={styles.descripcion_title}>Descripción</Text>
+          <Text>{avanceData.descripcion}</Text>
+        </View>
 
-            <View style={styles.container_descripcion}>
-                <Text style={styles.descripcion_title}>Descripción</Text>
-                <Text >{avanceData.descripcion}</Text>
-            </View>
+        <View>
+          <Text style={styles.avisos_style}> Avisos del Curso</Text>
+        </View>
 
-            <View>
-                <Text style={styles.avisos_style}> Avisos del Curso</Text>
-            </View>
+        <View>
+          <Text style={styles.clases_style}>
+            {avanceData.nro_clases}/{avanceData.total_clases}
+          </Text>
+        </View>
 
-            <View>
-                <Text style={styles.clases_style}>{avanceData.nro_clases}/{avanceData.total_clases}</Text>
-            </View>
+        <View style={styles.container_buttons}>
+          <TouchableOpacity
+            style={styles.desvincular_style}
+            onPress={() => setSolicitarEliminacion()}
+          >
+            <Text style={styles.desvincular_text}> X Desvincularme X </Text>
+          </TouchableOpacity>
 
+          <Text style={styles.text_volver}> Volver ... </Text>
 
-            <View style={styles.container_buttons}>
+          <TouchableOpacity
+            style={styles.atras_style}
+            onPress={() => navigation.navigate("MisCursos")}
+          >
+            <Text style={styles.atras_text}> Atras </Text>
+          </TouchableOpacity>
+        </View>
 
-                <TouchableOpacity style={styles.desvincular_style} onPress={() =>
-                     setSolicitarEliminacion()}>
-                    <Text style={styles.desvincular_text}> X Desvincularme X </Text>
-                </TouchableOpacity>
+        <View>
+          {solicitarState && (
+            <ModalSolicitarEliminarCurso
+              state={solicitarState}
+              restore={restoreSolicitarModal}
+              eliminar={setEliminarCurso}
+            />
+          )}
 
-                <Text style={styles.text_volver }> Volver ... </Text>
-                
-                <TouchableOpacity style={styles.atras_style} onPress={() => navigation.navigate("MisCursos")}>
-                    <Text style={styles.atras_text}> Atras </Text>
-                </TouchableOpacity>
-            </View>
-
-            <View>
-                {solicitarState && <ModalSolicitarEliminarCurso 
-                    state={solicitarState}
-                    restore={restoreSolicitarModal}
-                    eliminar={setEliminarCurso}/>}
-
-                {eliminarState && <ModalConfirmarEliminarCurso 
-                    state={eliminarState}
-                    restore={restoreEliminarModal}/>}
-            </View>
-
-        </ScrollView>
-
+          {eliminarState && (
+            <ModalConfirmarEliminarCurso
+              state={eliminarState}
+              restore={restoreEliminarModal}
+            />
+          )}
+        </View>
+      </ScrollView>
     </View>
-  )
-
-
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "white"
-    },
-    title_style : {
-        alignItems:"flex-start",
-        textAlign:"left",
-        fontSize: 35,
-        fontWeight:"bold",
-        fontFamily:"Roboto",
-        marginTop:20
-    },
-    image_style : {
-        justifyContent:"center",
-        alignContent:"center"
-    },
-    container_image : {
-        justifyContent:"center",
-        alignItems:"center"
-    },
-    descripcion_title : {
-        fontSize:19,
-        fontFamily:"sans-serif-condensed",
-        fontWeight:"bold"
-    },
-    description_text : {
-        fontSize:15,
-        fontFamily:"notoserif",
-
-    },
-    container_descripcion : {
-        marginRight:25,
-        marginLeft:25,
-        marginTop:20
-    },
-    avisos_style : {
-        borderRadius:34,
-        backgroundColor:"#000000",
-        fontWeight:"bold",
-        fontSize : 24,
-        color:"white",
-        textAlign:"center",
-        marginTop:20
-    },
-    clases_style : {
-        borderRadius:34,
-        backgroundColor:"#90C641",
-        fontWeight:"bold",
-        fontSize : 24,
-        color:"black",
-        textAlign:"center",
-        marginTop:20
-    },
-    desvincular_style: {
-        borderRadius: 12,
-        backgroundColor:"#FA0000"
-      },
-    desvincular_text : {
-        color: "white",
-        fontSize: 28,
-        fontWeight: "bold",
-        width: 300,
-        textAlign: "center"
-    },  
-    atras_text : {
-        fontSize: 24,
-        fontWeight: "bold",
-        color: "black",
-        textAlign: "center"
-    },
-    atras_style : {
-        backgroundColor:"white",
-        marginTop:10
-    },
-    container_buttons : {
-        justifyContent:"center",
-        alignContent:"center",
-        fontSize:35,
-        marginTop:40,
-        alignItems: "center"
-    },
-    text_volver : {
-        fontSize: 16,
-        textAlign: "center",
-        marginTop: 10
-    }
-  });
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+  title_style: {
+    alignItems: "flex-start",
+    textAlign: "left",
+    fontSize: 35,
+    fontWeight: "bold",
+    fontFamily: "Roboto",
+    marginTop: 20,
+  },
+  image_style: {
+    justifyContent: "center",
+    alignContent: "center",
+  },
+  container_image: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  descripcion_title: {
+    fontSize: 19,
+    fontFamily: "sans-serif-condensed",
+    fontWeight: "bold",
+  },
+  description_text: {
+    fontSize: 15,
+    fontFamily: "notoserif",
+  },
+  container_descripcion: {
+    marginRight: 25,
+    marginLeft: 25,
+    marginTop: 20,
+  },
+  avisos_style: {
+    borderRadius: 34,
+    backgroundColor: "#000000",
+    fontWeight: "bold",
+    fontSize: 24,
+    color: "white",
+    textAlign: "center",
+    marginTop: 20,
+  },
+  clases_style: {
+    borderRadius: 34,
+    backgroundColor: "#90C641",
+    fontWeight: "bold",
+    fontSize: 24,
+    color: "black",
+    textAlign: "center",
+    marginTop: 20,
+  },
+  desvincular_style: {
+    borderRadius: 12,
+    backgroundColor: "#FA0000",
+  },
+  desvincular_text: {
+    color: "white",
+    fontSize: 28,
+    fontWeight: "bold",
+    width: 300,
+    textAlign: "center",
+  },
+  atras_text: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "black",
+    textAlign: "center",
+  },
+  atras_style: {
+    backgroundColor: "white",
+    marginTop: 10,
+  },
+  container_buttons: {
+    justifyContent: "center",
+    alignContent: "center",
+    fontSize: 35,
+    marginTop: 40,
+    alignItems: "center",
+  },
+  text_volver: {
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 10,
+  },
+});

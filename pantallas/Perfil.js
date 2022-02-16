@@ -11,10 +11,9 @@ import {
 import { FontAwesome } from "react-native-vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState } from "react";
-import dataCursos from "../data/data";
 import Curso from "../componentes/curso";
 
-export default function Perfil({ navigation }) {
+export default function Perfil({}) {
   const [date, setDate] = useState(new Date(1598051730000));
 
   const [mode, setMode] = useState("date");
@@ -31,7 +30,7 @@ export default function Perfil({ navigation }) {
     "Mostrar todos los cursos"
   );
 
-  const [favoritos, setFavoritos] = useState(false)
+  const [favoritos, setFavoritos] = useState(false);
 
   const misCursosData = [
     {
@@ -105,23 +104,21 @@ export default function Perfil({ navigation }) {
 
   const cambiarMensajeCursos = () => {
     set_ocultar_cursos_state(!ocultar_cursos_state);
-    setFavoritos(false)
+    setFavoritos(false);
     ocultar_cursos_state
       ? set_mensaje_cursos_state("Mostrar todos los cursos")
       : set_mensaje_cursos_state("Ocultar todos los cursos");
   };
 
   const cambiarFavoritos = () => {
-    set_ocultar_cursos_state(false)
-    setFavoritos(!favoritos)
-  }
+    set_ocultar_cursos_state(false);
+    setFavoritos(!favoritos);
+  };
 
   const restore = (state) => {
-    if(state === "favoritos")
-      set_ocultar_cursos_state(false)
-    else
-      setFavoritos(false)
-  }
+    if (state === "favoritos") set_ocultar_cursos_state(false);
+    else setFavoritos(false);
+  };
 
   const perfilData = {
     nombre: "test",
@@ -190,7 +187,7 @@ export default function Perfil({ navigation }) {
         />
       )}
 
-      {ocultar_cursos_state &&(
+      {ocultar_cursos_state && (
         <FlatList
           data={misCursosData}
           renderItem={({ item }) => (
@@ -204,7 +201,7 @@ export default function Perfil({ navigation }) {
         />
       )}
 
-      {favoritos &&(
+      {favoritos && (
         <FlatList
           data={favoritosData}
           renderItem={({ item }) => (
