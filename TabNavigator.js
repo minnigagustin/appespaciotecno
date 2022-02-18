@@ -38,6 +38,7 @@ function HomeStackScreen() {
       <HomeStack.Screen name="Mis Favoritos" component={MisCursos} />
       <HomeStack.Screen name="AvanceCursos" component={AvanceCursos} />
       <HomeStack.Screen name="Favoritos" component={Favoritos} />
+      <HomeStack.Screen name="EditarPerfil" component={EditarPerfil} />
     </HomeStack.Navigator>
   );
 }
@@ -107,6 +108,17 @@ const TabNavigator = () => {
       <Tab.Screen
         name="MisCursos"
         component={MisCursos}
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome name={"user"} color={"#90C641"} size={size} />
+          ),
+          headerTitle: (props) => <LogoTitle {...props} />,
+          headerTitleAlign: "center",
+        }}
+      />
+       <Tab.Screen
+        name="EditarPerfil"
+        component={EditarPerfil}
         options={{
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name={"user"} color={"#90C641"} size={size} />

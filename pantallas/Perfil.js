@@ -9,6 +9,7 @@ import {
   FlatList,
 } from "react-native";
 import { FontAwesome } from "react-native-vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState } from "react";
 import Curso from "../componentes/curso";
@@ -74,6 +75,8 @@ export default function Perfil({}) {
     },
   ];
 
+  const navigation = useNavigation();
+
   const onChange = (event, selectedDate) => {
     if (selectedDate != null) {
       const currentDate = selectedDate || date;
@@ -115,11 +118,6 @@ export default function Perfil({}) {
     setFavoritos(!favoritos);
   };
 
-  const restore = (state) => {
-    if (state === "favoritos") set_ocultar_cursos_state(false);
-    else setFavoritos(false);
-  };
-
   const perfilData = {
     nombre: "test",
     apellido: "asdasd",
@@ -141,7 +139,7 @@ export default function Perfil({}) {
         </View>
 
         <View>
-          <TouchableOpacity style={styles.edit_icon}>
+          <TouchableOpacity style={styles.edit_icon} onPress={() => {navigation.navigate("EditarPerfil")}}>
             <FontAwesome name="edit" size={24} />
           </TouchableOpacity>
         </View>
