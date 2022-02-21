@@ -119,9 +119,9 @@ export default function Perfil({}) {
   };
 
   const perfilData = {
-    nombre: "test",
-    apellido: "asdasd",
-    documento: "34634",
+    nombre: "Ricardo",
+    apellido: "Fort",
+    documento: "7777777",
     avatar: require("../assets/image1.png"),
     cumpleanios: "30/03/2001",
   };
@@ -139,7 +139,18 @@ export default function Perfil({}) {
         </View>
 
         <View>
-          <TouchableOpacity style={styles.edit_icon} onPress={() => {navigation.navigate("EditarPerfil")}}>
+          <TouchableOpacity
+            style={styles.edit_icon}
+            onPress={() => {
+              navigation.navigate("EditarPerfil", {
+                param_nombre: perfilData.nombre,
+                param_apellido: perfilData.apellido,
+                param_dni: perfilData.documento,
+                param_cumple: perfilData.cumpleanios,
+                param_avatar: perfilData.avatar
+              });
+            }}
+          >
             <FontAwesome name="edit" size={24} />
           </TouchableOpacity>
         </View>
