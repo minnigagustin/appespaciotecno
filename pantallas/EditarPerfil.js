@@ -11,6 +11,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { ModalCambiosConfirmados } from "../componentes/ModalCambiosConfirmados";
+import { ModalConfirmarCambios } from "../componentes/ModalConfirmarCambios";
 import { ScrollView } from "react-native-gesture-handler";
 
 export default function Perfil({ route }) {
@@ -52,20 +53,23 @@ export default function Perfil({ route }) {
   // State que se encarga de mostrar el modal de cambios guardados.
   //---------------------------------------------------
 
-  const [showCambiosModal, setShowCambiosModal] = useState(false);
+  const [showCambiosRealizadosModal, setShowCambiosRealizadosModal] =
+    useState(false);
+
+  const [showAConfirmarModal, setShowAConfirmarModal] = useState(false);
 
   //---------------------------------------------------
   // States encargados de actualizar la info del perfil.
   // Por defecto, vienen cargados desde los parámetros del perfil
   //---------------------------------------------------
 
-  const [stateNombre, setStateNombre] = useState(JSON.stringify(param_nombre));
+  const [stateNombre, setStateNombre] = useState(JSON.stringify(param_nombre).replace(/['"]+/g, '').trim());
 
   const [stateApellido, setStateApellido] = useState(
-    JSON.stringify(param_apellido)
+    JSON.stringify(param_apellido).replace(/['"]+/g, '').trim()
   );
 
-  const [stateDni, setStateDni] = useState(JSON.stringify(param_dni));
+  const [stateDni, setStateDni] = useState(JSON.stringify(param_dni).replace(/['"]+/g, '').trim());
 
   const [stateCumpleanios, setStateCumpleanios] = useState(param_cumple);
 
@@ -76,11 +80,11 @@ export default function Perfil({ route }) {
   //---------------------------------------------------
 
   const perfilModificado = {
-    nuevo_nombre: "",
-    nuevo_apellido: "",
-    nuevo_dni: "",
-    nuevo_avatar: "",
-    nuevo_cumple: "",
+    nuevo_nombre: stateNombre,
+    nuevo_apellido: stateApellido,
+    nuevo_dni: stateDni,
+    nuevo_avatar: stateAvatar,
+    nuevo_cumple: stateCumpleanios,
   };
 
   //---------------------------------------------------
@@ -92,15 +96,13 @@ export default function Perfil({ route }) {
       const currentDate = selectedDate || date;
       setShow(Platform.OS === "ios");
       setDate(currentDate);
-      setDateInput(selectedDate);
       setTextCumpleanios(
-        dateInput.getDate() +
+        selectedDate.getDate() +
           "/" +
-          dateInput.getMonth() +
+          selectedDate.getMonth() +
           "/" +
-          dateInput.getUTCFullYear()
+          selectedDate.getUTCFullYear()
       );
-      actualizarCumple(textCumpleanios)
     } else {
       setTextCumpleanios(" / / ");
       setShow(false);
@@ -116,23 +118,25 @@ export default function Perfil({ route }) {
     showMode("date");
   };
 
-  const setTextInput = () => {
-    showMode();
+  const guardarCambios = () => {
+    setStateNombre(perfilModificado.nuevo_nombre)
+    setStateApellido(perfilModificado.nuevo_apellido)
+    setStateAvatar(perfilModificado.nuevo_avatar)
+    setStateDni(perfilModificado.nuevo_dni)
+    setStateCumpleanios(perfilModificado.nuevo_cumple)
+    setShowAConfirmarModal(true)
   };
 
-  const guardarCambios = () => {
-    if (perfilModificado.nuevo_nombre != "")
-      setStateNombre(perfilModificado.nuevo_nombre);
-    if (perfilModificado.nuevo_apellido != "")
-      setStateApellido(perfilModificado.nuevo_apellido);
-    if (perfilModificado.nuevo_dni != "")
-      setStateDni(perfilModificado.nuevo_dni);
-    if (perfilModificado.nuevo_cumple != "")
-      setStateCumpleanios(perfilModificado.nuevo_cumple);
+  const checkCambios = () => {
+    if (
+      (perfilModificado.nuevo_nombre !== stateNombre)
+    )
+      setShowAConfirmarModal(true)
   };
 
   const restoreCambiosModal = () => {
-    setShowCambiosModal(false);
+    setShowCambiosRealizadosModal(false);
+    setShowAConfirmarModal(false);
   };
 
   const actualizarNombre = (text) => {
@@ -148,8 +152,8 @@ export default function Perfil({ route }) {
   };
 
   const actualizarCumple = (text) => {
-    console.log("Entre")
-    perfilModificado.nuevo_cumple = text;
+    perfilModificado.nuevo_cumple =
+      text.getDate() + "/" + text.getMonth() + "/" + text.getUTCFullYear();
   };
 
   return (
@@ -220,9 +224,8 @@ export default function Perfil({ route }) {
             placeholderTextColor="#777"
             style={styles.data_input}
             multiline={false}
-            onChange={onChange
-            }
             onPressIn={showMode}
+            onChange={actualizarCumple(date)}
             value={textCumpleanios}
           ></TextInput>
         </View>
@@ -247,6 +250,7 @@ export default function Perfil({ route }) {
           </TouchableOpacity>
         </View>
       </ScrollView>
+
       {show && (
         <DateTimePicker
           testID="dateTimePicker"
@@ -257,9 +261,17 @@ export default function Perfil({ route }) {
           onChange={onChange}
         />
       )}
-      {showCambiosModal && (
+
+      {showAConfirmarModal && (
+        <ModalConfirmarCambios
+          state={showAConfirmarModal}
+          restore={restoreCambiosModal}
+        />
+      )}
+
+      {showCambiosRealizadosModal && (
         <ModalCambiosConfirmados
-          state={showCambiosModal}
+          state={showCambiosRealizadosModal}
           restore={restoreCambiosModal}
         />
       )}
@@ -320,6 +332,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    marginVertical: 50,
   },
   cancelar_style: {
     borderRadius: 12,

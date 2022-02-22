@@ -84,7 +84,7 @@ export default function AvanceCursos() {
 
           <TouchableOpacity
             style={styles.atras_style}
-            onPress={() => navigation.navigate("MisCursos")}
+            onPress={() => navigation.goBack()}
           >
             <Text style={styles.atras_text}> Atras </Text>
           </TouchableOpacity>

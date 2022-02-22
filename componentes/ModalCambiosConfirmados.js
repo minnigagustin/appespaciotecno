@@ -22,10 +22,13 @@ export const ModalCambiosConfirmados = (props) => {
           </Text>
           <TouchableOpacity
             style={styles.aceptar_style}
-            onPress={props.restore}
+            onPress={() => {
+              props.restore;
+              navigation.goBack();
+            }}
             onRequestClose={() => {
-                this.visibleModal(false), navigation.navigate("Perfils");
-              }}
+              this.visibleModal(false);
+            }}
           >
             <Text style={styles.button_text}> Aceptar </Text>
           </TouchableOpacity>
