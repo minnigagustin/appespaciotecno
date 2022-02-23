@@ -5,18 +5,17 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  Button,
 } from "react-native";
 import { FontAwesome } from "react-native-vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { ModalCambiosConfirmados } from "../componentes/ModalCambiosConfirmados";
 import { ModalConfirmarCambios } from "../componentes/ModalConfirmarCambios";
 import { ScrollView } from "react-native-gesture-handler";
+import * as ImagePicker from 'expo-image-picker';
 
 export default function Perfil({ route }) {
-  const [date, setDate] = useState(new Date(1598051730000));
-
   //---------------------------------------------------
   // Propiedades del perfil que se recibe por parámetro.
   //---------------------------------------------------
@@ -63,17 +62,21 @@ export default function Perfil({ route }) {
   // Por defecto, vienen cargados desde los parámetros del perfil
   //---------------------------------------------------
 
-  const [stateNombre, setStateNombre] = useState(JSON.stringify(param_nombre).replace(/['"]+/g, '').trim());
-
-  const [stateApellido, setStateApellido] = useState(
-    JSON.stringify(param_apellido).replace(/['"]+/g, '').trim()
+  const [stateNombre, setStateNombre] = useState(
+    JSON.stringify(param_nombre).replace(/['"]+/g, "").trim()
   );
 
-  const [stateDni, setStateDni] = useState(JSON.stringify(param_dni).replace(/['"]+/g, '').trim());
+  const [stateApellido, setStateApellido] = useState(
+    JSON.stringify(param_apellido).replace(/['"]+/g, "").trim()
+  );
 
-  const [stateCumpleanios, setStateCumpleanios] = useState(param_cumple);
+  const [stateDni, setStateDni] = useState(
+    JSON.stringify(param_dni).replace(/['"]+/g, "").trim()
+  );
 
-  const [stateAvatar, setStateAvatar] = useState(param_avatar);
+  const userCumpleanios = param_cumple;
+
+  const [stateAvatar, setStateAvatar] = useState('https://www.filo.news/__export/1645470524516/sites/claro/img/2022/02/21/ricardo_portada_1.jpg_1359985867.jpg');
 
   //---------------------------------------------------
   // Nuevo perfil con las modificacioes realizadas
@@ -84,54 +87,31 @@ export default function Perfil({ route }) {
     nuevo_apellido: stateApellido,
     nuevo_dni: stateDni,
     nuevo_avatar: stateAvatar,
-    nuevo_cumple: stateCumpleanios,
   };
 
   //---------------------------------------------------
   // Función que actualiza la fecha de cumpleaños
-  //---------------------------------------------------
+  //--------------------------------------------------
 
-  const onChange = (event, selectedDate) => {
-    if (selectedDate != null) {
-      const currentDate = selectedDate || date;
-      setShow(Platform.OS === "ios");
-      setDate(currentDate);
-      setTextCumpleanios(
-        selectedDate.getDate() +
-          "/" +
-          selectedDate.getMonth() +
-          "/" +
-          selectedDate.getUTCFullYear()
-      );
-    } else {
-      setTextCumpleanios(" / / ");
-      setShow(false);
-    }
-  };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode("date");
+  const guardarPerfil = () => {
+    setStateNombre(perfilModificado.nuevo_nombre);
+    setStateApellido(perfilModificado.nuevo_apellido);
+    setStateAvatar(perfilModificado.nuevo_avatar);
+    setStateDni(perfilModificado.nuevo_dni);
+    setStateAvatar(perfilModificado.nuevo_avatar)
   };
 
   const guardarCambios = () => {
-    setStateNombre(perfilModificado.nuevo_nombre)
-    setStateApellido(perfilModificado.nuevo_apellido)
-    setStateAvatar(perfilModificado.nuevo_avatar)
-    setStateDni(perfilModificado.nuevo_dni)
-    setStateCumpleanios(perfilModificado.nuevo_cumple)
-    setShowAConfirmarModal(true)
+    checkCambios();
   };
 
   const checkCambios = () => {
     if (
-      (perfilModificado.nuevo_nombre !== stateNombre)
+      perfilModificado.nuevo_nombre !== stateNombre ||
+      perfilModificado.nuevo_apellido !== stateApellido ||
+      perfilModificado.nuevo_dni !== stateDni
     )
-      setShowAConfirmarModal(true)
+      setShowAConfirmarModal(true);
   };
 
   const restoreCambiosModal = () => {
@@ -151,9 +131,22 @@ export default function Perfil({ route }) {
     perfilModificado.nuevo_dni = text;
   };
 
-  const actualizarCumple = (text) => {
-    perfilModificado.nuevo_cumple =
-      text.getDate() + "/" + text.getMonth() + "/" + text.getUTCFullYear();
+  const [image, setImage] = useState(null);
+
+  const actualizarAvatar = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+      setStateAvatar(image);
+      //setStateAvatar(result.uri)
+    }
   };
 
   return (
@@ -166,7 +159,9 @@ export default function Perfil({ route }) {
         </View>
         <View style={styles.container_header}>
           <View style={styles.header_info_container}>
-            <Image source={stateAvatar} />
+            <TouchableOpacity onPress={actualizarAvatar}>
+              <Image source={{ uri: stateAvatar }} style={{width: 150, height: 150, borderRadius: 400/ 2}} />
+            </TouchableOpacity>
           </View>
           <View>
             <Text style={styles.info_header}>
@@ -177,7 +172,7 @@ export default function Perfil({ route }) {
               <FontAwesome name="vcard" size={20} /> {stateDni}
             </Text>
             <Text style={styles.info_header}>
-              <FontAwesome name="birthday-cake" size={20} /> {stateCumpleanios}
+              <FontAwesome name="birthday-cake" size={20} /> {userCumpleanios}
             </Text>
           </View>
         </View>
@@ -217,17 +212,6 @@ export default function Perfil({ route }) {
             multiline={false}
             onChangeText={(text_dni) => actualizarDni(text_dni)}
           ></TextInput>
-
-          <TextInput
-            name="text_cumple"
-            placeholder={"Cumpleaños"}
-            placeholderTextColor="#777"
-            style={styles.data_input}
-            multiline={false}
-            onPressIn={showMode}
-            onChange={actualizarCumple(date)}
-            value={textCumpleanios}
-          ></TextInput>
         </View>
 
         <View style={styles.buttons_container_in_row}>
@@ -251,21 +235,11 @@ export default function Perfil({ route }) {
         </View>
       </ScrollView>
 
-      {show && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          mode={mode}
-          is24Hour={true}
-          display="default"
-          onChange={onChange}
-        />
-      )}
-
       {showAConfirmarModal && (
         <ModalConfirmarCambios
           state={showAConfirmarModal}
           restore={restoreCambiosModal}
+          init={guardarPerfil}
         />
       )}
 

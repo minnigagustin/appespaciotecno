@@ -88,7 +88,7 @@ export default function Perfil({}) {
           "/" +
           dateInput.getMonth() +
           "/" +
-          dateInput.getUTCFullYear()
+          dateInput.getFullYear()
       );
     } else {
       setTextCumpleanios(" / / ");

@@ -10,13 +10,13 @@ export const ModalConfirmarCambios = (props) => {
   const [showConfirmadosModal, setShowConfirmadosModal] = useState(false);
 
   const setConfirmados = () => {
+    props.init();
     setShowConfirmadosModal(true);
-    
   };
 
   const restoreModal = () => {
     setShowConfirmadosModal(false);
-    props.restore()
+    props.restore();
   };
 
   return (
@@ -49,9 +49,9 @@ export const ModalConfirmarCambios = (props) => {
 
             <TouchableOpacity
               style={styles.aceptar_style}
-              onPress={ () => {
-                setConfirmados()}
-              }
+              onPress={() => {
+                setConfirmados(props);
+              }}
             >
               <Text style={styles.button_text}> Aceptar </Text>
             </TouchableOpacity>

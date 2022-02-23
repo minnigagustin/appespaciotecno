@@ -116,17 +116,6 @@ const TabNavigator = () => {
           headerTitleAlign: "center",
         }}
       />
-       <Tab.Screen
-        name="EditarPerfil"
-        component={EditarPerfil}
-        options={{
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome name={"user"} color={"#90C641"} size={size} />
-          ),
-          headerTitle: (props) => <LogoTitle {...props} />,
-          headerTitleAlign: "center",
-        }}
-      />
     </Tab.Navigator>
   );
 };
