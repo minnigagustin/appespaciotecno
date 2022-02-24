@@ -11,6 +11,7 @@ import MisCursos from "./pantallas/MisCursos";
 import Favoritos from "./pantallas/Favoritos";
 import AvanceCursos from "./pantallas/AvanceCursos";
 import EditarPerfil from "./pantallas/EditarPerfil";
+import Login from "./pantallas/Login";
 import { FontAwesome } from "react-native-vector-icons";
 
 const Tab = createBottomTabNavigator();
@@ -39,6 +40,7 @@ function HomeStackScreen() {
       <HomeStack.Screen name="AvanceCursos" component={AvanceCursos} />
       <HomeStack.Screen name="Favoritos" component={Favoritos} />
       <HomeStack.Screen name="EditarPerfil" component={EditarPerfil} />
+      <HomeStack.Screen name="Login" component={Login} />
     </HomeStack.Navigator>
   );
 }
@@ -108,6 +110,17 @@ const TabNavigator = () => {
       <Tab.Screen
         name="MisCursos"
         component={MisCursos}
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome name={"user"} color={"#90C641"} size={size} />
+          ),
+          headerTitle: (props) => <LogoTitle {...props} />,
+          headerTitleAlign: "center",
+        }}
+      />
+      <Tab.Screen
+        name="Login"
+        component={Login}
         options={{
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name={"user"} color={"#90C641"} size={size} />
