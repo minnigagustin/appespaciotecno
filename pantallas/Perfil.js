@@ -9,12 +9,12 @@ import {
   FlatList,
 } from "react-native";
 import { FontAwesome } from "react-native-vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState } from "react";
-import dataCursos from "../data/data";
 import Curso from "../componentes/curso";
 
-export default function Perfil({ navigation }) {
+export default function Perfil({}) {
   const [date, setDate] = useState(new Date(1598051730000));
 
   const [mode, setMode] = useState("date");
@@ -31,7 +31,7 @@ export default function Perfil({ navigation }) {
     "Mostrar todos los cursos"
   );
 
-  const [favoritos, setFavoritos] = useState(false)
+  const [favoritos, setFavoritos] = useState(false);
 
   const misCursosData = [
     {
@@ -75,6 +75,8 @@ export default function Perfil({ navigation }) {
     },
   ];
 
+  const navigation = useNavigation();
+
   const onChange = (event, selectedDate) => {
     if (selectedDate != null) {
       const currentDate = selectedDate || date;
@@ -86,7 +88,7 @@ export default function Perfil({ navigation }) {
           "/" +
           dateInput.getMonth() +
           "/" +
-          dateInput.getUTCFullYear()
+          dateInput.getFullYear()
       );
     } else {
       setTextCumpleanios(" / / ");
@@ -105,28 +107,21 @@ export default function Perfil({ navigation }) {
 
   const cambiarMensajeCursos = () => {
     set_ocultar_cursos_state(!ocultar_cursos_state);
-    setFavoritos(false)
+    setFavoritos(false);
     ocultar_cursos_state
       ? set_mensaje_cursos_state("Mostrar todos los cursos")
       : set_mensaje_cursos_state("Ocultar todos los cursos");
   };
 
   const cambiarFavoritos = () => {
-    set_ocultar_cursos_state(false)
-    setFavoritos(!favoritos)
-  }
-
-  const restore = (state) => {
-    if(state === "favoritos")
-      set_ocultar_cursos_state(false)
-    else
-      setFavoritos(false)
-  }
+    set_ocultar_cursos_state(false);
+    setFavoritos(!favoritos);
+  };
 
   const perfilData = {
-    nombre: "test",
-    apellido: "asdasd",
-    documento: "34634",
+    nombre: "Ricardo",
+    apellido: "Fort",
+    documento: "7777777",
     avatar: require("../assets/image1.png"),
     cumpleanios: "30/03/2001",
   };
@@ -144,7 +139,18 @@ export default function Perfil({ navigation }) {
         </View>
 
         <View>
-          <TouchableOpacity style={styles.edit_icon}>
+          <TouchableOpacity
+            style={styles.edit_icon}
+            onPress={() => {
+              navigation.navigate("EditarPerfil", {
+                param_nombre: perfilData.nombre,
+                param_apellido: perfilData.apellido,
+                param_dni: perfilData.documento,
+                param_cumple: perfilData.cumpleanios,
+                param_avatar: perfilData.avatar
+              });
+            }}
+          >
             <FontAwesome name="edit" size={24} />
           </TouchableOpacity>
         </View>
@@ -190,7 +196,7 @@ export default function Perfil({ navigation }) {
         />
       )}
 
-      {ocultar_cursos_state &&(
+      {ocultar_cursos_state && (
         <FlatList
           data={misCursosData}
           renderItem={({ item }) => (
@@ -204,7 +210,7 @@ export default function Perfil({ navigation }) {
         />
       )}
 
-      {favoritos &&(
+      {favoritos && (
         <FlatList
           data={favoritosData}
           renderItem={({ item }) => (

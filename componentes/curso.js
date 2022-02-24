@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { StyleSheet, Text, View, Dimensions, Modal, Pressable } from "react-native";
+import React from 'react';
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from "react-native";
 // iconos
 import { FontAwesome } from "react-native-vector-icons";
 
@@ -109,5 +109,15 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center"
+  },
+  inscribir_button: {
+    backgroundColor:"#90C641",
+    borderRadius:5
+  },
+  container: {
+    alignItems:"flex-end",
+    fontSize: 20,
+    fontFamily: "Roboto",
+    left:30
   }
 });
