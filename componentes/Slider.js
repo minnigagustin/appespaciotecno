@@ -2,24 +2,25 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet, StatusBar} from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
+import {AntDesign} from 'react-native-vector-icons';
 const data = [
   {
     title: 'Title 1',
-    text: 'Description.\nSay something cool',
+    text: 'Desarrollar habilidades blandas y cognitivas generando en los chicos el interés por crear proyectos en ciencias, arte y tecnología, con impacto social, fomentando la curiosidad, la indagación y el emprendedurismo como motores del proceso de aprendizaje.',
     image: require('../assets/descubrir.jpg'),
-    bg: '#59b2ab',
+    bg: '#FFFFFF',
   },
   {
     title: 'Title 2',
     text: 'Other cool stuff',
-    image: require('../assets/descubrir.jpg'),
-    bg: '#febe29',
+    image: require('../assets/capacitar.jpg'),
+    bg: '#FFFFFF',
   },
   {
-    title: 'Rocket guy',
+    title: '¡Bienvenidos!',
     text: "I'm already out of descriptions\n\nLorem ipsum bla bla bla",
-    image: require('../assets/descubrir.jpg'),
-    bg: '#22bcb5',
+    image: require('../assets/emprender.jpg'),
+    bg: '#FFFFFF',
   },
 ];
 
@@ -36,22 +37,66 @@ const styles = StyleSheet.create({
     height: 320,
     resizeMode:"contain",
     borderRadius: 300 / 20,
-    marginTop:-50
   },
   text: {
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: 'black',
     textAlign: 'center',
-    fontSize:30
+    fontSize:16
   },
   title: {
     fontSize: 32,
-    color: 'white',
+    color: 'black',
     textAlign: 'center',
     marginTop:-150
+  },
+  buttonCircle: {
+    width: 40,
+    height: 40,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
 export default class App extends React.Component {
+
+  _renderSkipButton = () => {
+    return (
+      <View style={styles.buttonCircle}>
+        <AntDesign
+          name="closecircle"
+          color={'#a4b858'}
+          size={34}
+        />
+      </View>
+    );
+  };
+
+  _renderNextButton = () => {
+    return (
+      <View style={styles.buttonCircle}>
+        <AntDesign
+          name="pluscircle"
+          color={'#a4b858'}
+          size={34}
+        />
+      </View>
+    );
+  };
+
+  _renderDoneButton = () => {
+    return (
+      <View style={styles.buttonCircle}>
+        <AntDesign
+          name="checkcircle"
+          color={'#a4b858'}
+          size={34}
+        />
+      </View>
+    );
+  };
+
   _renderItem = ({item}) => {
     return (
       <View
@@ -78,8 +123,12 @@ export default class App extends React.Component {
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
           data={data}
-          nextLabel={"Siguiente"}
-          doneLabel={"Hecho"}
+          renderNextButton={this._renderNextButton}
+          renderDoneButton={this._renderDoneButton}
+          showSkipButton
+          renderSkipButton={this._renderSkipButton}
+          dotStyle={{backgroundColor: '#509bb4'}}
+          activeDotStyle={{backgroundColor: '#a4b858'}}
         />
       </View>
     );

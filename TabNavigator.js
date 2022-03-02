@@ -12,6 +12,8 @@ import Favoritos from "./pantallas/Favoritos";
 import AvanceCursos from "./pantallas/AvanceCursos";
 import EditarPerfil from "./pantallas/EditarPerfil";
 import Login from "./pantallas/Login";
+import Categorias from "./pantallas/Categorias";
+import Marcas from "./pantallas/Marcas";
 import PantallaSlides from "./componentes/Slider";
 import { FontAwesome } from "react-native-vector-icons";
 
@@ -47,18 +49,37 @@ function HomeStackScreen() {
   );
 }
 
+const InicioStack = createNativeStackNavigator();
+
+function InicioStackScreen() {
+  return (
+    <InicioStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <InicioStack.Screen name="Mi Perfil" component={Home} />
+      <InicioStack.Screen name="Mis Cursos" component={MisCursos} />
+      <InicioStack.Screen name="Categorias" component={Categorias} />
+      <InicioStack.Screen name="Marcas" component={Marcas} />
+    </InicioStack.Navigator>
+  );
+}
+
 const TabNavigator = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
         name="Cursos"
-        component={Home}
+        component={InicioStackScreen}
+        
         options={{
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name={"home"} color={"#90C641"} size={size} />
           ),
           headerTitle: (props) => <LogoTitle {...props} />,
           headerTitleAlign: "center",
+          headerShown: false
         }}
       />
       <Tab.Screen
@@ -87,7 +108,7 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Perfils"
+        name="Perfil"
         component={HomeStackScreen}
         options={{
           tabBarIcon: ({ size, color }) => (
@@ -98,39 +119,7 @@ const TabNavigator = () => {
         }}
       />
 
-      <Tab.Screen
-        name="AvanceCursos"
-        component={AvanceCursos}
-        options={{
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome name={"user"} color={"#90C641"} size={size} />
-          ),
-          headerTitle: (props) => <LogoTitle {...props} />,
-          headerTitleAlign: "center",
-        }}
-      />
-      <Tab.Screen
-        name="MisCursos"
-        component={MisCursos}
-        options={{
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome name={"user"} color={"#90C641"} size={size} />
-          ),
-          headerTitle: (props) => <LogoTitle {...props} />,
-          headerTitleAlign: "center",
-        }}
-      />
-      <Tab.Screen
-        name="PantallaSlide"
-        component={PantallaSlides}
-        options={{
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome name={"user"} color={"#90C641"} size={size} />
-          ),
-          headerTitle: (props) => <LogoTitle {...props} />,
-          headerTitleAlign: "center",
-        }}
-      />
+      
     </Tab.Navigator>
   );
 };
