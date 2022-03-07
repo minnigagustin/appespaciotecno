@@ -3,6 +3,9 @@ import {
   Text,
   Image,
   StyleSheet,
+  Dimensions,
+  KeyboardAvoidingView,
+  ImageBackground,
   TouchableOpacity,
   TextInput,
   Button,
@@ -14,15 +17,24 @@ import { ModalCambiosConfirmados } from "../componentes/ModalCambiosConfirmados"
 import { ModalConfirmarCambios } from "../componentes/ModalConfirmarCambios";
 import { ScrollView } from "react-native-gesture-handler";
 
+
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
+
 export default function Login({ route }) {
   return (
+    <ImageBackground
+                source={require('../assets/fondo_login.jpg')}
+                style={{width:"100%",height:"100%"}}
+            >
     <View style={styles.container}>
       <Image
         style={styles.imagen_style}
-        source={require("../assets/espaciotecno.jpg")}
+        resizeMode="contain"
+        source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
       />
 
-      <View style={styles.logo_container}>
+      {/* <View style={styles.logo_container}>
         <Image
           style={styles.logo_style}
           source={require("../assets/descubrir.jpg")}>
@@ -37,43 +49,55 @@ export default function Login({ route }) {
           style={styles.logo_style}
           source={require("../assets/capacitar.jpg")}>
         </Image>
-      </View>
+      </View> */}
 
       <TextInput
         style={styles.input_style}
-        placeholder={"Ingrese un usuario"}
+        textAlign={'center'}
+        placeholderTextColor="#000" 
+        placeholder={"Usuario (DNI)"}
       ></TextInput>
 
       <TextInput
         style={styles.input_style}
-        placeholder={"Ingrese su contraseña"}
+        textAlign={'center'}
+        placeholderTextColor="#000" 
+        placeholder={"Contraseña"}
       ></TextInput>
 
-      <TouchableOpacity style={styles.ingresar_style}>
-        <Text style={styles.ingresar_text}> Ingresar </Text>
+<TouchableOpacity style={styles.ingresar_style}>
+        <Text style={styles.ingresar_text}>INGRESAR</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.crear_style}>
-        <Text style={styles.crear_text}> Crear usuario </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity>
-        <Text style={styles.recuperar_text}> Recuperar Contraseña </Text>
+      <TouchableOpacity style={{color: 'white', marginTop: 4}}>
+        <Text style={styles.recuperar_text}>¿Olvido tu contraseña?</Text>
       </TouchableOpacity>
     </View>
+    
+    <View style={{
+    bottom: 41}}>
+
+
+      <TouchableOpacity style={{color: 'white'}}>
+        <Text style={styles.recuperar_text}>¿No tienes un usuario? <Text style={{fontWeight: 'bold'}}>Registrate</Text></Text>
+      </TouchableOpacity>
+</View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    marginTop:10,
+    alignItems: 'center'
   },
   imagen_style: {
     alignSelf: "center",
-    marginVertical: 10,
-    width: 200,
-    height: 200,
+    marginTop:90,
+    marginBottom:80,
+    width: 150,
+    height: 150,
   },
   logo_container: {
     flexDirection: "row",
@@ -92,22 +116,30 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     fontSize: 20,
     marginBottom: 20,
-    borderWidth: 3,
-    borderRadius: 300 / 40,
+    borderRadius: 30,
     borderColor: "#90C641",
-    paddingHorizontal: 10,
+    width: width/1.25,
+    padding: 10,
     backgroundColor: "white"
   },
   ingresar_style: {
-    borderRadius: 300 / 40,
+    borderRadius: 30,
     borderColor: "black",
-    backgroundColor: "#90C641",
+    paddingVertical: 6,
+    paddingHorizontal:48,
+    backgroundColor: 'rgba(0, 0, 0, 0.15)',
     alignSelf: "center",
-    marginTop: 10,
-    marginBottom: 9,
+  },
+  registrarse_style: {
+    borderRadius: 30,
+    borderColor: "black",
+    paddingVertical: 6,
+    paddingHorizontal:48,
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    alignSelf: "center"
   },
   ingresar_text: {
-    fontSize: 25,
+    fontSize: 13,
     color: "white",
     marginVertical: 7,
     marginHorizontal: 7,
@@ -128,8 +160,8 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
   },
   recuperar_text: {
-    color: "#a8a7a7",
-    fontSize: 15,
+    color: 'white',
+    fontSize: 19,
     textAlign: "center",
     fontFamily: "Roboto",
     fontWeight: "bold",
@@ -141,10 +173,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 7,
   },
   recuperar_text: {
-    color: "#a8a7a7",
-    fontSize: 15,
+    color: "white",
+    fontSize: 20,
     textAlign: "center",
     fontFamily: "Roboto",
-    fontWeight: "bold",
   },
 });

@@ -16,14 +16,15 @@ import Categorias from "./pantallas/Categorias";
 import Marcas from "./pantallas/Marcas";
 import PantallaSlides from "./componentes/Slider";
 import { FontAwesome } from "react-native-vector-icons";
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
-const Tab = createBottomTabNavigator();
+const Tab = createDrawerNavigator();
 
 function LogoTitle() {
   return (
     <Image
-      style={{ width: 50, height: 50 }}
-      source={require("./assets/espaciotecno.jpg")}
+      style={{ width: 130, height: 50, marginLeft: -20 }}
+      source={require("./assets/LOGO-ESPACIOTECNO-HORIZONTAL-01.png")}
     />
   );
 }
@@ -36,14 +37,14 @@ function HomeStackScreen() {
       screenOptions={{
         headerShown: false,
       }}
-    >
+    ><HomeStack.Screen name="Login" component={Login} />
       <HomeStack.Screen name="Mi Perfil" component={Perfil} />
       <HomeStack.Screen name="Mis Cursos" component={MisCursos} />
       <HomeStack.Screen name="Mis Favoritos" component={MisCursos} />
       <HomeStack.Screen name="AvanceCursos" component={AvanceCursos} />
       <HomeStack.Screen name="Favoritos" component={Favoritos} />
       <HomeStack.Screen name="EditarPerfil" component={EditarPerfil} />
-      <HomeStack.Screen name="Login" component={Login} />
+      
       <HomeStack.Screen name="PantallaSlides" component={PantallaSlides} />
     </HomeStack.Navigator>
   );
@@ -68,7 +69,9 @@ function InicioStackScreen() {
 
 const TabNavigator = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator initialRouteName="Cursos" screenOptions={{
+      drawerPosition: 'left'
+    }}>
       <Tab.Screen
         name="Cursos"
         component={InicioStackScreen}
@@ -78,8 +81,7 @@ const TabNavigator = () => {
             <FontAwesome name={"home"} color={"#90C641"} size={size} />
           ),
           headerTitle: (props) => <LogoTitle {...props} />,
-          headerTitleAlign: "center",
-          headerShown: false
+          headerTitleAlign: "left",
         }}
       />
       <Tab.Screen
@@ -114,9 +116,9 @@ const TabNavigator = () => {
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name={"user"} color={"#90C641"} size={size} />
           ),
-          headerTitle: (props) => <LogoTitle {...props} />,
-          headerTitleAlign: "center",
+          headerShown: false
         }}
+        
       />
 
       

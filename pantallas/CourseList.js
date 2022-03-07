@@ -11,7 +11,7 @@ export default class CourseList extends React.Component{
                 onPress={onPress}
                 style={{
                     flexDirection:"row",
-                    backgroundColor:bg,
+                    backgroundColor:"#d9eefb",
                     padding:20,
                     marginHorizontal:20,
                     borderRadius:20,
@@ -28,38 +28,35 @@ export default class CourseList extends React.Component{
                          <Text style={{
                              color:"#345c74",
                              fontWeight:"bold",
-                             fontSize:13,
+                             fontSize:16,
                              paddingHorizontal:20,
                              width:170
                          }}>{title}</Text>
-                         <Text style={{
-                             color:"#f58084",
-                             fontSize:12,
-                             paddingHorizontal:20
-                         }}>
-                             10 horas, 19 clases
-                         </Text>
+                        
                     </View>
-                    <Text style={{
-                        color:"#345c74",
-                        fontSize:13,
-                        paddingLeft:10,
-                        paddingRight:10
-                    }}>
-                        25%
-                    </Text>
-                    <ProgressCircle
-                        percent={30}
-                        radius={17}
-                        borderWidth={1.5}
-                        color="f580084"
-                        shadowColor="#FFF"
-                        bgColor="#FFF"
-                    >
-                        <Image
-                            source={require('../assets/pl.png')}
-                        />
-                    </ProgressCircle>
+                    <View
+                                onPress={()=>this.props.navigation.navigate('Categorias')}
+                                style={{
+                                    flexDirection:"row",
+                                    backgroundColor:"#0088c2",
+                                    alignItems:"center",
+                                    width:130,
+                                    paddingVertical:10,
+                                    borderRadius:10,
+                                    marginLeft: 10,
+                                    paddingHorizontal:10
+                                }}
+                           >
+                                    <Text style={{
+                                        color:"#FFF",
+                                        fontWeight:"bold",
+                                        fontSize:14
+                                    }}>INSCRIBIRME</Text>  
+                                    <Image
+                                        source={require('../assets/a3.png')}
+                                        style={{marginLeft:10,width:8,height:8}}
+                                    />
+                           </View>
 
             </TouchableOpacity>
         )

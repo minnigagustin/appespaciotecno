@@ -8,48 +8,25 @@ import {
     ImageBackground} from 'react-native'
 import {Modalize} from 'react-native-modalize'
 import CourseList from '../pantallas/CourseList'
+import CategoriasList from '../pantallas/CategoriasList'
 
 export default class Cources extends React.Component{
     render(){
         return(
             <ImageBackground
-                source={require('../assets/cat.png')}
+                source={require('../assets/FONDO-DESCUBRIR.jpg')}
                 style={{width:"100%",height:"100%"}}
             >
-                <View style={{
-                    flexDirection:"row",
-                    width:"100%",
-                    paddingHorizontal:20
-                }}>
-                    <TouchableOpacity
-                        onPress={()=>this.props.navigation.goBack()}
-                        style={{
-                            paddingHorizontal:10,
-                            paddingVertical:13,
-                           borderRadius:10,
-                            marginTop:30,
-                           backgroundColor:"#8bbcdb"
-                        }}
-                    >
-                        <Image
-                            source={require('../assets/a1.png')}
-                            style={{width:20,height:15}}
-                        />
-                    </TouchableOpacity>
-                    
-                </View>
-                <Text style={{
-                    color:"#FFF",
-                    fontSize:35,
-                    fontWeight:"bold",
-                    width:200,
+                
+                <Image
+                            source={require('../assets/DESCUBRIR-VERTICAL-01.png')} resizeMode="contain" style={{
+                    width: 300,
+                    height: 500,
                     alignSelf:"center",
-                    textAlign:"center",
-                    marginTop:34
+                    top:-120
                     
-                    }}>
-                    UI/UX Cursos
-                </Text>
+                    }} />
+                
 
                 <Modalize
                     handleStyle={{
@@ -61,10 +38,18 @@ export default class Cources extends React.Component{
                         borderTopLeftRadius:60,
                         borderTopRightRadius:60
                     }}
-                    alwaysOpen={500}
+                    alwaysOpen={450}
                     scrollViewProps={{showsVerticalScrollIndicator:false}}
                 >
-                    <View style={{marginTop:40}}>
+                    <View style={{marginTop:60}}>
+
+                    <CategoriasList
+                                onPress={()=>this.props.navigation.navigate("Perfil")}
+                                img={require('../assets/xd.png')}
+                                title="Multimedia"
+                                bg="#fdddf3"
+                            />
+                        
                             <CourseList
                                 onPress={()=>this.props.navigation.navigate("Perfil")}
                                 img={require('../assets/xd.png')}

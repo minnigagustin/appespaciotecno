@@ -4,36 +4,16 @@ import {ScrollView,TextInput} from 'react-native-gesture-handler'
 import CourseList from '../pantallas/CourseList'
 import Curso from "../componentes/curso";
 import { FontAwesome } from "react-native-vector-icons";
+import {LinearGradient} from 'expo-linear-gradient';
 
 export default class Home extends React.Component{
     render(){
         return(
-           <ImageBackground
-            source={require('../assets/Home.png')}
-            style={{width:"100%",height:"100%"}}
-           >
-               <ScrollView>
-               <View style={{
-                    flexDirection:"row",
-                    width:"100%",
-                    paddingHorizontal:20
-                }}>
-                       <View style={{
-                           paddingHorizontal:10,
-                           paddingVertical:12,
-                           borderRadius:10,
-                           marginTop:30,
-                           backgroundColor:"#d1a0a7"
-                       }}>
-                           <Image
-                            source={require('../assets/hum.png')}
-                            style={{height:15,width:20}}
-                           />
-                       </View>
-                       
-                   </View>
+            
+               <ScrollView><LinearGradient style={{flex:2,
+                padding:10}} colors={[ '#4D94C1', '#90C641']} >
                    <Text style={{
-                       paddingHorizontal:20,
+                       paddingHorizontal:8,
                        fontSize:35,
                        paddingTop:40,
                        fontWeight:"bold",
@@ -41,39 +21,27 @@ export default class Home extends React.Component{
                    }}>
                        Bienvenido Agustin!
                    </Text>
-
-                   <View style={{
-                       flexDirection:"row",
-                       alignItems:"center",
-                       backgroundColor:"#FFF",
-                       padding:10,
-                       borderRadius:12,
-                       marginHorizontal:20,
-                       marginTop:20
+                   <Text style={{
+                       paddingHorizontal:15,
+                       textAlign: "center",
+                       fontSize:25,
+                       fontWeight:"900",
+                       color:"#FFF"
                    }}>
-                       <TextInput
-                            placeholder="¿Que estas buscando?"
-                            placeholderTextColor="#345c74"
-                            style={{
-                                fontWeight:"bold",
-                                fontSize:12,
-                                width:280,
-                                paddingHorizontal:12
-                            }}
-                       />
-                       <Image
-                            source={require('../assets/sear.png')}
-                            style={{height:14,width:14}}
-                       />
-                   </View>
-                   <ScrollView horizontal>
-                     <View style={{width: 530}}>
+                       ¿Que taller te gustaria hacer?
+                   </Text>
+                   <View style={{height: 100}} />
+                    </LinearGradient>
+                   <ScrollView horizontal style={{bottom: 100, }}>
+                     
                    <View style={{
                        flexDirection:"row",
-                       backgroundColor:"#549fa4",
+                       backgroundColor:"red",
                        marginTop:15,
-                       marginHorizontal:20,
+                       marginHorizontal:10,
+                       elevation: 7,
                        borderRadius:20,
+                       marginBottom:16,
                        paddingVertical:30,
                        paddingLeft:30,
                        width: 400
@@ -117,35 +85,18 @@ export default class Home extends React.Component{
                             style={{marginLeft:-80,marginTop:35}}
                        />
 
-<TouchableOpacity
-                                onPress={()=>this.props.navigation.navigate('Marcas')}
-                                style={{
-                                    flexDirection:"row",
-                                    backgroundColor:"white",
-                                    alignItems:"center",
-                                    marginTop:20,
-                                    width:150,
-                                    paddingVertical:10,
-                                    borderRadius:14,
-                                    paddingHorizontal:10
-                                }}
-                           >
-                                    <Image
-                                        source={require('../assets/EMPRENDER.png')}
-                                        style={{width:140,height:40}}
-                                    />
-                           </TouchableOpacity>
 
                    </View>
-                   </View>
-
-                   <View style={{width: 530}}>
+                   
+                   
                    <View style={{
                        flexDirection:"row",
                        backgroundColor:"#e41c24",
                        marginTop:15,
                        marginHorizontal:20,
+                       elevation: 7,
                        borderRadius:20,
+                       marginBottom:16,
                        paddingVertical:30,
                        paddingLeft:30,
                        width: 400
@@ -160,64 +111,24 @@ export default class Home extends React.Component{
                            }}>
                                ¿Queres aprender?
                            </Text>
-                           <TouchableOpacity
-                                onPress={()=>this.props.navigation.navigate('Categorias')}
-                                style={{
-                                    flexDirection:"row",
-                                    backgroundColor:"#90C641",
-                                    alignItems:"center",
-                                    marginTop:20,
-                                    width:150,
-                                    paddingVertical:10,
-                                    borderRadius:14,
-                                    paddingHorizontal:10
-                                }}
-                           >
-                                    <Text style={{
-                                        color:"#FFF",
-                                        fontWeight:"bold",
-                                        fontSize:12
-                                    }}>Conocenos</Text>  
-                                    <Image
-                                        source={require('../assets/a3.png')}
-                                        style={{marginLeft:20,width:8,height:8}}
-                                    />
-                           </TouchableOpacity>
                        </View>
                        <Image
                             source={require('../assets/undraw.png')}
                             style={{marginLeft:-80,marginTop:35}}
                        />
 
-                            <TouchableOpacity
-                                onPress={()=>this.props.navigation.navigate('Categorias')}
-                                style={{
-                                    flexDirection:"row",
-                                    backgroundColor:"white",
-                                    alignItems:"center",
-                                    marginTop:20,
-                                    width:150,
-                                    paddingVertical:10,
-                                    borderRadius:14,
-                                    paddingHorizontal:10
-                                }}
-                           >
-                                    <Image
-                                        source={require('../assets/DESCUBRIR.png')}
-                                        style={{width:140,height:40}}
-                                    />
-                           </TouchableOpacity>
 
                    </View>
-                   </View>
-
-                   <View style={{width: 530}}>
+                   
+                 
                    <View style={{
                        flexDirection:"row",
-                       backgroundColor:"#549fa4",
+                       backgroundColor:"#3499c2",
                        marginTop:15,
                        marginHorizontal:20,
+                       elevation: 7,
                        borderRadius:20,
+                       marginBottom:16,
                        paddingVertical:30,
                        paddingLeft:30,
                        width: 400
@@ -261,68 +172,93 @@ export default class Home extends React.Component{
                             style={{marginLeft:-80,marginTop:35}}
                        />
 
-                            <TouchableOpacity
-                                onPress={()=>this.props.navigation.navigate('Marcas')}
-                                style={{
-                                    flexDirection:"row",
-                                    backgroundColor:"white",
-                                    alignItems:"center",
-                                    marginTop:20,
-                                    width:150,
-                                    paddingVertical:10,
-                                    borderRadius:14,
-                                    paddingHorizontal:10
-                                }}
-                           >
-                                    <Image
-                                        source={require('../assets/CAPACITAR.png')}
-                                        style={{width:140,height:40}}
-                                    />
-                           </TouchableOpacity>
+                           
 
                    </View>
-                   </View>
+                  
 
                    </ScrollView>
-                   <Text style={{
-                       color:"#345c74",
-                       fontWeight:"bold",
-                       fontSize:20,
-                       paddingHorizontal:20,
-                       marginTop:20,
-                       marginBottom:10
-                   }}>Cursos para vos!</Text>
 
-            
-
-                   <CourseList
-                        img={require('../assets/xd.png')}
-                        title="Adobe XD Prototyping"
-                        bg="#fdddf3"
-                   />
                    
-                    <CourseList
-                        img={require('../assets/sketch.png')}
-                        title="Sketch shortcuts and tricks"
-                        bg="#fef8e3"
-                   />
-                    <CourseList
-                        img={require('../assets/ae.png')}
-                        title="UI Motion Design in After Effects"
-                        bg="#fcf2ff"
-                   />
-                   <CourseList
-                        img={require('../assets/ae.png')}
-                        title="UI Motion Design in After Effects"
-                        bg="#fcf2ff"
-                   />
-                   <CourseList
-                        img={require('../assets/ae.png')}
-                        title="UI Motion Design in After Effects"
-                        bg="#fcf2ff"
-                   />
+
+                   <View style={{
+                       top: -70,}}>
+                           <Text style={{textAlign: 'center', fontSize: 22}}>En ESPACIO TECNO podras</Text>
+                           <Text style={{textAlign: 'center', fontSize: 24, fontWeight: 'bold'}}><Text style={{color: '#eb0032'}}>descubrir,</Text> <Text style={{color: '#3499c2'}}>capacitarte</Text> <Text style={{color: '#a1b94b'}}>y emprender</Text></Text>
+                   <Text style={{textAlign: 'center', fontSize: 22, marginHorizontal: 20, marginTop: 20}}>Cada area cuenta con talleres y cursos para potenciar tu conocimiento.</Text>
+                   <Text style={{
+                       color:"#353535",
+                       fontWeight:"bold",
+                       fontSize:24,
+                       paddingHorizontal:20,
+                       textAlign: 'center',
+                       marginBottom:10
+                   }}>¡Descubrilos!</Text>
+                   <View style={{flexDirection: 'row', marginHorizontal: 20, alignItems: 'center'}}>
+                   <View style={{
+                       backgroundColor:"#eb0032",
+                       marginTop:15,
+                       justifyContent: 'center',
+                       alignItems: 'center',
+                       paddingVertical:3,
+                       marginLeft: -4,
+                       borderRadius:20,
+                       width: 120
+                   }}>
+                       <View>
+                           
+                       <Image
+                            source={require('../assets/DESCUBRIRACCESO.png')}
+                            style={{ width: 110, height: 110}}
+                       />
+
+                           </View>
+
+                   </View>
+
+                   <View style={{
+                       backgroundColor:"#3499c2",
+                       marginTop:15,
+                       justifyContent: 'center',
+                       alignItems: 'center',
+                       marginHorizontal:20,
+                       paddingVertical:3,
+                       borderRadius:10,
+                       width: 120
+                   }}>
+                       <View>
+                           
+                       <Image
+                            source={require('../assets/CAPACITARACCESO.png')}
+                            style={{ width: 110, height: 110}}
+                       />
+
+                           </View>
+
+                   </View>
+
+                   <View style={{
+                       backgroundColor:"#a1b94b",
+                       marginTop:15,
+                       justifyContent: 'center',
+                       alignItems: 'center',
+                       paddingVertical:3,
+                       borderRadius:20,
+                       width: 120
+                   }}>
+                       <View>
+                           
+                       <Image
+                            source={require('../assets/EMPRENDERACCESO.png')}
+                            style={{ width: 110, height: 110}}
+                       />
+
+                           </View>
+
+                   </View>
+                   </View>
+                   </View>
                </ScrollView>
-           </ImageBackground>
         )
     }
 }
