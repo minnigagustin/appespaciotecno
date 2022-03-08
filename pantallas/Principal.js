@@ -204,7 +204,7 @@ export default class Home extends React.Component{
                        marginLeft: -4,
                        borderRadius:20,
                        width: 120
-                   }}
+                       }}
                    onPress={()=>this.props.navigation.navigate('Categorias')}>
                        <View>
                            

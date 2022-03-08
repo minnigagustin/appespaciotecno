@@ -27,9 +27,17 @@ const misCursosData = [
   },
 ];
 
-export default function MisCursos() {
+export default function MisCursos({ route }) {
+  const { param_usuario } = route.params;
+
+  console.log(param_usuario);
+
   return (
     <View>
+      <Text style={styles.header_text}>
+        {" "}
+        Hola de nuevo, {param_usuario.nombre} {param_usuario.apellido}
+      </Text>
       <View style={styles.header}>
         <FontAwesome name="book" size={24} />
         <Text style={styles.title_perfil}>Mis Cursos</Text>
@@ -52,6 +60,10 @@ export default function MisCursos() {
 }
 
 const styles = StyleSheet.create({
+  header_text:{
+    paddingTop:20,
+    textAlign:"center"
+  },
   header: {
     flex: 1,
     backgroundColor: "#fff",

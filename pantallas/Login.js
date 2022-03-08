@@ -4,84 +4,122 @@ import {
   Image,
   StyleSheet,
   Dimensions,
-  KeyboardAvoidingView,
   ImageBackground,
   TouchableOpacity,
   TextInput,
-  Button,
 } from "react-native";
-import { FontAwesome } from "react-native-vector-icons";
-import React, { useState, useCallback } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { ModalCambiosConfirmados } from "../componentes/ModalCambiosConfirmados";
-import { ModalConfirmarCambios } from "../componentes/ModalConfirmarCambios";
-import { ScrollView } from "react-native-gesture-handler";
+import React from "react";
 
+import { useNavigation } from "@react-navigation/native";
+
+import { useState } from "react";
+
+import axios from "axios";
+
+import API from "../api";
+
+import { FontAwesome } from "react-native-vector-icons";
 
 const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
 
 export default function Login({ route }) {
+  const [dni, setDni] = useState("");
+
+  const [contrasenia, setContrasenia] = useState("");
+
+  const navigation = useNavigation();
+
+  const actualizarUser = (text_user) => {
+    setDni(text_user);
+  };
+
+  const actualizarContra = (text_contra) => {
+    setContrasenia(text_contra);
+  };
+
+  const chequearValidacion = () => {
+    verificarUsuario();
+    resetearCampos();
+  };
+
+  const verificarUsuario = async () => {
+    await axios.get("http://10.0.2.2:8011/logout/");
+    const formData = {};
+    formData.numero_documento = dni;
+    formData.password = contrasenia;
+    axios({
+      url: "http://10.0.2.2:8011/login/",
+      method: "POST",
+      data: formData,
+    }).then((result) => {
+      if (result.status === 200)
+        navigation.navigate("Mis Cursos", {
+          param_usuario: result.data
+        });
+    });
+  };
+
+  const resetearCampos = () => {
+    setDni("");
+    setContrasenia("");
+  };
+
   return (
     <ImageBackground
-                source={require('../assets/fondo_login.jpg')}
-                style={{width:"100%",height:"100%"}}
-            >
-    <View style={styles.container}>
-      <Image
-        style={styles.imagen_style}
-        resizeMode="contain"
-        source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
-      />
-
-      {/* <View style={styles.logo_container}>
+      source={require("../assets/fondo_login.jpg")}
+      style={{ width: "100%", height: "100%" }}
+    >
+      <View style={styles.container}>
         <Image
-          style={styles.logo_style}
-          source={require("../assets/descubrir.jpg")}>
-        </Image>
+          style={styles.imagen_style}
+          resizeMode="contain"
+          source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
+        />
 
-        <Image
-          style={styles.logo_style}
-          source={require("../assets/emprender.jpg")}>
-        </Image>
+        <TextInput
+          style={styles.input_style}
+          textAlign={"center"}
+          placeholderTextColor="#000"
+          placeholder={"Usuario (DNI)"}
+          onChangeText={(text_user) => actualizarUser(text_user)}
+          value={dni}
+        ></TextInput>
 
-        <Image
-          style={styles.logo_style}
-          source={require("../assets/capacitar.jpg")}>
-        </Image>
-      </View> */}
+        <TextInput
+          style={styles.input_style}
+          textAlign={"center"}
+          placeholderTextColor="#000"
+          placeholder={"Contraseña"}
+          onChangeText={(text_contra) => actualizarContra(text_contra)}
+          value={contrasenia}
+          secureTextEntry={true}
+        ></TextInput>
 
-      <TextInput
-        style={styles.input_style}
-        textAlign={'center'}
-        placeholderTextColor="#000" 
-        placeholder={"Usuario (DNI)"}
-      ></TextInput>
+        <TouchableOpacity
+          style={styles.ingresar_style}
+          onPress={() => chequearValidacion()}
+          disabled={!dni || !contrasenia}
+        >
+          <Text style={styles.ingresar_text}>INGRESAR</Text>
+        </TouchableOpacity>
 
-      <TextInput
-        style={styles.input_style}
-        textAlign={'center'}
-        placeholderTextColor="#000" 
-        placeholder={"Contraseña"}
-      ></TextInput>
+        <TouchableOpacity style={{ color: "white", marginTop: 4 }}>
+          <Text style={styles.recuperar_text}>¿Olvido tu contraseña?</Text>
+        </TouchableOpacity>
+      </View>
 
-<TouchableOpacity style={styles.ingresar_style}>
-        <Text style={styles.ingresar_text}>INGRESAR</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={{color: 'white', marginTop: 4}}>
-        <Text style={styles.recuperar_text}>¿Olvido tu contraseña?</Text>
-      </TouchableOpacity>
-    </View>
-    
-    <View style={{
-    bottom: 41}}>
-
-
-      <TouchableOpacity style={{color: 'white'}}>
-        <Text style={styles.recuperar_text}>¿No tienes un usuario? <Text style={{fontWeight: 'bold'}}>Registrate</Text></Text>
-      </TouchableOpacity>
-</View>
+      <View
+        style={{
+          bottom: 41,
+        }}
+      >
+        <TouchableOpacity style={{ color: "white" }}>
+          <Text style={styles.recuperar_text}>
+            ¿No tienes un usuario?{" "}
+            <Text style={{ fontWeight: "bold" }}>Registrate</Text>
+          </Text>
+        </TouchableOpacity>
+      </View>
     </ImageBackground>
   );
 }
@@ -89,27 +127,27 @@ export default function Login({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop:10,
-    alignItems: 'center'
+    marginTop: 10,
+    alignItems: "center",
   },
   imagen_style: {
     alignSelf: "center",
-    marginTop:90,
-    marginBottom:80,
+    marginTop: 90,
+    marginBottom: 80,
     width: 150,
     height: 150,
   },
   logo_container: {
     flexDirection: "row",
-    justifyContent:"center",
+    justifyContent: "center",
     marginTop: -45,
-    marginBottom:30
+    marginBottom: 30,
   },
   logo_style: {
     width: 120,
     height: 80,
-    margin:3,
-    resizeMode : 'contain'
+    margin: 3,
+    resizeMode: "contain",
   },
   input_style: {
     alignSelf: "center",
@@ -118,25 +156,25 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 30,
     borderColor: "#90C641",
-    width: width/1.25,
+    width: width / 1.25,
     padding: 10,
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   ingresar_style: {
     borderRadius: 30,
     borderColor: "black",
     paddingVertical: 6,
-    paddingHorizontal:48,
-    backgroundColor: 'rgba(0, 0, 0, 0.15)',
+    paddingHorizontal: 48,
+    backgroundColor: "rgba(0, 0, 0, 0.15)",
     alignSelf: "center",
   },
   registrarse_style: {
     borderRadius: 30,
     borderColor: "black",
     paddingVertical: 6,
-    paddingHorizontal:48,
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    alignSelf: "center"
+    paddingHorizontal: 48,
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+    alignSelf: "center",
   },
   ingresar_text: {
     fontSize: 13,
@@ -160,7 +198,7 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
   },
   recuperar_text: {
-    color: 'white',
+    color: "white",
     fontSize: 19,
     textAlign: "center",
     fontFamily: "Roboto",
