@@ -195,7 +195,7 @@ export default class Home extends React.Component{
                        marginBottom:10
                    }}>¡Descubrilos!</Text>
                    <View style={{flexDirection: 'row', marginHorizontal: 20, alignItems: 'center'}}>
-                   <View style={{
+                   <TouchableOpacity style={{
                        backgroundColor:"#eb0032",
                        marginTop:15,
                        justifyContent: 'center',
@@ -204,7 +204,8 @@ export default class Home extends React.Component{
                        marginLeft: -4,
                        borderRadius:20,
                        width: 120
-                   }}>
+                   }}
+                   onPress={()=>this.props.navigation.navigate('Categorias')}>
                        <View>
                            
                        <Image
@@ -214,7 +215,7 @@ export default class Home extends React.Component{
 
                            </View>
 
-                   </View>
+                   </TouchableOpacity>
 
                    <View style={{
                        backgroundColor:"#3499c2",
