@@ -2,67 +2,104 @@ import { View, Text, StyleSheet, FlatList } from "react-native";
 import { FontAwesome } from "react-native-vector-icons";
 import React from "react";
 import Curso from "../componentes/curso";
-
-const misCursosData = [
-  {
-    nombre: "Python",
-    subtitulo: "de junior a senior",
-    fecha: "Del 27/01 al 30/03",
-  },
-  {
-    nombre: "React",
-    subtitulo: "Probando",
-    fecha: "Del 13/01 al 20/03 - Ultimos días",
-  },
-  {
-    nombre: "Go",
-    subtitulo: "de junior a senior",
-    fecha: "Del 03/04 al 24/05",
-  },
-  { nombre: "HTML", subtitulo: "de junior a senior" },
-  {
-    nombre: "React Native",
-    subtitulo: "Probando",
-    fecha: "Del 13/01 al 20/03 - Ultimos días",
-  },
-];
+import API from "../api";
+import { useState } from "react";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 export default function MisCursos({ route }) {
+  const navigation = useNavigation();
+
   const { param_usuario } = route.params;
 
-  console.log(param_usuario);
+  const [cursos, setCursos] = useState([]);
+
+  const [mostrarCursos, setMostrarCursos] = useState(false);
+
+  const abrirFavoritos = () => {
+    getCursos();
+    setMostrarCursos(!mostrarCursos);
+  };
+
+  const getCursos = () => {
+    API.get(`curso/`).then((res) => {
+      const cursos = res.data;
+      setCursos(cursos);
+    });
+  };
 
   return (
     <View>
+
       <Text style={styles.header_text}>
         {" "}
-        Hola de nuevo, {param_usuario.nombre} {param_usuario.apellido}
+        Bienvenido, {param_usuario.nombre} {param_usuario.apellido}
       </Text>
+
       <View style={styles.header}>
         <FontAwesome name="book" size={24} />
         <Text style={styles.title_perfil}>Mis Cursos</Text>
         <FontAwesome name="book" size={24} />
       </View>
 
-      <FlatList
-        data={misCursosData}
-        renderItem={({ item }) => (
-          <Curso
-            nombre={item.nombre}
-            subtitulo={item.subtitulo}
-            fecha={item.fecha}
-          />
-        )}
-        keyExtractor={(item) => item.nombre}
-      />
+      <View style={styles.paneltab}>
+
+        <View style={{ flexDirection: "row" }}>
+          <FontAwesome name="heart" size={18} />
+          <TouchableOpacity
+            onPress={() => {
+              abrirFavoritos();
+            }}
+          >
+            <Text style={{ fontSize: 18, marginLeft: 5 }}>Favoritos</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{ flexDirection: "row" }}>
+          <FontAwesome name="edit" size={18} />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("EditarPerfil", {
+                param_nombre:  param_usuario.nombre ,
+                param_apellido:  param_usuario.apellido ,
+                param_dni:  param_usuario.numero_documento
+              });
+            }}
+          >
+            <Text style={{ fontSize: 18, marginLeft: 5 }}>Editar Perfil</Text>
+          </TouchableOpacity>
+        </View>
+
+      </View>
+
+      {mostrarCursos && (
+        <FlatList
+          data={cursos}
+          renderItem={({ item }) => (
+            <Curso
+              nombre={item.nombre}
+              subtitulo={item.subtitulo}
+              descripcion={item.descripcion}
+              carga={item.carga_horaria_hs}
+              fecha={item.fecha_inicio}
+              profesor={item.profesor}
+            />
+          )}
+          keyExtractor={(item) => item.nombre}
+        />
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  header_text:{
-    paddingTop:20,
-    textAlign:"center"
+  header_text: {
+    paddingTop: 20,
+    paddingBottom: 20,
+    fontWeight: "bold",
+    fontSize: 20,
+    fontFamily: "Roboto",
+    textAlign: "center",
   },
   header: {
     flex: 1,
@@ -81,5 +118,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     paddingLeft: 10,
     paddingRight: 10,
+  },
+  paneltab: {
+    justifyContent: "space-around",
+    alignItems: "center",
+    paddingTop: 20,
+    flexDirection: "row",
   },
 });

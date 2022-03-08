@@ -57,6 +57,7 @@ export default function Login({ route }) {
           param_usuario: result.data
         });
     });
+    console.log(result.data)
   };
 
   const resetearCampos = () => {
@@ -104,7 +105,7 @@ export default function Login({ route }) {
         </TouchableOpacity>
 
         <TouchableOpacity style={{ color: "white", marginTop: 4 }}>
-          <Text style={styles.recuperar_text}>¿Olvido tu contraseña?</Text>
+          <Text style={styles.recuperar_text}>¿Olvidó su contraseña?</Text>
         </TouchableOpacity>
       </View>
 

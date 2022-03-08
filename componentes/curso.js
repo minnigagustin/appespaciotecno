@@ -32,9 +32,13 @@ export default function curso(props) {
           </Text>
         </View>
         <Text style={{ fontWeight: "300", fontSize: 14 }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras posuere
-          nisl mauris, id ultricies nisi tempor eget. Nam dictum elit nisl,
-          vitae ullamcorper...
+          Descripcion:{props.descripcion}
+        </Text>
+        <Text style={{ fontWeight: "300", fontSize: 14 }}>
+          Carga horaria: {props.carga}
+        </Text>
+        <Text style={{ fontWeight: "300", fontSize: 14 }}>
+          Profesor: {props.profesor}
         </Text>
       </View>
       <View style={styles.divlargo}>
