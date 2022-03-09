@@ -76,7 +76,7 @@ export default function Perfil({ route }) {
 
   const userCumpleanios = param_cumple;
 
-  const [stateAvatar, setStateAvatar] = useState('https://www.filo.news/__export/1645470524516/sites/claro/img/2022/02/21/ricardo_portada_1.jpg_1359985867.jpg');
+  const [stateAvatar, setStateAvatar] = useState(param_avatar);
 
   //---------------------------------------------------
   // Nuevo perfil con las modificacioes realizadas
@@ -160,7 +160,7 @@ export default function Perfil({ route }) {
         <View style={styles.container_header}>
           <View style={styles.header_info_container}>
             <TouchableOpacity onPress={actualizarAvatar}>
-              <Image source={{ uri: stateAvatar }} style={{width: 150, height: 150, borderRadius: 400/ 2}} />
+              <Image source={{ uri: 'http://128.0.202.248:8011' + stateAvatar }} style={{width: 150, height: 150, borderRadius: 400/ 2}} />
             </TouchableOpacity>
           </View>
           <View>

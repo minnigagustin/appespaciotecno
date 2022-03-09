@@ -30,7 +30,6 @@ export default class Cources extends React.Component{
 
                 <Modalize
                     handleStyle={{
-                        marginTop:30,
                         backgroundColor:"#e9e9e9",
                         width:80
                     }}
@@ -41,13 +40,14 @@ export default class Cources extends React.Component{
                     alwaysOpen={450}
                     scrollViewProps={{showsVerticalScrollIndicator:false}}
                 >
-                    <View style={{marginTop:60}}>
+                    <View style={{paddingVertical:30}}>
 
                     <CategoriasList
                                 onPress={()=>this.props.navigation.navigate("Perfil")}
-                                img={require('../assets/xd.png')}
-                                title="Multimedia"
+                                img={require('../assets/FONDO-DESCUBRIR.jpg')}
+                                title="MULTIMEDIA"
                                 bg="#fdddf3"
+                                activado
                             />
                         
                             <CourseList
@@ -60,6 +60,12 @@ export default class Cources extends React.Component{
                                 img={require('../assets/sketch.png')}
                                 title="Sketch shortcuts and tricks"
                                 bg="#fef8e3"
+                            />
+                            <CategoriasList
+                                onPress={()=>this.props.navigation.navigate("Perfil")}
+                                img={require('../assets/fondo_login.jpg')}
+                                title="FABRICACION"
+                                bg="#fdddf3"
                             />
                              <CourseList
                                 img={require('../assets/ae.png')}

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, Image, StyleSheet, FlatList } from "react-native";
 import { FontAwesome } from "react-native-vector-icons";
 import React from "react";
 import Curso from "../componentes/curso";
@@ -35,7 +35,7 @@ export default function MisCursos({ route }) {
         {" "}
         Bienvenido, {param_usuario.nombre} {param_usuario.apellido}
       </Text>
-
+      <Image source={{uri:'http://128.0.202.248:8011' + param_usuario.picture}} style={{height: 150, width: 150, borderRadius: 150, alignSelf: 'center'}}/>
       <View style={styles.header}>
         <FontAwesome name="book" size={24} />
         <Text style={styles.title_perfil}>Mis Cursos</Text>
@@ -62,7 +62,8 @@ export default function MisCursos({ route }) {
               navigation.navigate("EditarPerfil", {
                 param_nombre:  param_usuario.nombre ,
                 param_apellido:  param_usuario.apellido ,
-                param_dni:  param_usuario.numero_documento
+                param_dni:  param_usuario.numero_documento,
+                param_avatar: param_usuario.picture
               });
             }}
           >
@@ -95,7 +96,7 @@ export default function MisCursos({ route }) {
 const styles = StyleSheet.create({
   header_text: {
     paddingTop: 20,
-    paddingBottom: 20,
+    paddingBottom: 10,
     fontWeight: "bold",
     fontSize: 20,
     fontFamily: "Roboto",

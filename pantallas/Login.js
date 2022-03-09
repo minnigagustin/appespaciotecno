@@ -5,22 +5,26 @@ import {
   StyleSheet,
   Dimensions,
   ImageBackground,
+  Alert,
   TouchableOpacity,
+  KeyboardAvoidingView,
   TextInput,
 } from "react-native";
 import React from "react";
 
 import { useNavigation } from "@react-navigation/native";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import axios from "axios";
 
 import API from "../api";
 
 import { FontAwesome } from "react-native-vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 
 export default function Login({ route }) {
   const [dni, setDni] = useState("");
@@ -42,21 +46,41 @@ export default function Login({ route }) {
     resetearCampos();
   };
 
+
+  useEffect(() => {
+    AsyncStorage.getItem('perfil').then((perfil) => {
+      if (perfil !== null) {
+        const numero = JSON.parse(perfil)
+        setDni(String(numero.numero_documento))
+      }
+      else {
+        console.log('NO HAY NADAAA')
+      }
+    });
+  }, []);
+
   const verificarUsuario = async () => {
-    await axios.get("http://10.0.2.2:8011/logout/");
     const formData = {};
+    await axios.get("http://128.0.202.248:8011/logout/");
     formData.numero_documento = dni;
     formData.password = contrasenia;
     axios({
-      url: "http://10.0.2.2:8011/login/",
+      
+      url: "http://128.0.202.248:8011/login/",
       method: "POST",
       data: formData,
-    }).then((result) => {
-      if (result.status === 200)
+    }).then((response) => {
+      if(response.status === 200){
+      AsyncStorage.setItem('perfil', JSON.stringify(response.data));
         navigation.navigate("Mis Cursos", {
-          param_usuario: result.data
+          param_usuario: response.data
         });
+      } 
+    }).catch(function (error) {
+      // handle error
+      Alert.alert('ALERTA!','DNI O CONTRASEÑA INCORRECTA');
     });
+  
     console.log(result.data)
   };
 
@@ -68,7 +92,9 @@ export default function Login({ route }) {
   return (
     <ImageBackground
       source={require("../assets/fondo_login.jpg")}
-      style={{ width: "100%", height: "100%" }}
+      style={{ resizeMode: 'stretch',
+      width: width,
+    height: height, }}
     >
       <View style={styles.container}>
         <Image
@@ -76,11 +102,12 @@ export default function Login({ route }) {
           resizeMode="contain"
           source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
         />
-
+        <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={30}>
         <TextInput
           style={styles.input_style}
           textAlign={"center"}
           placeholderTextColor="#000"
+          keyboardType="numeric"
           placeholder={"Usuario (DNI)"}
           onChangeText={(text_user) => actualizarUser(text_user)}
           value={dni}
@@ -97,7 +124,7 @@ export default function Login({ route }) {
         ></TextInput>
 
         <TouchableOpacity
-          style={styles.ingresar_style}
+          style={[styles.ingresar_style, {backgroundColor: dni ? '#017185' : 'rgba(0, 0, 0, 0.15)'}]}
           onPress={() => chequearValidacion()}
           disabled={!dni || !contrasenia}
         >
@@ -106,12 +133,13 @@ export default function Login({ route }) {
 
         <TouchableOpacity style={{ color: "white", marginTop: 4 }}>
           <Text style={styles.recuperar_text}>¿Olvidó su contraseña?</Text>
-        </TouchableOpacity>
+        </TouchableOpacity></KeyboardAvoidingView>
       </View>
 
       <View
         style={{
           bottom: 41,
+          position: 'relative'
         }}
       >
         <TouchableOpacity style={{ color: "white" }}>

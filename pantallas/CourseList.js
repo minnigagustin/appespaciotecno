@@ -1,6 +1,7 @@
 import React from 'react'
 import {Text,TouchableOpacity, View,Image} from 'react-native'
 import ProgressCircle from 'react-native-progress-circle'
+import { Entypo } from "react-native-vector-icons";
 
 
 export default class CourseList extends React.Component{
@@ -52,10 +53,9 @@ export default class CourseList extends React.Component{
                                         fontWeight:"bold",
                                         fontSize:14
                                     }}>INSCRIBIRME</Text>  
-                                    <Image
-                                        source={require('../assets/a3.png')}
-                                        style={{marginLeft:10,width:8,height:8}}
-                                    />
+                                    <Entypo name={'chevron-right'} size={18} color="white" />
+                                    
+
                            </View>
 
             </TouchableOpacity>

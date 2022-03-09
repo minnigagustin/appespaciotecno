@@ -11,8 +11,30 @@ import CourseList from "../pantallas/CourseList";
 import Curso from "../componentes/curso";
 import { FontAwesome } from "react-native-vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default class Home extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      perfil:[],
+     
+    };
+ }
+
+  componentDidMount(){
+    AsyncStorage.getItem('perfil').then((perfil) => {
+      if (perfil !== null) {
+        const perfilparse = JSON.parse(perfil)
+        this.setState({perfil : perfilparse})
+      }
+      else {
+        console.log('NO HAY NADAAA')
+      }
+    });
+  
+}
   render() {
     return (
       <ScrollView>
@@ -29,7 +51,7 @@ export default class Home extends React.Component {
               color: "#FFF",
             }}
           >
-            Bienvenido Agustin!
+            Bienvenido {this.state.perfil ? this.state.perfil.nombre : 'Registrate'}!
           </Text>
           <Text
             style={{
@@ -247,7 +269,7 @@ export default class Home extends React.Component {
             <TouchableOpacity
               style={{
                 backgroundColor: "#eb0032",
-                marginTop: 15,
+                marginTop: 2,
                 justifyContent: "center",
                 alignItems: "center",
                 paddingVertical: 3,
@@ -268,7 +290,7 @@ export default class Home extends React.Component {
             <View
               style={{
                 backgroundColor: "#3499c2",
-                marginTop: 15,
+                marginTop: 2,
                 justifyContent: "center",
                 alignItems: "center",
                 marginHorizontal: 20,
@@ -288,7 +310,7 @@ export default class Home extends React.Component {
             <View
               style={{
                 backgroundColor: "#a1b94b",
-                marginTop: 15,
+                marginTop: 2,
                 justifyContent: "center",
                 alignItems: "center",
                 paddingVertical: 3,
