@@ -21,6 +21,7 @@ import axios from "axios";
 import API from "../api";
 
 import { FontAwesome } from "react-native-vector-icons";
+import { parse } from "react-native-svg";
 
 const width = Dimensions.get("window").width;
 
@@ -31,13 +32,15 @@ export default function Registro() {
 
   const [dni, setDni] = useState("");
 
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState("");
 
   const [localidad, setLocalidad] = useState("");
 
   const [genero, setGenero] = useState("");
 
   const [contrasenia, setContrasenia] = useState("");
+
+  const navigation = useNavigation();
 
   const actualizarNombre = (text_user) => {
     setNombre(text_user);
@@ -52,8 +55,8 @@ export default function Registro() {
   };
 
   const actualizarMail = (text_user) => {
-    setEmail(text_user)
-  }
+    setEmail(text_user);
+  };
 
   const actualizarLocalidad = (text_user) => {
     setLocalidad(text_user);
@@ -106,8 +109,8 @@ export default function Registro() {
     formData.localidad = localidad;
     formData.genero = genero;
     formData.password = contrasenia;
-    formData.picture = null
-    console.log(formData)
+    formData.picture = null;
+    console.log(formData);
     axios({
       url: "http://128.0.202.248:8011/user/",
       method: "POST",
@@ -162,8 +165,8 @@ export default function Registro() {
               textAlign={"center"}
               placeholderTextColor="#000"
               placeholder={"Email"}
+              keyboardType="email-address"
               onChangeText={(text_user) => actualizarMail(text_user)}
-              value={"@"}
             ></TextInput>
 
             <TextInput
@@ -225,7 +228,12 @@ export default function Registro() {
               <Text style={styles.ingresar_text}>INGRESAR</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{ color: "white", marginTop: 4 }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Login");
+              }}
+              style={{ color: "white", marginTop: 4 }}
+            >
               <Text style={styles.recuperar_text}>¿Olvidó su contraseña?</Text>
             </TouchableOpacity>
           </View>
