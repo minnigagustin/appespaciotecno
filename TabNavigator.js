@@ -13,10 +13,11 @@ import AvanceCursos from "./pantallas/AvanceCursos";
 import EditarPerfil from "./pantallas/EditarPerfil";
 import Login from "./pantallas/Login";
 import Categorias from "./pantallas/Categorias";
+import Registro from "./pantallas/Registro";
 import Marcas from "./pantallas/Marcas";
 import PantallaSlides from "./componentes/Slider";
 import { FontAwesome } from "react-native-vector-icons";
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
 const Tab = createDrawerNavigator();
 
@@ -37,15 +38,16 @@ function HomeStackScreen() {
       screenOptions={{
         headerShown: false,
       }}
-    ><HomeStack.Screen name="Login" component={Login} />
+    >
+      <HomeStack.Screen name="Login" component={Login} />
       <HomeStack.Screen name="Mi Perfil" component={Perfil} />
       <HomeStack.Screen name="Mis Cursos" component={MisCursos} />
       <HomeStack.Screen name="Mis Favoritos" component={MisCursos} />
       <HomeStack.Screen name="AvanceCursos" component={AvanceCursos} />
       <HomeStack.Screen name="Favoritos" component={Favoritos} />
       <HomeStack.Screen name="EditarPerfil" component={EditarPerfil} />
-      
       <HomeStack.Screen name="PantallaSlides" component={PantallaSlides} />
+      <HomeStack.Screen name="Registro" component={Registro} />
     </HomeStack.Navigator>
   );
 }
@@ -69,13 +71,15 @@ function InicioStackScreen() {
 
 const TabNavigator = () => {
   return (
-    <Tab.Navigator initialRouteName="Cursos" screenOptions={{
-      drawerPosition: 'left'
-    }}>
+    <Tab.Navigator
+      initialRouteName="Cursos"
+      screenOptions={{
+        drawerPosition: "left",
+      }}
+    >
       <Tab.Screen
         name="Cursos"
         component={InicioStackScreen}
-        
         options={{
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name={"home"} color={"#90C641"} size={size} />
@@ -116,12 +120,19 @@ const TabNavigator = () => {
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name={"user"} color={"#90C641"} size={size} />
           ),
-          headerShown: false
+          headerShown: false,
         }}
-        
       />
-
-      
+      <Tab.Screen
+        name="Registrarse"
+        component={Registro}
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome name={"user"} color={"#90C641"} size={size} />
+          ),
+          headerShown: false,
+        }}
+      />
     </Tab.Navigator>
   );
 };
