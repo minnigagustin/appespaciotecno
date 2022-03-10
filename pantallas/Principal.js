@@ -65,24 +65,7 @@ export default class Home extends React.Component {
           style={{ flex: 2, padding: 10 }}
           colors={["#4D94C1", "#90C641"]}
         >
-          <TouchableOpacity
-            onPress={() => {
-              this.desloguearUsuario();
-            }}
-          >
-            <Text
-              style={{
-                paddingHorizontal: 8,
-                marginVertical: 10,
-                marginLeft: 260,
-                fontSize: 14,
-                color: "#FFF",
-              }}
-            >
-              {" "}
-              Abandonar Sesión
-            </Text>
-          </TouchableOpacity>
+          
           <Text
             style={{
               paddingHorizontal: 8,
@@ -109,7 +92,7 @@ export default class Home extends React.Component {
           <View style={{ height:100 }} />
         
         <ScrollView horizontal style={{ position:'absolute',
-    bottom: -85}}>
+    bottom: -85, width: width}}>
           <View
             style={{
               flexDirection: "row",
@@ -316,9 +299,9 @@ export default class Home extends React.Component {
                 justifyContent: "center",
                 alignItems: "center",
                 paddingVertical: 3,
-                marginLeft: -4,
+                marginLeft: -10,
                 borderRadius: 20,
-                width: 120,
+                width: width/3.5,
               }}
               onPress={() => this.props.navigation.navigate("Categorias")}
             >
@@ -339,7 +322,7 @@ export default class Home extends React.Component {
                 marginHorizontal: 20,
                 paddingVertical: 3,
                 borderRadius: 10,
-                width: 120,
+                width: width/3.5,
               }}
             >
               <View>
@@ -358,7 +341,7 @@ export default class Home extends React.Component {
                 alignItems: "center",
                 paddingVertical: 3,
                 borderRadius: 20,
-                width: 120,
+                width: width/3.5,
               }}
             >
               <View>
@@ -372,7 +355,7 @@ export default class Home extends React.Component {
           <Text
             style={{
               color: "#055c6e",
-              fontSize: 24,
+              fontSize: width/18,
               marginTop: 23,
               paddingHorizontal: 20,
               paddingVertical:10,
