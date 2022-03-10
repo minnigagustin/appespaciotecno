@@ -8,21 +8,15 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  Button,
   ActivityIndicator,
+  Alert
 } from "react-native";
 import React from "react";
 
 import { useNavigation } from "@react-navigation/native";
-
 import { useState } from "react";
-
 import axios from "axios";
-
-import API from "../api";
-
-import { FontAwesome } from "react-native-vector-icons";
-import { parse } from "react-native-svg";
+import { ModalRegistroOk } from "../componentes/ModalRegistroOk";
 
 const width = Dimensions.get("window").width;
 
@@ -42,6 +36,8 @@ export default function Registro() {
   const [contrasenia, setContrasenia] = useState("");
 
   const [loading, setLoading] = useState(false);
+
+  const [modalOk, setModalOk] = useState(false);
 
   const navigation = useNavigation();
 
@@ -70,7 +66,11 @@ export default function Registro() {
   };
 
   const verificarRegistro = () => {
-    if (checkCampos()) enviarRegistro();
+    if (checkCampos()) {
+      enviarRegistro();
+      actualizarStates();
+    }
+    else Alert.alert("POR FAVOR, COMPLETE LOS CAMPOS SOLICITADOS");
   };
 
   const checkCampos = () => {
@@ -101,12 +101,37 @@ export default function Registro() {
       method: "POST",
       data: formData,
     }).then((result) => {
-      if (result.status === 200)
-        navigation.navigate("Login", {
+      if (result.status === 200) {
+        navigation.navigate("Principal", {
           param_usuario: result.data,
         });
+      }
     });
+  };
+
+  const actualizarStates = () => {
     setLoading(true);
+    setModalOk(true);
+    resetCampos()
+  };
+
+  const restoreModalOk = () => {
+    setModalOk(false);
+  };
+
+  const regresarScreen = () => {
+    resetCampos();
+    navigation.goBack();
+  };
+
+  const resetCampos = () => {
+    setNombre("");
+    setApellido("");
+    setDni("");
+    setEmail("");
+    setLocalidad("");
+    setGenero("");
+    setContrasenia("");
   };
 
   return (
@@ -129,6 +154,7 @@ export default function Registro() {
               placeholder={"Nombre"}
               color="black"
               onChangeText={(text_user) => actualizarNombre(text_user)}
+              value={nombre}
             ></TextInput>
 
             <TextInput
@@ -137,6 +163,7 @@ export default function Registro() {
               placeholderTextColor="#c9c8c8"
               placeholder={"Apellido"}
               onChangeText={(text_user) => actualizarApellido(text_user)}
+              value={apellido}
             ></TextInput>
 
             <TextInput
@@ -145,6 +172,7 @@ export default function Registro() {
               placeholderTextColor="#c9c8c8"
               placeholder={"Ingrese su DNI"}
               onChangeText={(text_user) => actualizarDni(text_user)}
+              value={dni}
             ></TextInput>
 
             <TextInput
@@ -154,6 +182,7 @@ export default function Registro() {
               placeholder={"Email"}
               keyboardType="email-address"
               onChangeText={(text_user) => actualizarMail(text_user)}
+              value={email}
             ></TextInput>
 
             <TextInput
@@ -162,6 +191,7 @@ export default function Registro() {
               placeholderTextColor="#c9c8c8"
               placeholder={"Localidad"}
               onChangeText={(text_user) => actualizarLocalidad(text_user)}
+              value={localidad}
             ></TextInput>
 
             <View
@@ -196,6 +226,7 @@ export default function Registro() {
               placeholder={"Escriba una contraseña"}
               secureTextEntry={true}
               onChangeText={(text_user) => actualizarContrasenia(text_user)}
+              value={contrasenia}
             ></TextInput>
 
             <TextInput
@@ -218,16 +249,21 @@ export default function Registro() {
             <TouchableOpacity
               style={styles.regresar_style}
               onPress={() => {
-                navigation.goBack();
+                regresarScreen();
               }}
             >
               <Text style={styles.ingresar_text}>REGRESAR</Text>
             </TouchableOpacity>
-
           </View>
         </ScrollView>
       </View>
       {loading && <ActivityIndicator size="small" color="#0000ff" />}
+      {modalOk && (
+        <ModalRegistroOk
+          state={modalOk}
+          restore={restoreModalOk}
+        />
+      )}
     </ImageBackground>
   );
 }
@@ -280,7 +316,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderColor: "black",
     paddingVertical: 6,
-    marginTop:20,
+    marginTop: 20,
     backgroundColor: "rgba(0, 0, 0, 0.15)",
     alignSelf: "center",
   },
