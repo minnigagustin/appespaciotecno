@@ -7,7 +7,9 @@ import {
   ImageBackground,
   Alert,
   TouchableOpacity,
+  Keyboard,
   KeyboardAvoidingView,
+  ActivityIndicator,
   TextInput,
 } from "react-native";
 import React from "react";
@@ -28,6 +30,7 @@ const height = Dimensions.get("window").height;
 
 export default function Login({ route }) {
   const [dni, setDni] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [contrasenia, setContrasenia] = useState("");
 
@@ -42,6 +45,8 @@ export default function Login({ route }) {
   };
 
   const chequearValidacion = () => {
+    Keyboard.dismiss()
+    setLoading(true);
     verificarUsuario();
     resetearCampos();
   };
@@ -71,6 +76,7 @@ export default function Login({ route }) {
       data: formData,
     }).then((response) => {
       if(response.status === 200){
+        setLoading(false);
       AsyncStorage.setItem('perfil', JSON.stringify(response.data));
         navigation.navigate("Mis Cursos", {
           param_usuario: response.data
@@ -79,9 +85,9 @@ export default function Login({ route }) {
     }).catch(function (error) {
       // handle error
       Alert.alert('ALERTA!','DNI O CONTRASEÑA INCORRECTA');
+      setLoading(false);
     });
   
-    console.log(result.data)
   };
 
   const resetearCampos = () => {
@@ -90,6 +96,7 @@ export default function Login({ route }) {
   };
 
   return (
+    
     <ImageBackground
       source={require("../assets/fondo_login.jpg")}
       style={{ resizeMode: 'stretch',
@@ -97,12 +104,20 @@ export default function Login({ route }) {
     height: height, }}
     >
       <View style={styles.container}>
+       {loading && 
+        <ActivityIndicator size="large" color="#FFFFFF" style={{
+          position: 'absolute',
+          alignItems: 'center',
+          justifyContent: 'center',
+          bottom: 120
+        }}/>}
+      
         <Image
           style={styles.imagen_style}
           resizeMode="contain"
           source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
         />
-        <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={30}>
+        <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={25}>
         <TextInput
           style={styles.input_style}
           textAlign={"center"}
@@ -124,7 +139,7 @@ export default function Login({ route }) {
         ></TextInput>
 
         <TouchableOpacity
-          style={[styles.ingresar_style, {backgroundColor: dni ? '#017185' : 'rgba(0, 0, 0, 0.15)'}]}
+          style={[styles.ingresar_style, {backgroundColor: dni && contrasenia ? '#017185' : 'rgba(0, 0, 0, 0.15)'}]}
           onPress={() => chequearValidacion()}
           disabled={!dni || !contrasenia}
         >

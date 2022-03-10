@@ -12,6 +12,29 @@ import Curso from "../componentes/curso";
 import { FontAwesome } from "react-native-vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {Calendar, LocaleConfig} from 'react-native-calendars';
+
+LocaleConfig.locales['fr'] = {
+  monthNames: [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre'
+  ],
+  monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+  dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+  dayNamesShort: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+  today: "Aujourd'hui"
+};
+LocaleConfig.defaultLocale = 'fr';
 
 export default class Home extends React.Component {
 
@@ -37,8 +60,10 @@ export default class Home extends React.Component {
 }
   render() {
     return (
-      <ScrollView>
+      <ScrollView style={{backgroundColor: 'white'}}>
+        <View>
         <LinearGradient
+        start={{x: 0.0, y: 0.25}} end={{x: 0.8, y: 0.5}}
           style={{ flex: 2, padding: 10 }}
           colors={["#4D94C1", "#90C641"]}
         >
@@ -64,9 +89,10 @@ export default class Home extends React.Component {
           >
             ¿Que taller te gustaria hacer?
           </Text>
-          <View style={{ height: 100 }} />
-        </LinearGradient>
-        <ScrollView horizontal style={{ bottom: 100 }}>
+          <View style={{ height:100 }} />
+        
+        <ScrollView horizontal style={{ position:'absolute',
+    bottom: -85}}>
           <View
             style={{
               flexDirection: "row",
@@ -220,11 +246,10 @@ export default class Home extends React.Component {
             />
           </View>
         </ScrollView>
+</LinearGradient>
+        </View>
 
-        <View
-          style={{
-            top: -70,
-          }}
+        <View style={{marginTop: 90}}
         >
           <Text style={{ textAlign: "center", fontSize: 22 }}>
             En ESPACIO TECNO podras
@@ -254,7 +279,7 @@ export default class Home extends React.Component {
               fontSize: 24,
               paddingHorizontal: 20,
               textAlign: "center",
-              marginBottom: 10,
+              marginBottom: 1,
             }}
           >
             ¡Descubrilos!
@@ -264,12 +289,13 @@ export default class Home extends React.Component {
               flexDirection: "row",
               marginHorizontal: 20,
               alignItems: "center",
+              marginBottom: 1,
             }}
           >
             <TouchableOpacity
               style={{
                 backgroundColor: "#eb0032",
-                marginTop: 2,
+                marginTop: 15,
                 justifyContent: "center",
                 alignItems: "center",
                 paddingVertical: 3,
@@ -290,7 +316,7 @@ export default class Home extends React.Component {
             <View
               style={{
                 backgroundColor: "#3499c2",
-                marginTop: 2,
+                marginTop: 15,
                 justifyContent: "center",
                 alignItems: "center",
                 marginHorizontal: 20,
@@ -310,7 +336,7 @@ export default class Home extends React.Component {
             <View
               style={{
                 backgroundColor: "#a1b94b",
-                marginTop: 2,
+                marginTop: 15,
                 justifyContent: "center",
                 alignItems: "center",
                 paddingVertical: 3,
@@ -326,7 +352,92 @@ export default class Home extends React.Component {
               </View>
             </View>
           </View>
+          <Text
+            style={{
+              color: "#055c6e",
+              fontSize: 24,
+              marginTop: 23,
+              paddingHorizontal: 20,
+              paddingVertical:10,
+              textAlign: "center",
+              backgroundColor: '#d5e4d4'
+            }}
+          >
+            Mira las <Text style={{fontWeight:'bold'}}>actividades por fecha</Text>
+          </Text>
+          <LinearGradient
+        start={{x: 0.0, y: 0.25}} end={{x: 0.8, y: 0.5}}
+          style={{ flex: 2, padding: 10 }}
+          colors={["#4D94C1", "#90C641"]}
+        >
+         <Calendar
+  // Handler which gets executed on day press. Default = undefined
+
+  // Handler which gets executed on day long press. Default = undefined
+  onDayPress={day => {
+    console.log('selected day', day);
+  }}
+  minDate={'2022-03-10'}
+  
+  
+  theme={{
+    calendarBackground: 'transparent',
+    todayTextColor: 'white',
+    monthTextColor: 'white',
+    dayTextColor: 'white',
+    textMonthFontSize: 20,
+    arrowColor: 'white',
+    dotColor: 'white',
+    todayTextColor: 'black',
+    textDayHeaderFontSize: 20,
+    textSectionTitleColor: 'white',
+    textMonthFontWeight: 'bold',
+    selectedDayTextColor: 'black',
+    selectedDayBackgroundColor: 'black',
+    selectedDotColor: 'white',
+    selectedDotColor: 'blue',
+    
+  }}
+  // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+  // Handler which gets executed when visible month changes in calendar. Default = undefined
+  onMonthChange={month => {
+    console.log('month changed', month);
+  }}
+
+  markedDates={{
+    '2022-03-10': {selected: true, selectedColor: 'white'},
+
+  }}
+  disableAllTouchEventsForDisabledDays={true}
+  disabledDaysIndexes={[5, 6]}
+  // Hide month navigation arrows. Default = false
+
+  // Do not show days of other months in month page. Default = false
+ 
+  // If hideArrows = false and hideExtraDays = false do not switch month when tapping on greyed out
+  // day from another month that is visible in calendar page. Default = false
+  // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday
+  firstDay={1}
+  // Hide day names. Default = false
+  // Show week numbers to the left. Default = false
+  showWeekNumbers={true}
+  // Handler which gets executed when press arrow icon left. It receive a callback can go back month
+  onPressArrowLeft={subtractMonth => subtractMonth()}
+  // Handler which gets executed when press arrow icon right. It receive a callback can go next month
+  onPressArrowRight={addMonth => addMonth()}
+  // Disable left arrow. Default = false
+
+
+  // Enable the option to swipe between months. Default = false
+  enableSwipeMonths={true}
+/>
+        </LinearGradient>
+
+
         </View>
+
+  
+        
       </ScrollView>
     );
   }
