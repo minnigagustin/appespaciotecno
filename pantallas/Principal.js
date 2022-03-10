@@ -289,6 +289,7 @@ export default class Home extends React.Component {
               flexDirection: "row",
               marginHorizontal: 20,
               alignItems: "center",
+              alignSelf: 'center',
               marginBottom: 1,
             }}
           >
@@ -299,7 +300,6 @@ export default class Home extends React.Component {
                 justifyContent: "center",
                 alignItems: "center",
                 paddingVertical: 3,
-                marginLeft: -10,
                 borderRadius: 20,
                 width: width/3.5,
               }}
@@ -319,8 +319,8 @@ export default class Home extends React.Component {
                 marginTop: 15,
                 justifyContent: "center",
                 alignItems: "center",
-                marginHorizontal: 20,
                 paddingVertical: 3,
+                marginHorizontal: 10,
                 borderRadius: 10,
                 width: width/3.5,
               }}

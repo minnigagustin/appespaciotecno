@@ -94,7 +94,7 @@ export default function Login({ route }) {
     
     <ImageBackground
       source={require("../assets/fondo_login.jpg")}
-      style={{ resizeMode: "stretch", width: width, height: height }}
+      style={{ resizeMode: "stretch", width: width, height: height+30 }}
     >
       <View style={styles.container}>
        {loading && 
