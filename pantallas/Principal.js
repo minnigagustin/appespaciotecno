@@ -82,7 +82,7 @@ export default class Home extends React.Component {
             style={{
               paddingHorizontal: 15,
               textAlign: "center",
-              fontSize: 25,
+              fontSize: width/18,
               fontWeight: "900",
               color: "#FFF",
             }}
@@ -104,7 +104,7 @@ export default class Home extends React.Component {
               marginBottom: 16,
               paddingVertical: 30,
               paddingLeft: 30,
-              width: width - 30,
+              width: width - 20,
             }}
           >
             <View>
@@ -164,7 +164,7 @@ export default class Home extends React.Component {
               marginBottom: 16,
               paddingVertical: 30,
               paddingLeft: 30,
-              width: width - 30,
+              width: width - 20,
             }}
           >
             <View>
@@ -197,7 +197,7 @@ export default class Home extends React.Component {
               marginBottom: 16,
               paddingVertical: 30,
               paddingLeft: 30,
-              width: width - 30,
+              width: width - 20,
             }}
           >
             <View>
@@ -251,11 +251,11 @@ export default class Home extends React.Component {
 
         <View style={{marginTop: 90}}
         >
-          <Text style={{ textAlign: "center", fontSize: 22 }}>
+          <Text style={{ textAlign: "center", fontSize: width/19, }}>
             En ESPACIO TECNO podras
           </Text>
           <Text
-            style={{ textAlign: "center", fontSize: 24, fontWeight: "bold" }}
+            style={{ textAlign: "center", fontSize: width/18, fontWeight: "bold" }}
           >
             <Text style={{ color: "#eb0032" }}>descubrir,</Text>{" "}
             <Text style={{ color: "#3499c2" }}>capacitarte</Text>{" "}
@@ -264,7 +264,7 @@ export default class Home extends React.Component {
           <Text
             style={{
               textAlign: "center",
-              fontSize: 22,
+              fontSize: width/19,
               marginHorizontal: 20,
               marginTop: 20,
             }}
