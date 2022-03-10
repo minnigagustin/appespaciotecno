@@ -1,10 +1,12 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, Dimensions } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-<<<<<<< HEAD
 import {Calendar, LocaleConfig} from 'react-native-calendars';
+
+const {width, height} = Dimensions.get("window");
+
 
 LocaleConfig.locales['fr'] = {
   monthNames: [
@@ -27,9 +29,6 @@ LocaleConfig.locales['fr'] = {
   today: "Aujourd'hui"
 };
 LocaleConfig.defaultLocale = 'fr';
-=======
-import axios from "axios";
->>>>>>> 46f2b3740b28abea848f58f0db431ac9dbd649f1
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -122,7 +121,7 @@ export default class Home extends React.Component {
               marginBottom: 16,
               paddingVertical: 30,
               paddingLeft: 30,
-              width: 400,
+              width: width - 30,
             }}
           >
             <View>
@@ -182,7 +181,7 @@ export default class Home extends React.Component {
               marginBottom: 16,
               paddingVertical: 30,
               paddingLeft: 30,
-              width: 400,
+              width: width - 30,
             }}
           >
             <View>
@@ -215,7 +214,7 @@ export default class Home extends React.Component {
               marginBottom: 16,
               paddingVertical: 30,
               paddingLeft: 30,
-              width: 400,
+              width: width - 30,
             }}
           >
             <View>
