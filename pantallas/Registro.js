@@ -9,6 +9,7 @@ import {
   TextInput,
   ScrollView,
   Button,
+  ActivityIndicator,
 } from "react-native";
 import React from "react";
 
@@ -39,6 +40,8 @@ export default function Registro() {
   const [genero, setGenero] = useState("");
 
   const [contrasenia, setContrasenia] = useState("");
+
+  const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
 
@@ -83,24 +86,7 @@ export default function Registro() {
     else return false;
   };
 
-  const verificarUsuario = async () => {
-    await axios.get("http://128.0.202.248:8011/logout/");
-    const formData = {};
-    formData.numero_documento = dni;
-    formData.password = contrasenia;
-    axios({
-      url: "http://128.0.202.248:8011/login/",
-      method: "POST",
-      data: formData,
-    }).then((result) => {
-      if (result.status === 200)
-        navigation.navigate("Mis Cursos", {
-          param_usuario: result.data,
-        });
-    });
-  };
-
-  const enviarRegistro = () => {
+  const enviarRegistro = async () => {
     const formData = {};
     formData.nombre = nombre;
     formData.apellido = apellido;
@@ -110,17 +96,17 @@ export default function Registro() {
     formData.genero = genero;
     formData.password = contrasenia;
     formData.picture = null;
-    console.log(formData);
     axios({
       url: "http://128.0.202.248:8011/user/",
       method: "POST",
       data: formData,
     }).then((result) => {
       if (result.status === 200)
-        navigation.navigate("Mis Cursos", {
+        navigation.navigate("Login", {
           param_usuario: result.data,
         });
     });
+    setLoading(true);
   };
 
   return (
@@ -139,15 +125,16 @@ export default function Registro() {
             <TextInput
               style={styles.input_style}
               textAlign={"center"}
-              placeholderTextColor="#000"
+              placeholderTextColor="#c9c8c8"
               placeholder={"Nombre"}
+              color="black"
               onChangeText={(text_user) => actualizarNombre(text_user)}
             ></TextInput>
 
             <TextInput
               style={styles.input_style}
               textAlign={"center"}
-              placeholderTextColor="#000"
+              placeholderTextColor="#c9c8c8"
               placeholder={"Apellido"}
               onChangeText={(text_user) => actualizarApellido(text_user)}
             ></TextInput>
@@ -155,7 +142,7 @@ export default function Registro() {
             <TextInput
               style={styles.input_style}
               textAlign={"center"}
-              placeholderTextColor="#000"
+              placeholderTextColor="#c9c8c8"
               placeholder={"Ingrese su DNI"}
               onChangeText={(text_user) => actualizarDni(text_user)}
             ></TextInput>
@@ -163,7 +150,7 @@ export default function Registro() {
             <TextInput
               style={styles.input_style}
               textAlign={"center"}
-              placeholderTextColor="#000"
+              placeholderTextColor="#c9c8c8"
               placeholder={"Email"}
               keyboardType="email-address"
               onChangeText={(text_user) => actualizarMail(text_user)}
@@ -172,7 +159,7 @@ export default function Registro() {
             <TextInput
               style={styles.input_style}
               textAlign={"center"}
-              placeholderTextColor="#000"
+              placeholderTextColor="#c9c8c8"
               placeholder={"Localidad"}
               onChangeText={(text_user) => actualizarLocalidad(text_user)}
             ></TextInput>
@@ -205,7 +192,7 @@ export default function Registro() {
             <TextInput
               style={styles.input_style}
               textAlign={"center"}
-              placeholderTextColor="#000"
+              placeholderTextColor="#c9c8c8"
               placeholder={"Escriba una contraseña"}
               secureTextEntry={true}
               onChangeText={(text_user) => actualizarContrasenia(text_user)}
@@ -214,7 +201,7 @@ export default function Registro() {
             <TextInput
               style={styles.input_style}
               textAlign={"center"}
-              placeholderTextColor="#000"
+              placeholderTextColor="#c9c8c8"
               secureTextEntry={true}
               placeholder={"Confirme su contraseña"}
             ></TextInput>
@@ -225,33 +212,22 @@ export default function Registro() {
                 verificarRegistro();
               }}
             >
-              <Text style={styles.ingresar_text}>INGRESAR</Text>
+              <Text style={styles.ingresar_text}>REGISTRARSE</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
+              style={styles.regresar_style}
               onPress={() => {
-                navigation.navigate("Login");
+                navigation.goBack();
               }}
-              style={{ color: "white", marginTop: 4 }}
             >
-              <Text style={styles.recuperar_text}>¿Olvidó su contraseña?</Text>
+              <Text style={styles.ingresar_text}>REGRESAR</Text>
             </TouchableOpacity>
+
           </View>
         </ScrollView>
       </View>
-
-      <View
-        style={{
-          bottom: 41,
-        }}
-      >
-        <TouchableOpacity style={{ color: "white" }}>
-          <Text style={styles.recuperar_text}>
-            ¿No tienes un usuario?{" "}
-            <Text style={{ fontWeight: "bold" }}>Registrate</Text>
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {loading && <ActivityIndicator size="small" color="#0000ff" />}
     </ImageBackground>
   );
 }
@@ -297,6 +273,14 @@ const styles = StyleSheet.create({
     borderColor: "black",
     paddingVertical: 6,
     paddingHorizontal: 48,
+    backgroundColor: "rgba(0, 0, 0, 0.15)",
+    alignSelf: "center",
+  },
+  regresar_style: {
+    borderRadius: 30,
+    borderColor: "black",
+    paddingVertical: 6,
+    marginTop:20,
     backgroundColor: "rgba(0, 0, 0, 0.15)",
     alignSelf: "center",
   },
