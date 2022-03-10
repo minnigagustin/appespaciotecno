@@ -21,8 +21,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 import API from "../api";
-
-import { FontAwesome } from "react-native-vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const width = Dimensions.get("window").width;
@@ -51,15 +49,13 @@ export default function Login({ route }) {
     resetearCampos();
   };
 
-
   useEffect(() => {
-    AsyncStorage.getItem('perfil').then((perfil) => {
+    AsyncStorage.getItem("perfil").then((perfil) => {
       if (perfil !== null) {
-        const numero = JSON.parse(perfil)
-        setDni(String(numero.numero_documento))
-      }
-      else {
-        console.log('NO HAY NADAAA')
+        const numero = JSON.parse(perfil);
+        setDni(String(numero.numero_documento));
+      } else {
+        console.log("NO HAY NADAAA");
       }
     });
   }, []);
@@ -70,7 +66,6 @@ export default function Login({ route }) {
     formData.numero_documento = dni;
     formData.password = contrasenia;
     axios({
-      
       url: "http://128.0.202.248:8011/login/",
       method: "POST",
       data: formData,
@@ -99,9 +94,7 @@ export default function Login({ route }) {
     
     <ImageBackground
       source={require("../assets/fondo_login.jpg")}
-      style={{ resizeMode: 'stretch',
-      width: width,
-    height: height, }}
+      style={{ resizeMode: "stretch", width: width, height: height }}
     >
       <View style={styles.container}>
        {loading && 
@@ -154,10 +147,13 @@ export default function Login({ route }) {
       <View
         style={{
           bottom: 41,
-          position: 'relative'
+          position: "relative",
         }}
       >
-        <TouchableOpacity style={{ color: "white" }}>
+        <TouchableOpacity
+          style={{ color: "white" }}
+          onPress={() => navigation.navigate("Registro")}
+        >
           <Text style={styles.recuperar_text}>
             ¿No tienes un usuario?{" "}
             <Text style={{ fontWeight: "bold" }}>Registrate</Text>

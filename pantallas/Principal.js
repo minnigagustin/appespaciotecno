@@ -1,17 +1,9 @@
 import React from "react";
-import {
-  View,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
-  Image,
-} from "react-native";
-import { ScrollView, TextInput } from "react-native-gesture-handler";
-import CourseList from "../pantallas/CourseList";
-import Curso from "../componentes/curso";
-import { FontAwesome } from "react-native-vector-icons";
+import { View, Text, TouchableOpacity, Image } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+<<<<<<< HEAD
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 
 LocaleConfig.locales['fr'] = {
@@ -35,29 +27,36 @@ LocaleConfig.locales['fr'] = {
   today: "Aujourd'hui"
 };
 LocaleConfig.defaultLocale = 'fr';
+=======
+import axios from "axios";
+>>>>>>> 46f2b3740b28abea848f58f0db431ac9dbd649f1
 
 export default class Home extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      perfil:[],
-     
+      perfil: [],
     };
- }
+  }
 
-  componentDidMount(){
-    AsyncStorage.getItem('perfil').then((perfil) => {
+  componentDidMount() {
+    AsyncStorage.getItem("perfil").then((perfil) => {
       if (perfil !== null) {
-        const perfilparse = JSON.parse(perfil)
-        this.setState({perfil : perfilparse})
-      }
-      else {
-        console.log('NO HAY NADAAA')
+        const perfilparse = JSON.parse(perfil);
+        this.setState({ perfil: perfilparse });
+      } else {
+        console.log("NO HAY NADAAA");
       }
     });
-  
-}
+  }
+
+  //cuando se deje de usar clase, crear un state que consulte si el usuario esta logueado, si es true, entonces mostrar el texto
+  //de abandonar sesión, en cambio si es falso (por defecto), no muestra nada
+
+  async desloguearUsuario() {
+    await axios.get("http://128.0.202.248:8011/logout/");
+  }
+
   render() {
     return (
       <ScrollView style={{backgroundColor: 'white'}}>
@@ -67,6 +66,24 @@ export default class Home extends React.Component {
           style={{ flex: 2, padding: 10 }}
           colors={["#4D94C1", "#90C641"]}
         >
+          <TouchableOpacity
+            onPress={() => {
+              this.desloguearUsuario();
+            }}
+          >
+            <Text
+              style={{
+                paddingHorizontal: 8,
+                marginVertical: 10,
+                marginLeft: 260,
+                fontSize: 14,
+                color: "#FFF",
+              }}
+            >
+              {" "}
+              Abandonar Sesión
+            </Text>
+          </TouchableOpacity>
           <Text
             style={{
               paddingHorizontal: 8,
@@ -76,7 +93,8 @@ export default class Home extends React.Component {
               color: "#FFF",
             }}
           >
-            Bienvenido {this.state.perfil ? this.state.perfil.nombre : 'Registrate'}!
+            Bienvenido{" "}
+            {this.state.perfil ? this.state.perfil.nombre : "Registrate"}!
           </Text>
           <Text
             style={{

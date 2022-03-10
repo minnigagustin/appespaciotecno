@@ -15,6 +15,7 @@ import Login from "./pantallas/Login";
 import Categorias from "./pantallas/Categorias";
 import Registro from "./pantallas/Registro";
 import Marcas from "./pantallas/Marcas";
+import Recuperar from "./pantallas/Recuperar";
 import PantallaSlides from "./componentes/Slider";
 import { FontAwesome } from "react-native-vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -48,6 +49,7 @@ function HomeStackScreen() {
       <HomeStack.Screen name="EditarPerfil" component={EditarPerfil} />
       <HomeStack.Screen name="PantallaSlides" component={PantallaSlides} />
       <HomeStack.Screen name="Registro" component={Registro} />
+      <HomeStack.Screen name="Recuperar" component={Recuperar} />
     </HomeStack.Navigator>
   );
 }
@@ -123,9 +125,9 @@ const TabNavigator = () => {
           headerShown: false,
         }}
       />
-      <Tab.Screen
-        name="Registrarse"
-        component={Registro}
+       <Tab.Screen
+        name="Recuperar"
+        component={Recuperar}
         options={{
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name={"user"} color={"#90C641"} size={size} />
