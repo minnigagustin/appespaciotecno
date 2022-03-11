@@ -405,7 +405,7 @@ export default class Home extends React.Component {
   }}
 
   markedDates={{
-    '2022-03-10': {selected: true, selectedColor: 'white'},
+    date: {selected: true, selectedColor: 'white'},
 
   }}
   disableAllTouchEventsForDisabledDays={true}

@@ -15,6 +15,7 @@ import Login from "./pantallas/Login";
 import Categorias from "./pantallas/Categorias";
 import Registro from "./pantallas/Registro";
 import Marcas from "./pantallas/Marcas";
+import Splash from "./pantallas/Splash";
 import Recuperar from "./pantallas/Recuperar";
 import PantallaSlides from "./componentes/Slider";
 import { FontAwesome } from "react-native-vector-icons";
@@ -71,7 +72,7 @@ function InicioStackScreen() {
   );
 }
 
-const TabNavigator = () => {
+function TabNavigator() {
   return (
     <Tab.Navigator
       initialRouteName="Cursos"
@@ -81,7 +82,7 @@ const TabNavigator = () => {
     >
       <Tab.Screen
         name="Cursos"
-        component={InicioStackScreen}
+        component={Home}
         options={{
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name={"home"} color={"#90C641"} size={size} />
@@ -138,5 +139,58 @@ const TabNavigator = () => {
     </Tab.Navigator>
   );
 };
+const InicioHomeStack = createNativeStackNavigator();
+const App = () => {
 
-export default TabNavigator;
+  return (
+    <InicioHomeStack.Navigator
+      initialRouteName="SplashScreen"
+      screenOptions={{
+        drawerPosition: "left",
+      }}
+    >
+      <InicioHomeStack.Screen
+        name="SplashScreen"
+        component={Splash}
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome name={"home"} color={"#90C641"} size={size} />
+          ),
+          headerTitle: (props) => <LogoTitle {...props} />,
+          headerTitleAlign: "left",
+          headerShown: false
+        }}
+      />
+
+<InicioHomeStack.Screen
+        name="HomeInicio"
+        component={TabNavigator}
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome name={"home"} color={"#90C641"} size={size} />
+          ),
+          headerTitle: (props) => <LogoTitle {...props} />,
+          headerTitleAlign: "left",
+          headerShown: false
+        }}
+      />
+
+<InicioHomeStack.Screen
+        name="Login"
+        component={Login}
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome name={"home"} color={"#90C641"} size={size} />
+          ),
+          headerTitle: (props) => <LogoTitle {...props} />,
+          headerTitleAlign: "left",
+          headerShown: false
+        }}
+      />
+      
+
+    </InicioHomeStack.Navigator>
+  );
+};
+
+export default App;
