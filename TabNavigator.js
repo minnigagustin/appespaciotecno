@@ -126,16 +126,6 @@ function TabNavigator() {
           headerShown: false,
         }}
       />
-       <Tab.Screen
-        name="Recuperar"
-        component={Recuperar}
-        options={{
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome name={"user"} color={"#90C641"} size={size} />
-          ),
-          headerShown: false,
-        }}
-      />
     </Tab.Navigator>
   );
 };

@@ -43,7 +43,7 @@ export default function Login({ route }) {
   };
 
   const chequearValidacion = () => {
-    Keyboard.dismiss()
+    Keyboard.dismiss();
     setLoading(true);
     verificarUsuario();
     resetearCampos();
@@ -69,20 +69,21 @@ export default function Login({ route }) {
       url: "http://128.0.202.248:8011/login/",
       method: "POST",
       data: formData,
-    }).then((response) => {
-      if(response.status === 200){
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setLoading(false);
+          AsyncStorage.setItem("perfil", JSON.stringify(response.data));
+          navigation.navigate("Mis Cursos", {
+            param_usuario: response.data,
+          });
+        }
+      })
+      .catch(function (error) {
+        // handle error
+        Alert.alert("ALERTA!", "DNI O CONTRASEÑA INCORRECTA");
         setLoading(false);
-      AsyncStorage.setItem('perfil', JSON.stringify(response.data));
-        navigation.navigate("Mis Cursos", {
-          param_usuario: response.data
-        });
-      } 
-    }).catch(function (error) {
-      // handle error
-      Alert.alert('ALERTA!','DNI O CONTRASEÑA INCORRECTA');
-      setLoading(false);
-    });
-  
+      });
   };
 
   const resetearCampos = () => {
@@ -91,57 +92,71 @@ export default function Login({ route }) {
   };
 
   return (
-    
     <ImageBackground
       source={require("../assets/fondo_login.jpg")}
-      style={{ resizeMode: "stretch", width: width, height: height+30 }}
+      style={{ resizeMode: "stretch", width: width, height: height + 30 }}
     >
       <View style={styles.container}>
-       {loading && 
-        <ActivityIndicator size="large" color="#FFFFFF" style={{
-          position: 'absolute',
-          alignItems: 'center',
-          justifyContent: 'center',
-          bottom: 120
-        }}/>}
-      
+        {loading && (
+          <ActivityIndicator
+            size="large"
+            color="#FFFFFF"
+            style={{
+              position: "absolute",
+              alignItems: "center",
+              justifyContent: "center",
+              bottom: 120,
+            }}
+          />
+        )}
+
         <Image
           style={styles.imagen_style}
           resizeMode="contain"
           source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
         />
-        <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={25}>
-        <TextInput
-          style={styles.input_style}
-          textAlign={"center"}
-          placeholderTextColor="#000"
-          keyboardType="numeric"
-          placeholder={"Usuario (DNI)"}
-          onChangeText={(text_user) => actualizarUser(text_user)}
-          value={dni}
-        ></TextInput>
+        <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={25}>
+          <TextInput
+            style={styles.input_style}
+            textAlign={"center"}
+            placeholderTextColor="#000"
+            keyboardType="numeric"
+            placeholder={"Usuario (DNI)"}
+            onChangeText={(text_user) => actualizarUser(text_user)}
+            value={dni}
+          ></TextInput>
 
-        <TextInput
-          style={styles.input_style}
-          textAlign={"center"}
-          placeholderTextColor="#000"
-          placeholder={"Contraseña"}
-          onChangeText={(text_contra) => actualizarContra(text_contra)}
-          value={contrasenia}
-          secureTextEntry={true}
-        ></TextInput>
+          <TextInput
+            style={styles.input_style}
+            textAlign={"center"}
+            placeholderTextColor="#000"
+            placeholder={"Contraseña"}
+            onChangeText={(text_contra) => actualizarContra(text_contra)}
+            value={contrasenia}
+            secureTextEntry={true}
+          ></TextInput>
 
-        <TouchableOpacity
-          style={[styles.ingresar_style, {backgroundColor: dni && contrasenia ? '#017185' : 'rgba(0, 0, 0, 0.15)'}]}
-          onPress={() => chequearValidacion()}
-          disabled={!dni || !contrasenia}
-        >
-          <Text style={styles.ingresar_text}>INGRESAR</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.ingresar_style,
+              {
+                backgroundColor:
+                  dni && contrasenia ? "#017185" : "rgba(0, 0, 0, 0.15)",
+              },
+            ]}
+            onPress={() => chequearValidacion()}
+            disabled={!dni || !contrasenia}
+          >
+            <Text style={styles.ingresar_text}>INGRESAR</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={{ color: "white", marginTop: 4 }}>
-          <Text style={styles.recuperar_text}>¿Olvidó su contraseña?</Text>
-        </TouchableOpacity></KeyboardAvoidingView>
+          <TouchableOpacity
+            style={{ color: "white", marginTop: 4 }}
+            onPress={() => navigation.navigate("Recuperar")}
+          >
+            <Text style={styles.recuperar_text}>¿Olvidó su contraseña?</Text>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
       </View>
 
       <View

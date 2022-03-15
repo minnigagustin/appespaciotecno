@@ -8,13 +8,18 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 
 export default function MisCursos({ route }) {
+
   const navigation = useNavigation();
 
   const { param_usuario } = route.params;
 
   const [cursos, setCursos] = useState([]);
 
+  const [cursosFavoritos, setCursosFavoritos] = useState([])
+
   const [mostrarCursos, setMostrarCursos] = useState(false);
+
+  const [mostrarCursosFavoritos, setMostrarCursosFavoritos] = useState(false);
 
   const abrirFavoritos = () => {
     getCursos();
@@ -28,9 +33,15 @@ export default function MisCursos({ route }) {
     });
   };
 
+  const getCursosFavoritos = () => {
+    API.get(`comisionesbypersona/`+param_usuario.id).then((res) => {
+      const cursos = res.data;
+      setCursosFavoritos(cursos);
+    });
+  }
+
   return (
     <View>
-
       <Text style={styles.header_text}>
         {" "}
         Bienvenido, {param_usuario.nombre} {param_usuario.apellido}

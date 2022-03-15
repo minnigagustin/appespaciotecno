@@ -24,7 +24,9 @@ export const ModalRegistroOk = (props) => {
             style={styles.aceptar_style}
             onPress={() => {
               props.restore;
-              navigation.navigate("Mis Cursos");
+              navigation.navigate("Mis Cursos", {
+                param_usuario: props.user
+              });
             }}
             onRequestClose={() => {
               this.visibleModal(false);

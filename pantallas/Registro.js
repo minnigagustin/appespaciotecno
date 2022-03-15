@@ -9,7 +9,7 @@ import {
   TextInput,
   ScrollView,
   ActivityIndicator,
-  Alert
+  Alert,
 } from "react-native";
 import React from "react";
 
@@ -39,6 +39,8 @@ export default function Registro() {
 
   const [modalOk, setModalOk] = useState(false);
 
+  const formData = {};
+
   const navigation = useNavigation();
 
   const actualizarNombre = (text_user) => {
@@ -65,12 +67,12 @@ export default function Registro() {
     setContrasenia(text_user);
   };
 
-  const verificarRegistro = () => {
+  const verificarRegistro = async () => {
+    await axios.get("http://128.0.202.248:8011/logout/");
     if (checkCampos()) {
       enviarRegistro();
       actualizarStates();
-    }
-    else Alert.alert("POR FAVOR, COMPLETE LOS CAMPOS SOLICITADOS");
+    } else Alert.alert("POR FAVOR, COMPLETE LOS CAMPOS SOLICITADOS");
   };
 
   const checkCampos = () => {
@@ -87,7 +89,6 @@ export default function Registro() {
   };
 
   const enviarRegistro = async () => {
-    const formData = {};
     formData.nombre = nombre;
     formData.apellido = apellido;
     formData.numero_documento = dni;
@@ -112,7 +113,7 @@ export default function Registro() {
   const actualizarStates = () => {
     setLoading(true);
     setModalOk(true);
-    resetCampos()
+    resetCampos();
   };
 
   const restoreModalOk = () => {
@@ -262,6 +263,7 @@ export default function Registro() {
         <ModalRegistroOk
           state={modalOk}
           restore={restoreModalOk}
+          user={formData}
         />
       )}
     </ImageBackground>
