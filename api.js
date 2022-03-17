@@ -1,7 +1,1 @@
-import axios from "axios";
-
-const instance = axios.create({
-  baseURL: `https://tecnotest.bahia.gob.ar/`,
-});
-
-export default instance;
+export const BASE_URL = "https://tecnotest.bahia.gob.ar/"

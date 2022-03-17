@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   TextInput,
 } from "react-native";
+
 import React from "react";
 
 import { useNavigation } from "@react-navigation/native";
@@ -20,14 +21,17 @@ import { useState, useEffect } from "react";
 
 import axios from "axios";
 
-import API from "../api";
+import API, { BASE_URL } from "../api";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const width = Dimensions.get("window").width;
+
 const height = Dimensions.get("window").height;
 
 export default function Login({ route }) {
   const [dni, setDni] = useState("");
+
   const [loading, setLoading] = useState(false);
 
   const [contrasenia, setContrasenia] = useState("");
@@ -44,8 +48,11 @@ export default function Login({ route }) {
 
   const chequearValidacion = () => {
     Keyboard.dismiss();
+
     setLoading(true);
+
     verificarUsuario();
+
     resetearCampos();
   };
 
@@ -53,6 +60,7 @@ export default function Login({ route }) {
     AsyncStorage.getItem("perfil").then((perfil) => {
       if (perfil !== null) {
         const numero = JSON.parse(perfil);
+
         setDni(String(numero.numero_documento));
       } else {
         console.log("NO HAY NADAAA");
@@ -62,32 +70,53 @@ export default function Login({ route }) {
 
   const verificarUsuario = async () => {
     const formData = {};
-    console.log(API.get("/login/"));
-    await API.get("logout/");
+
+    const url_logout = BASE_URL + "logout/";
+
+    const url_login = BASE_URL + "login/";
+
+    console.log(url_login);
+
+    await axios.get(url_logout);
+
     formData.numero_documento = dni;
+
     formData.password = contrasenia;
-    API.post("login/",  formData )
-      /*asssxios({
-      url: "http://128.0.202.248:8011/login/",                                                                                                                       
+
+    console.log(formData);
+
+    axios({
+      url: url_login,
+
       method: "POST",
+
       data: formData,
-    })*/
+    })
       .then((response) => {
         if (response.status === 200) {
           setLoading(false);
+
           AsyncStorage.setItem("perfil", JSON.stringify(response.data));
-          navigation.navigate(("Cate", { screen: 'Mis Cursos' }));
+
+          navigation.navigate("Mis Cursos", {
+            param_usuario: response.data,
+          });
         }
       })
+
       .catch(function (error) {
         // handle error
+
         Alert.alert("ALERTA!", "DNI O CONTRASEÑA INCORRECTA");
+
         setLoading(false);
       });
   };
 
   const resetearCampos = () => {
+
     setDni("");
+    
     setContrasenia("");
   };
 
