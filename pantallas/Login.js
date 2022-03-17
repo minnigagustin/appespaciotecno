@@ -76,9 +76,7 @@ export default function Login({ route }) {
         if (response.status === 200) {
           setLoading(false);
           AsyncStorage.setItem("perfil", JSON.stringify(response.data));
-          navigation.navigate("Mis Cursos", {
-            param_usuario: response.data,
-          });
+          navigation.navigate(("Cate", { screen: 'Mis Cursos' }));
         }
       })
       .catch(function (error) {

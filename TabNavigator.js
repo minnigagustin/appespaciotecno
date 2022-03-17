@@ -5,7 +5,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./pantallas/Principal";
 import Qr from "./pantallas/Qr";
-
 import Perfil from "./pantallas/Perfil";
 import MisCursos from "./pantallas/MisCursos";
 import Favoritos from "./pantallas/Favoritos";
@@ -20,9 +19,8 @@ import Recuperar from "./pantallas/Recuperar";
 import PantallaSlides from "./componentes/Slider";
 import { FontAwesome } from "react-native-vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-
+import { NavigationContainer } from '@react-navigation/native';
 const Tab = createDrawerNavigator();
-
 function LogoTitle() {
   return (
     <Image
@@ -31,9 +29,7 @@ function LogoTitle() {
     />
   );
 }
-
 const HomeStack = createNativeStackNavigator();
-
 function HomeStackScreen() {
   return (
     <HomeStack.Navigator
@@ -54,9 +50,7 @@ function HomeStackScreen() {
     </HomeStack.Navigator>
   );
 }
-
 const InicioStack = createNativeStackNavigator();
-
 function InicioStackScreen() {
   return (
     <InicioStack.Navigator
@@ -71,7 +65,6 @@ function InicioStackScreen() {
     </InicioStack.Navigator>
   );
 }
-
 function TabNavigator() {
   return (
     <Tab.Navigator
@@ -126,18 +119,24 @@ function TabNavigator() {
           headerShown: false,
         }}
       />
+       <Tab.Screen
+        name="Recuperar"
+        component={Recuperar}
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome name={"user"} color={"#90C641"} size={size} />
+          ),
+          headerShown: false,
+        }}
+      />
     </Tab.Navigator>
   );
 };
 const InicioHomeStack = createNativeStackNavigator();
 const App = () => {
-
   return (
+    <NavigationContainer>
     <InicioHomeStack.Navigator
-      initialRouteName="SplashScreen"
-      screenOptions={{
-        drawerPosition: "left",
-      }}
     >
       <InicioHomeStack.Screen
         name="SplashScreen"
@@ -151,7 +150,6 @@ const App = () => {
           headerShown: false
         }}
       />
-
 <InicioHomeStack.Screen
         name="HomeInicio"
         component={TabNavigator}
@@ -164,10 +162,9 @@ const App = () => {
           headerShown: false
         }}
       />
-
 <InicioHomeStack.Screen
-        name="Login"
-        component={Login}
+        name="LoginNavegacion"
+        component={HomeStackScreen}
         options={{
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name={"home"} color={"#90C641"} size={size} />
@@ -177,10 +174,19 @@ const App = () => {
           headerShown: false
         }}
       />
-      
-
+<InicioHomeStack.Screen
+        name="Cate"
+        component={InicioStackScreen}
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome name={"home"} color={"#90C641"} size={size} />
+          ),
+          headerTitle: (props) => <LogoTitle {...props} />,
+          headerTitleAlign: "left",
+        }}
+      />
     </InicioHomeStack.Navigator>
+    </NavigationContainer>
   );
 };
-
 export default App;

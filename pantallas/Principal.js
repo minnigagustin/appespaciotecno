@@ -303,7 +303,7 @@ export default class Home extends React.Component {
                 borderRadius: 20,
                 width: width/3.5,
               }}
-              onPress={() => this.props.navigation.navigate("Categorias")}
+              onPress={() => this.props.navigation.navigate("Cate", { screen: 'Categorias' })}
             >
               <View>
                 <Image
