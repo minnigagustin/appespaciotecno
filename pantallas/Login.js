@@ -67,8 +67,8 @@ export default function Login({ route }) {
     formData.numero_documento = dni;
     formData.password = contrasenia;
     API.post("login/",  formData )
-      /*axios({
-      url: "http://128.0.202.248:8011/login/",
+      /*asssxios({
+      url: "http://128.0.202.248:8011/login/",                                                                                                                       
       method: "POST",
       data: formData,
     })*/
