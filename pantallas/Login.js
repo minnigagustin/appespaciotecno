@@ -21,7 +21,7 @@ import { useState, useEffect } from "react";
 
 import axios from "axios";
 
-import API, { BASE_URL } from "../api";
+import { BASE_URL } from "../api";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 

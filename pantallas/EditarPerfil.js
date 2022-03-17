@@ -5,15 +5,23 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Button,
 } from "react-native";
+
 import { FontAwesome } from "react-native-vector-icons";
+
 import React, { useState, useCallback } from "react";
+
 import { useNavigation } from "@react-navigation/native";
+
 import { ModalCambiosConfirmados } from "../componentes/ModalCambiosConfirmados";
+
 import { ModalConfirmarCambios } from "../componentes/ModalConfirmarCambios";
+
 import { ScrollView } from "react-native-gesture-handler";
-import * as ImagePicker from 'expo-image-picker';
+
+import * as ImagePicker from "expo-image-picker";
+
+import { BASE_URL } from "../api";
 
 export default function Perfil({ route }) {
   //---------------------------------------------------
@@ -30,10 +38,6 @@ export default function Perfil({ route }) {
 
   const { param_avatar } = route.params;
 
-  //---------------------------------------------------
-  // Props encargadas del DateTimePicker.
-  //---------------------------------------------------
-
   const [mode, setMode] = useState("date");
 
   const [show, setShow] = useState(false);
@@ -42,25 +46,12 @@ export default function Perfil({ route }) {
 
   const [textCumpleanios, setTextCumpleanios] = useState("");
 
-  //---------------------------------------------------
-  // Prop para navegar entre Screens.
-  //---------------------------------------------------
-
   const navigation = useNavigation();
-
-  //---------------------------------------------------
-  // State que se encarga de mostrar el modal de cambios guardados.
-  //---------------------------------------------------
 
   const [showCambiosRealizadosModal, setShowCambiosRealizadosModal] =
     useState(false);
 
   const [showAConfirmarModal, setShowAConfirmarModal] = useState(false);
-
-  //---------------------------------------------------
-  // States encargados de actualizar la info del perfil.
-  // Por defecto, vienen cargados desde los parámetros del perfil
-  //---------------------------------------------------
 
   const [stateNombre, setStateNombre] = useState(
     JSON.stringify(param_nombre).replace(/['"]+/g, "").trim()
@@ -78,57 +69,71 @@ export default function Perfil({ route }) {
 
   const [stateAvatar, setStateAvatar] = useState(param_avatar);
 
-  //---------------------------------------------------
-  // Nuevo perfil con las modificacioes realizadas
-  //---------------------------------------------------
-
   const perfilModificado = {
     nuevo_nombre: stateNombre,
+
     nuevo_apellido: stateApellido,
+
     nuevo_dni: stateDni,
+
     nuevo_avatar: stateAvatar,
   };
 
-  //---------------------------------------------------
-  // Función que actualiza la fecha de cumpleaños
-  //--------------------------------------------------
-
   const guardarPerfil = () => {
+
     setStateNombre(perfilModificado.nuevo_nombre);
+
     setStateApellido(perfilModificado.nuevo_apellido);
+
     setStateAvatar(perfilModificado.nuevo_avatar);
+
     setStateDni(perfilModificado.nuevo_dni);
-    setStateAvatar(perfilModificado.nuevo_avatar)
+
+    setStateAvatar(perfilModificado.nuevo_avatar);
   };
 
   const guardarCambios = () => {
+
     checkCambios();
   };
 
   const checkCambios = () => {
+
     if (
       perfilModificado.nuevo_nombre !== stateNombre ||
+
       perfilModificado.nuevo_apellido !== stateApellido ||
+
       perfilModificado.nuevo_dni !== stateDni
+
     )
       setShowAConfirmarModal(true);
   };
 
   const restoreCambiosModal = () => {
+
     setShowCambiosRealizadosModal(false);
+
     setShowAConfirmarModal(false);
+
   };
 
   const actualizarNombre = (text) => {
+
     perfilModificado.nuevo_nombre = text;
+
   };
 
   const actualizarApellido = (text) => {
+
     perfilModificado.nuevo_apellido = text;
+
   };
 
   const actualizarDni = (text) => {
+
     perfilModificado.nuevo_dni = text;
+
   };
 
   const [image, setImage] = useState(null);
@@ -160,7 +165,10 @@ export default function Perfil({ route }) {
         <View style={styles.container_header}>
           <View style={styles.header_info_container}>
             <TouchableOpacity onPress={actualizarAvatar}>
-              <Image source={{ uri: 'http://128.0.202.248:8011' + stateAvatar }} style={{width: 150, height: 150, borderRadius: 400/ 2}} />
+              <Image
+                source={{ uri: BASE_URL + stateAvatar }}
+                style={{ width: 150, height: 150, borderRadius: 400 / 2 }}
+              />
             </TouchableOpacity>
           </View>
           <View>
