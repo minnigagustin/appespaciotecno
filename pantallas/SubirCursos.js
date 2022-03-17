@@ -12,15 +12,9 @@ import {
 } from "react-native";
 import React from "react";
 
-import { useNavigation } from "@react-navigation/native";
-
 import { useState } from "react";
 
 import axios from "axios";
-
-import API from "../api";
-
-import { FontAwesome } from "react-native-vector-icons";
 
 const width = Dimensions.get("window").width;
 
