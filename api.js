@@ -1,5 +1,7 @@
-import axios from 'axios';
+import axios from "axios";
 
-export default axios.create({
-  baseURL: `http://128.0.202.248:8011/`
+const instance = axios.create({
+  baseURL: `https://tecnotest.bahia.gob.ar/`,
 });
+
+export default instance;
