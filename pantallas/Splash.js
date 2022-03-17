@@ -46,7 +46,7 @@ export default class Home extends React.Component {
         this.props.navigation.replace("HomeInicio");
         }, 1000);
       } else {
-        this.props.navigation.replace("Login");
+        this.props.navigation.replace("LoginNavegacion");
       }
     });
   }
