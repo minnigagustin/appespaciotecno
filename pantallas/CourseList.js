@@ -1,6 +1,5 @@
 import React from 'react'
 import {Text,TouchableOpacity, View,Image} from 'react-native'
-import ProgressCircle from 'react-native-progress-circle'
 import { Entypo } from "react-native-vector-icons";
 
 

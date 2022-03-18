@@ -16,7 +16,7 @@ export default function App() {
     })();
   }, []);
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = ({ data }) => {
     setScanned(true);
     Alert.alert('Escaneado!', 'El link es: ' + data);
   };

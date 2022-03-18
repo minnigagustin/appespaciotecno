@@ -25,8 +25,6 @@ export default function MisCursos({ route }) {
 
   const [mostrarCursos, setMostrarCursos] = useState(false);
 
-  const [mostrarCursosFavoritos, setMostrarCursosFavoritos] = useState(false);
-
   const abrirFavoritos = () => {
     getCursos();
 

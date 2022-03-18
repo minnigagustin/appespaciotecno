@@ -15,7 +15,7 @@ import { useState } from "react";
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
-export default function Login({ route }) {
+export default function Login() {
   const [email, setEmail] = useState("");
 
   const actualizarMail = (text_user) => {

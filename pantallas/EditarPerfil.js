@@ -9,7 +9,7 @@ import {
 
 import { FontAwesome } from "react-native-vector-icons";
 
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 
 import { useNavigation } from "@react-navigation/native";
 
@@ -37,14 +37,6 @@ export default function Perfil({ route }) {
   const { param_cumple } = route.params;
 
   const { param_avatar } = route.params;
-
-  const [mode, setMode] = useState("date");
-
-  const [show, setShow] = useState(false);
-
-  const [dateInput, setDateInput] = useState(new Date());
-
-  const [textCumpleanios, setTextCumpleanios] = useState("");
 
   const navigation = useNavigation();
 
