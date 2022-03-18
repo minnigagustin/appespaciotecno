@@ -32,7 +32,7 @@ export default function MisCursos({ route }) {
   };
 
   const getCursos = () => {
-    API.get(`curso/`).then((res) => {
+    BASE_URL.get(`curso/`).then((res) => {
       const cursos = res.data;
 
       setCursos(cursos);
@@ -40,7 +40,7 @@ export default function MisCursos({ route }) {
   };
 
   const getCursosFavoritos = () => {
-    API.get(`comisionesbypersona/` + param_usuario.id).then((res) => {
+    BASE_URL.get(`comisionesbypersona/` + param_usuario.id).then((res) => {
       const cursos = res.data;
 
       setCursosFavoritos(cursos);
