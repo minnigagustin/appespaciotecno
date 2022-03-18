@@ -120,7 +120,7 @@ export default class Home extends React.Component {
                 ¿Queres emprender?
               </Text>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("Categorias")}
+                onPress={() => this.props.navigation.navigate("Cate", { screen: 'Categorias' })}
                 style={{
                   flexDirection: "row",
                   backgroundColor: "#90C641",
@@ -303,7 +303,7 @@ export default class Home extends React.Component {
                 borderRadius: 20,
                 width: width/3.5,
               }}
-              onPress={() => this.props.navigation.navigate("Categorias")}
+              onPress={() => this.props.navigation.navigate("Cate", { screen: 'Categorias' })}
             >
               <View>
                 <Image
@@ -377,7 +377,7 @@ export default class Home extends React.Component {
   onDayPress={day => {
     console.log('selected day', day);
   }}
-  minDate={'2022-03-10'}
+  minDate={'2022-03-14'}
   
   
   theme={{
@@ -405,7 +405,7 @@ export default class Home extends React.Component {
   }}
 
   markedDates={{
-    date: {selected: true, selectedColor: 'white'},
+    '2022-03-15': {selected: true, selectedColor: 'white'},
 
   }}
   disableAllTouchEventsForDisabledDays={true}

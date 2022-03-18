@@ -20,6 +20,7 @@ import Recuperar from "./pantallas/Recuperar";
 import PantallaSlides from "./componentes/Slider";
 import { FontAwesome } from "react-native-vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { NavigationContainer } from '@react-navigation/native';
 
 const Tab = createDrawerNavigator();
 
@@ -143,11 +144,9 @@ const InicioHomeStack = createNativeStackNavigator();
 const App = () => {
 
   return (
+    <NavigationContainer>
     <InicioHomeStack.Navigator
-      initialRouteName="SplashScreen"
-      screenOptions={{
-        drawerPosition: "left",
-      }}
+      
     >
       <InicioHomeStack.Screen
         name="SplashScreen"
@@ -176,8 +175,8 @@ const App = () => {
       />
 
 <InicioHomeStack.Screen
-        name="Login"
-        component={Login}
+        name="LoginNavegacion"
+        component={HomeStackScreen}
         options={{
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name={"home"} color={"#90C641"} size={size} />
@@ -187,9 +186,22 @@ const App = () => {
           headerShown: false
         }}
       />
+
+<InicioHomeStack.Screen
+        name="Cate"
+        component={InicioStackScreen}
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome name={"home"} color={"#90C641"} size={size} />
+          ),
+          headerTitle: (props) => <LogoTitle {...props} />,
+          headerTitleAlign: "left",
+        }}
+      />
       
 
     </InicioHomeStack.Navigator>
+    </NavigationContainer>
   );
 };
 

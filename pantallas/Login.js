@@ -49,6 +49,8 @@ export default function Login({ route }) {
     resetearCampos();
   };
 
+  
+
   useEffect(() => {
     AsyncStorage.getItem("perfil").then((perfil) => {
       if (perfil !== null) {
