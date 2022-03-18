@@ -1,9 +1,16 @@
 import React from "react";
+
 import { View, Text, TouchableOpacity, Image, Dimensions } from "react-native";
+
 import { ScrollView } from "react-native-gesture-handler";
+
 import { LinearGradient } from "expo-linear-gradient";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import {Calendar, LocaleConfig} from 'react-native-calendars';
+
+import { BASE_URL } from "../api";
 
 const {width, height} = Dimensions.get("window");
 
@@ -31,16 +38,23 @@ LocaleConfig.locales['fr'] = {
 LocaleConfig.defaultLocale = 'fr';
 
 export default class Home extends React.Component {
+
   constructor(props) {
+
     super(props);
+
     this.state = {
+
       perfil: [],
     };
   }
 
   componentDidMount() {
+
     AsyncStorage.getItem("perfil").then((perfil) => {
+
       if (perfil !== null) {
+
         const perfilparse = JSON.parse(perfil);
         this.setState({ perfil: perfilparse });
       } else {
@@ -53,7 +67,8 @@ export default class Home extends React.Component {
   //de abandonar sesión, en cambio si es falso (por defecto), no muestra nada
 
   async desloguearUsuario() {
-    await axios.get("http://128.0.202.248:8011/logout/");
+
+    await axios.get(BASE_URL+"logout/");
   }
 
   render() {

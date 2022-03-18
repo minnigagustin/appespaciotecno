@@ -1,5 +1,1 @@
-import axios from 'axios';
-
-export default axios.create({
-  baseURL: `http://128.0.202.248:8011/`
-});
+export const BASE_URL = "https://tecnotest.bahia.gob.ar/"

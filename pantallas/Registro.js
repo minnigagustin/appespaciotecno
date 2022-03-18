@@ -9,14 +9,20 @@ import {
   TextInput,
   ScrollView,
   ActivityIndicator,
-  Alert
+  Alert,
 } from "react-native";
+
 import React from "react";
 
 import { useNavigation } from "@react-navigation/native";
+
 import { useState } from "react";
+
 import axios from "axios";
+
 import { ModalRegistroOk } from "../componentes/ModalRegistroOk";
+
+import { BASE_URL } from "../api";
 
 const width = Dimensions.get("window").width;
 
@@ -38,6 +44,8 @@ export default function Registro() {
   const [loading, setLoading] = useState(false);
 
   const [modalOk, setModalOk] = useState(false);
+
+  const formData = {};
 
   const navigation = useNavigation();
 
@@ -65,12 +73,14 @@ export default function Registro() {
     setContrasenia(text_user);
   };
 
-  const verificarRegistro = () => {
+  const verificarRegistro = async () => {
+    await axios.get(BASE_URL + "logout/");
+
     if (checkCampos()) {
       enviarRegistro();
+
       actualizarStates();
-    }
-    else Alert.alert("POR FAVOR, COMPLETE LOS CAMPOS SOLICITADOS");
+    } else Alert.alert("POR FAVOR, COMPLETE LOS CAMPOS SOLICITADOS");
   };
 
   const checkCampos = () => {
@@ -87,18 +97,27 @@ export default function Registro() {
   };
 
   const enviarRegistro = async () => {
-    const formData = {};
     formData.nombre = nombre;
+
     formData.apellido = apellido;
+
     formData.numero_documento = dni;
+
     formData.email = email;
+
     formData.localidad = localidad;
+
     formData.genero = genero;
+
     formData.password = contrasenia;
+
     formData.picture = null;
+
     axios({
-      url: "http://128.0.202.248:8011/user/",
+      url: BASE_URL + "user/",
+
       method: "POST",
+
       data: formData,
     }).then((result) => {
       if (result.status === 200) {
@@ -111,8 +130,10 @@ export default function Registro() {
 
   const actualizarStates = () => {
     setLoading(true);
+
     setModalOk(true);
-    resetCampos()
+
+    resetCampos();
   };
 
   const restoreModalOk = () => {
@@ -121,16 +142,23 @@ export default function Registro() {
 
   const regresarScreen = () => {
     resetCampos();
+
     navigation.goBack();
   };
 
   const resetCampos = () => {
     setNombre("");
+
     setApellido("");
+
     setDni("");
+
     setEmail("");
+
     setLocalidad("");
+
     setGenero("");
+
     setContrasenia("");
   };
 
@@ -262,6 +290,7 @@ export default function Registro() {
         <ModalRegistroOk
           state={modalOk}
           restore={restoreModalOk}
+          user={formData}
         />
       )}
     </ImageBackground>

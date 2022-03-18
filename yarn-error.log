@@ -1,30 +1,20 @@
 Arguments: 
-  /snap/node/5953/bin/node /snap/node/5953/bin/yarn.js global dir
+  /usr/bin/node /usr/share/yarn/bin/yarn.js install
 
 PATH: 
-  /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+  /home/mesa20/.local/bin:/home/mesa20/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 
 Yarn version: 
-  1.22.17
+  1.22.18
 
 Node version: 
-  16.14.0
+  14.19.0
 
 Platform: 
   linux x64
 
 Trace: 
-  Error: EACCES: permission denied, write
-      at writeSync (node:fs:884:3)
-      at SyncWriteStream._write (node:internal/fs/sync_write_stream:25:3)
-      at writeOrBuffer (node:internal/streams/writable:389:12)
-      at _write (node:internal/streams/writable:330:10)
-      at SyncWriteStream.Writable.write (node:internal/streams/writable:334:10)
-      at ConsoleReporter._log (/snap/node/5953/lib/cli.js:96904:17)
-      at ConsoleReporter.log (/snap/node/5953/lib/cli.js:96892:10)
-      at dir (/snap/node/5953/lib/cli.js:36299:14)
-      at Object.<anonymous> (/snap/node/5953/lib/cli.js:25983:25)
-      at Generator.next (<anonymous>)
+  Error: EACCES: permission denied, mkdir '/home/mesa20/Documentos/GitHub/appespaciotecno/node_modules/@babel/helper-define-polyfill-provider/node_modules'
 
 npm manifest: 
   {
@@ -39,6 +29,7 @@ npm manifest:
       "eject": "expo eject"
     },
     "dependencies": {
+      "@expo/ngrok": "^2.4.3",
       "@react-native-async-storage/async-storage": "~1.15.0",
       "@react-native-community/datetimepicker": "4.0.0",
       "@react-native-community/masked-view": "^0.1.11",
@@ -73,7 +64,8 @@ npm manifest:
       "react-native-safe-area-context": "3.3.2",
       "react-native-screens": "~3.10.1",
       "react-native-slideshow": "^1.0.1",
-      "react-native-svg": "^12.1.1",
+      "react-native-svg": "^12.3.0",
+      "react-native-svg-animations": "^0.2.6",
       "react-native-vector-icons": "^9.0.0",
       "react-native-web": "0.17.1",
       "react-navigation": "^4.4.4",
@@ -5024,7 +5016,15 @@ Lockfile:
     "resolved" "https://registry.npmjs.org/react-native-slideshow/-/react-native-slideshow-1.0.1.tgz"
     "version" "1.0.1"
   
-  "react-native-svg@^12.1.0", "react-native-svg@^12.1.1":
+  "react-native-svg-animations@^0.2.6":
+    "integrity" "sha512-moApbBqFfFthKFtfgT4EEuVqB3w/HPkBpPcBCFKl2v7fo8FKMDmIJFnlqk81IYHtneYYRv5fTy+OT2U0Pdlpfg=="
+    "resolved" "https://registry.npmjs.org/react-native-svg-animations/-/react-native-svg-animations-0.2.6.tgz"
+    "version" "0.2.6"
+    dependencies:
+      "color" "^3.1.2"
+      "svg-path-properties" "^1.0.3"
+  
+  "react-native-svg@^12.0.3", "react-native-svg@^12.1.0", "react-native-svg@^12.1.1":
     "integrity" "sha512-NIAJ8jCnXGCqGWXkkJ1GTzO4a3Md5at5sagYV8Vh4MXYnL4z5Rh428Wahjhh+LIjx40EE5xM5YtwyJBqOIba2Q=="
     "resolved" "https://registry.npmjs.org/react-native-svg/-/react-native-svg-12.1.1.tgz"
     "version" "12.1.1"
@@ -5765,6 +5765,11 @@ Lockfile:
     "integrity" "sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w=="
     "resolved" "https://registry.npmjs.org/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz"
     "version" "1.0.0"
+  
+  "svg-path-properties@^1.0.3":
+    "integrity" "sha512-Wo6SjzONZPL9UAgrnwcCkDGRYP9CbHJGkNcPFIgEVRjiOiJxSd/AtwnGk/4N4iOLGUoas57TMxY0xASDeb9YJg=="
+    "resolved" "https://registry.npmjs.org/svg-path-properties/-/svg-path-properties-1.0.11.tgz"
+    "version" "1.0.11"
   
   "temp@^0.8.1", "temp@0.8.3":
     "integrity" "sha1-4Ma8TSa5AxJEEOT+2BEDAU38H1k="
