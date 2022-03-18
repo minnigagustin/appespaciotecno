@@ -33,6 +33,7 @@ export default function Login({ route }) {
           resizeMode="contain"
           source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
         />
+
         <TextInput
           style={styles.input_style}
           textAlign={"center"}
