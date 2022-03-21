@@ -20,7 +20,7 @@ import { useState } from "react";
 
 import axios from "axios";
 
-import { ModalRegistroOk } from "../componentes/ModalRegistroOk";
+import { ModalRegistroOk } from "../modals/ModalRegistroOk";
 
 import { BASE_URL } from "../api";
 

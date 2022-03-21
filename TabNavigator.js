@@ -84,13 +84,13 @@ function InicioStackScreen() {
 function TabNavigator() {
   return (
     <Tab.Navigator
-      initialRouteName="Cursos"
+      initialRouteName="Principal"
       screenOptions={{
         drawerPosition: "left",
       }}
     >
       <Tab.Screen
-        name="Cursos"
+        name="Principal"
         component={Home}
         options={{
           tabBarIcon: ({ size, color }) => (

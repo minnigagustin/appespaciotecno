@@ -23,6 +23,8 @@ import axios from "axios";
 
 import { BASE_URL } from "../api";
 
+import global from "../componentes/global"
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const width = Dimensions.get("window").width;
@@ -96,17 +98,20 @@ export default function Login({ route }) {
     })
       .then((response) => {
         if (response.status === 200) {
+
+          global.authenticated = true;
+
           setLoading(false);
 
           AsyncStorage.setItem("perfil", JSON.stringify(response.data));
 
-          navigation.navigate("Mis Cursos", {
+          navigation.navigate("Principal", {
             param_usuario: response.data,
           });
         }
       })
 
-      .catch(function (error) {
+      .catch(function () {
         // handle error
 
         Alert.alert("ALERTA!", "DNI O CONTRASEÑA INCORRECTA");
@@ -116,9 +121,8 @@ export default function Login({ route }) {
   };
 
   const resetearCampos = () => {
-
     setDni("");
-    
+
     setContrasenia("");
   };
 

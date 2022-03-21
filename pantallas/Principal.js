@@ -1,60 +1,64 @@
 import React from "react";
-
 import { View, Text, TouchableOpacity, Image, Dimensions } from "react-native";
-
 import { ScrollView } from "react-native-gesture-handler";
-
 import { LinearGradient } from "expo-linear-gradient";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-import {Calendar, LocaleConfig} from 'react-native-calendars';
-
+import { Calendar, LocaleConfig } from "react-native-calendars";
 import { BASE_URL } from "../api";
-
-const {width, height} = Dimensions.get("window");
-
-
-LocaleConfig.locales['fr'] = {
+import global from "../componentes/global"
+const { width, height } = Dimensions.get("window");
+LocaleConfig.locales["fr"] = {
   monthNames: [
-    'Enero',
-    'Febrero',
-    'Marzo',
-    'Abril',
-    'Mayo',
-    'Junio',
-    'Julio',
-    'Agosto',
-    'Septiembre',
-    'Octubre',
-    'Noviembre',
-    'Diciembre'
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
   ],
-  monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
-  dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
-  dayNamesShort: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-  today: "Aujourd'hui"
+  monthNamesShort: [
+    "Janv.",
+    "Févr.",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juil.",
+    "Août",
+    "Sept.",
+    "Oct.",
+    "Nov.",
+    "Déc.",
+  ],
+  dayNames: [
+    "Dimanche",
+    "Lundi",
+    "Mardi",
+    "Mercredi",
+    "Jeudi",
+    "Vendredi",
+    "Samedi",
+  ],
+  dayNamesShort: ["D", "L", "M", "M", "J", "V", "S"],
+  today: "Aujourd'hui",
 };
-LocaleConfig.defaultLocale = 'fr';
-
+LocaleConfig.defaultLocale = "fr";
 export default class Home extends React.Component {
-
   constructor(props) {
-
     super(props);
-
     this.state = {
-
       perfil: [],
     };
   }
-
   componentDidMount() {
-
     AsyncStorage.getItem("perfil").then((perfil) => {
-
       if (perfil !== null) {
-
         const perfilparse = JSON.parse(perfil);
         this.setState({ perfil: perfilparse });
       } else {
@@ -62,215 +66,224 @@ export default class Home extends React.Component {
       }
     });
   }
-
   //cuando se deje de usar clase, crear un state que consulte si el usuario esta logueado, si es true, entonces mostrar el texto
   //de abandonar sesión, en cambio si es falso (por defecto), no muestra nada
-
   async desloguearUsuario() {
-
-    await axios.get(BASE_URL+"logout/");
+    await axios.get(BASE_URL + "logout/");
   }
-
   render() {
     return (
-      <ScrollView style={{backgroundColor: 'white'}}>
+      <ScrollView style={{ backgroundColor: "white" }}>
         <View>
-        <LinearGradient
-        start={{x: 0.0, y: 0.25}} end={{x: 0.8, y: 0.5}}
-          style={{ flex: 2, padding: 10 }}
-          colors={["#4D94C1", "#90C641"]}
-        >
-          
-          <Text
-            style={{
-              paddingHorizontal: 8,
-              fontSize: 35,
-              paddingTop: 40,
-              fontWeight: "bold",
-              color: "#FFF",
-            }}
+          <LinearGradient
+            start={{ x: 0.0, y: 0.25 }}
+            end={{ x: 0.8, y: 0.5 }}
+            style={{ flex: 2, padding: 10 }}
+            colors={["#4D94C1", "#90C641"]}
           >
-            Bienvenido{" "}
-            {this.state.perfil ? this.state.perfil.nombre : "Registrate"}!
-          </Text>
-          <Text
-            style={{
-              paddingHorizontal: 15,
-              textAlign: "center",
-              fontSize: width/18,
-              fontWeight: "900",
-              color: "#FFF",
-            }}
-          >
-            ¿Que taller te gustaria hacer?
-          </Text>
-          <View style={{ height:100 }} />
-        
-        <ScrollView horizontal style={{ position:'absolute',
-    bottom: -85, width: width}}>
-          <View
-            style={{
-              flexDirection: "row",
-              backgroundColor: "red",
-              marginTop: 15,
-              marginHorizontal: 10,
-              elevation: 7,
-              borderRadius: 20,
-              marginBottom: 16,
-              paddingVertical: 30,
-              paddingLeft: 30,
-              width: width - 20,
-            }}
-          >
-            <View>
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  width: 250,
-                  paddingRight: 100,
-                }}
-              >
-                ¿Queres emprender?
-              </Text>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("Cate", { screen: 'Categorias' })}
+            {global.authenticated && <TouchableOpacity
+            >
+              <Text style={{
+                paddingHorizontal: 8,
+                fontSize: 15,
+                paddingTop: 10,
+                alignSelf:"flex-end",
+                paddingRight:10,
+                fontWeight: "bold",
+                color: "#FFF",
+              }}> Cerrar Sesión </Text>
+            </TouchableOpacity>}
+            <Text
+              style={{
+                paddingHorizontal: 8,
+                fontSize: 35,
+                paddingTop: 20,
+                fontWeight: "bold",
+                color: "#FFF",
+              }}
+            >
+              Bienvenido{" "}
+              {this.state.perfil ? this.state.perfil.nombre : "Registrate"}!
+            </Text>
+            <Text
+              style={{
+                paddingHorizontal: 15,
+                textAlign: "center",
+                fontSize: width / 18,
+                fontWeight: "900",
+                color: "#FFF",
+              }}
+            >
+              ¿Que taller te gustaria hacer?
+            </Text>
+            <View style={{ height: 100 }} />
+            <ScrollView
+              horizontal
+              style={{ position: "absolute", bottom: -85, width: width }}
+            >
+              <View
                 style={{
                   flexDirection: "row",
-                  backgroundColor: "#90C641",
-                  alignItems: "center",
-                  marginTop: 20,
-                  width: 150,
-                  paddingVertical: 10,
-                  borderRadius: 14,
-                  paddingHorizontal: 10,
+                  backgroundColor: "red",
+                  marginTop: 15,
+                  marginHorizontal: 10,
+                  elevation: 7,
+                  borderRadius: 20,
+                  marginBottom: 16,
+                  paddingVertical: 30,
+                  paddingLeft: 30,
+                  width: width - 20,
                 }}
               >
-                <Text
-                  style={{
-                    color: "#FFF",
-                    fontWeight: "bold",
-                    fontSize: 12,
-                  }}
-                >
-                  Conocenos
-                </Text>
+                <View>
+                  <Text
+                    style={{
+                      color: "white",
+                      fontSize: 20,
+                      fontWeight: "bold",
+                      width: 250,
+                      paddingRight: 100,
+                    }}
+                  >
+                    ¿Queres emprender?
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate("Categorias")}
+                    style={{
+                      flexDirection: "row",
+                      backgroundColor: "#90C641",
+                      alignItems: "center",
+                      marginTop: 20,
+                      width: 150,
+                      paddingVertical: 10,
+                      borderRadius: 14,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#FFF",
+                        fontWeight: "bold",
+                        fontSize: 12,
+                      }}
+                    >
+                      Conocenos
+                    </Text>
+                    <Image
+                      source={require("../assets/a3.png")}
+                      style={{ marginLeft: 20, width: 8, height: 8 }}
+                    />
+                  </TouchableOpacity>
+                </View>
                 <Image
-                  source={require("../assets/a3.png")}
-                  style={{ marginLeft: 20, width: 8, height: 8 }}
+                  source={require("../assets/undraw.png")}
+                  style={{ marginLeft: -80, marginTop: 35 }}
                 />
-              </TouchableOpacity>
-            </View>
-            <Image
-              source={require("../assets/undraw.png")}
-              style={{ marginLeft: -80, marginTop: 35 }}
-            />
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              backgroundColor: "#e41c24",
-              marginTop: 15,
-              marginHorizontal: 20,
-              elevation: 7,
-              borderRadius: 20,
-              marginBottom: 16,
-              paddingVertical: 30,
-              paddingLeft: 30,
-              width: width - 20,
-            }}
-          >
-            <View>
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  width: 250,
-                  paddingRight: 100,
-                }}
-              >
-                ¿Queres aprender?
-              </Text>
-            </View>
-            <Image
-              source={require("../assets/undraw.png")}
-              style={{ marginLeft: -80, marginTop: 35 }}
-            />
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              backgroundColor: "#3499c2",
-              marginTop: 15,
-              marginHorizontal: 20,
-              elevation: 7,
-              borderRadius: 20,
-              marginBottom: 16,
-              paddingVertical: 30,
-              paddingLeft: 30,
-              width: width - 20,
-            }}
-          >
-            <View>
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  width: 250,
-                  paddingRight: 100,
-                }}
-              >
-                ¿Queres capacitarte?
-              </Text>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("Categorias")}
+              </View>
+              <View
                 style={{
                   flexDirection: "row",
-                  backgroundColor: "#90C641",
-                  alignItems: "center",
-                  marginTop: 20,
-                  width: 150,
-                  paddingVertical: 10,
-                  borderRadius: 14,
-                  paddingHorizontal: 10,
+                  backgroundColor: "#e41c24",
+                  marginTop: 15,
+                  marginHorizontal: 20,
+                  elevation: 7,
+                  borderRadius: 20,
+                  marginBottom: 16,
+                  paddingVertical: 30,
+                  paddingLeft: 30,
+                  width: width - 20,
                 }}
               >
-                <Text
-                  style={{
-                    color: "#FFF",
-                    fontWeight: "bold",
-                    fontSize: 12,
-                  }}
-                >
-                  Conocenos
-                </Text>
+                <View>
+                  <Text
+                    style={{
+                      color: "white",
+                      fontSize: 20,
+                      fontWeight: "bold",
+                      width: 250,
+                      paddingRight: 100,
+                    }}
+                  >
+                    ¿Queres aprender?
+                  </Text>
+                </View>
                 <Image
-                  source={require("../assets/a3.png")}
-                  style={{ marginLeft: 20, width: 8, height: 8 }}
+                  source={require("../assets/undraw.png")}
+                  style={{ marginLeft: -80, marginTop: 35 }}
                 />
-              </TouchableOpacity>
-            </View>
-            <Image
-              source={require("../assets/undraw.png")}
-              style={{ marginLeft: -80, marginTop: 35 }}
-            />
-          </View>
-        </ScrollView>
-</LinearGradient>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  backgroundColor: "#3499c2",
+                  marginTop: 15,
+                  marginHorizontal: 20,
+                  elevation: 7,
+                  borderRadius: 20,
+                  marginBottom: 16,
+                  paddingVertical: 30,
+                  paddingLeft: 30,
+                  width: width - 20,
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      color: "white",
+                      fontSize: 20,
+                      fontWeight: "bold",
+                      width: 250,
+                      paddingRight: 100,
+                    }}
+                  >
+                    ¿Queres capacitarte?
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate("Categorias")}
+                    style={{
+                      flexDirection: "row",
+                      backgroundColor: "#90C641",
+                      alignItems: "center",
+                      marginTop: 20,
+                      width: 150,
+                      paddingVertical: 10,
+                      borderRadius: 14,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#FFF",
+                        fontWeight: "bold",
+                        fontSize: 12,
+                      }}
+                    >
+                      Conocenos
+                    </Text>
+                    <Image
+                      source={require("../assets/a3.png")}
+                      style={{ marginLeft: 20, width: 8, height: 8 }}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <Image
+                  source={require("../assets/undraw.png")}
+                  style={{ marginLeft: -80, marginTop: 35 }}
+                />
+              </View>
+            </ScrollView>
+          </LinearGradient>
         </View>
-
-        <View style={{marginTop: 90}}
-        >
-          <Text style={{ textAlign: "center", fontSize: width/19, }}>
+        <View style={{ marginTop: 90 }}>
+          <Text style={{ textAlign: "center", fontSize: width / 19 }}>
             En ESPACIO TECNO podras
           </Text>
           <Text
-            style={{ textAlign: "center", fontSize: width/18, fontWeight: "bold" }}
+            style={{
+              textAlign: "center",
+              fontSize: width / 18,
+              fontWeight: "bold",
+            }}
           >
             <Text style={{ color: "#eb0032" }}>descubrir,</Text>{" "}
             <Text style={{ color: "#3499c2" }}>capacitarte</Text>{" "}
@@ -279,7 +292,7 @@ export default class Home extends React.Component {
           <Text
             style={{
               textAlign: "center",
-              fontSize: width/19,
+              fontSize: width / 19,
               marginHorizontal: 20,
               marginTop: 20,
             }}
@@ -304,7 +317,7 @@ export default class Home extends React.Component {
               flexDirection: "row",
               marginHorizontal: 20,
               alignItems: "center",
-              alignSelf: 'center',
+              alignSelf: "center",
               marginBottom: 1,
             }}
           >
@@ -316,9 +329,11 @@ export default class Home extends React.Component {
                 alignItems: "center",
                 paddingVertical: 3,
                 borderRadius: 20,
-                width: width/3.5,
+                width: width / 3.5,
               }}
-              onPress={() => this.props.navigation.navigate("Cate", { screen: 'Categorias' })}
+              onPress={() =>
+                this.props.navigation.navigate("Cate", { screen: "Categorias" })
+              }
             >
               <View>
                 <Image
@@ -327,7 +342,6 @@ export default class Home extends React.Component {
                 />
               </View>
             </TouchableOpacity>
-
             <View
               style={{
                 backgroundColor: "#3499c2",
@@ -337,7 +351,7 @@ export default class Home extends React.Component {
                 paddingVertical: 3,
                 marginHorizontal: 10,
                 borderRadius: 10,
-                width: width/3.5,
+                width: width / 3.5,
               }}
             >
               <View>
@@ -347,7 +361,6 @@ export default class Home extends React.Component {
                 />
               </View>
             </View>
-
             <View
               style={{
                 backgroundColor: "#a1b94b",
@@ -356,7 +369,7 @@ export default class Home extends React.Component {
                 alignItems: "center",
                 paddingVertical: 3,
                 borderRadius: 20,
-                width: width/3.5,
+                width: width / 3.5,
               }}
             >
               <View>
@@ -370,89 +383,76 @@ export default class Home extends React.Component {
           <Text
             style={{
               color: "#055c6e",
-              fontSize: width/18,
+              fontSize: width / 18,
               marginTop: 23,
               paddingHorizontal: 20,
-              paddingVertical:10,
+              paddingVertical: 10,
               textAlign: "center",
-              backgroundColor: '#d5e4d4'
+              backgroundColor: "#d5e4d4",
             }}
           >
-            Mira las <Text style={{fontWeight:'bold'}}>actividades por fecha</Text>
+            Mira las{" "}
+            <Text style={{ fontWeight: "bold" }}>actividades por fecha</Text>
           </Text>
           <LinearGradient
-        start={{x: 0.0, y: 0.25}} end={{x: 0.8, y: 0.5}}
-          style={{ flex: 2, padding: 10 }}
-          colors={["#4D94C1", "#90C641"]}
-        >
-         <Calendar
-  // Handler which gets executed on day press. Default = undefined
-
-  // Handler which gets executed on day long press. Default = undefined
-  onDayPress={day => {
-    console.log('selected day', day);
-  }}
-  minDate={'2022-03-14'}
-  
-  
-  theme={{
-    calendarBackground: 'transparent',
-    todayTextColor: 'white',
-    monthTextColor: 'white',
-    dayTextColor: 'white',
-    textMonthFontSize: 20,
-    arrowColor: 'white',
-    dotColor: 'white',
-    todayTextColor: 'black',
-    textDayHeaderFontSize: 20,
-    textSectionTitleColor: 'white',
-    textMonthFontWeight: 'bold',
-    selectedDayTextColor: 'black',
-    selectedDayBackgroundColor: 'black',
-    selectedDotColor: 'white',
-    selectedDotColor: 'blue',
-    
-  }}
-  // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-  // Handler which gets executed when visible month changes in calendar. Default = undefined
-  onMonthChange={month => {
-    console.log('month changed', month);
-  }}
-
-  markedDates={{
-    '2022-03-15': {selected: true, selectedColor: 'white'},
-
-  }}
-  disableAllTouchEventsForDisabledDays={true}
-  disabledDaysIndexes={[5, 6]}
-  // Hide month navigation arrows. Default = false
-
-  // Do not show days of other months in month page. Default = false
- 
-  // If hideArrows = false and hideExtraDays = false do not switch month when tapping on greyed out
-  // day from another month that is visible in calendar page. Default = false
-  // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday
-  firstDay={1}
-  // Hide day names. Default = false
-  // Show week numbers to the left. Default = false
-  showWeekNumbers={true}
-  // Handler which gets executed when press arrow icon left. It receive a callback can go back month
-  onPressArrowLeft={subtractMonth => subtractMonth()}
-  // Handler which gets executed when press arrow icon right. It receive a callback can go next month
-  onPressArrowRight={addMonth => addMonth()}
-  // Disable left arrow. Default = false
-
-
-  // Enable the option to swipe between months. Default = false
-  enableSwipeMonths={true}
-/>
-        </LinearGradient>
-
-
+            start={{ x: 0.0, y: 0.25 }}
+            end={{ x: 0.8, y: 0.5 }}
+            style={{ flex: 2, padding: 10 }}
+            colors={["#4D94C1", "#90C641"]}
+          >
+            <Calendar
+              // Handler which gets executed on day press. Default = undefined
+              // Handler which gets executed on day long press. Default = undefined
+              onDayPress={(day) => {
+                console.log("selected day", day);
+              }}
+              minDate={"2022-03-10"}
+              theme={{
+                calendarBackground: "transparent",
+                todayTextColor: "white",
+                monthTextColor: "white",
+                dayTextColor: "white",
+                textMonthFontSize: 20,
+                arrowColor: "white",
+                dotColor: "white",
+                todayTextColor: "black",
+                textDayHeaderFontSize: 20,
+                textSectionTitleColor: "white",
+                textMonthFontWeight: "bold",
+                selectedDayTextColor: "black",
+                selectedDayBackgroundColor: "black",
+                selectedDotColor: "white",
+                selectedDotColor: "blue",
+              }}
+              // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+              // Handler which gets executed when visible month changes in calendar. Default = undefined
+              onMonthChange={(month) => {
+                console.log("month changed", month);
+              }}
+              markedDates={{
+                date: { selected: true, selectedColor: "white" },
+              }}
+              disableAllTouchEventsForDisabledDays={true}
+              disabledDaysIndexes={[5, 6]}
+              // Hide month navigation arrows. Default = false
+              // Do not show days of other months in month page. Default = false
+              // If hideArrows = false and hideExtraDays = false do not switch month when tapping on greyed out
+              // day from another month that is visible in calendar page. Default = false
+              // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday
+              firstDay={1}
+              // Hide day names. Default = false
+              // Show week numbers to the left. Default = false
+              showWeekNumbers={true}
+              // Handler which gets executed when press arrow icon left. It receive a callback can go back month
+              onPressArrowLeft={(subtractMonth) => subtractMonth()}
+              // Handler which gets executed when press arrow icon right. It receive a callback can go next month
+              onPressArrowRight={(addMonth) => addMonth()}
+              // Disable left arrow. Default = false
+              // Enable the option to swipe between months. Default = false
+              enableSwipeMonths={true}
+            />
+          </LinearGradient>
         </View>
-
-  
-        
       </ScrollView>
     );
   }

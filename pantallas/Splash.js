@@ -1,12 +1,10 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image, Dimensions, ImageBackground } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { View, Dimensions, ImageBackground } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {Calendar, LocaleConfig} from 'react-native-calendars';
+import {LocaleConfig} from 'react-native-calendars';
 import { AnimatedSVGPaths } from "react-native-svg-animations";
 const {width, height} = Dimensions.get("window");
 import ds from './d';
-import { NavigationContainer } from "@react-navigation/native";
 
 
 LocaleConfig.locales['fr'] = {

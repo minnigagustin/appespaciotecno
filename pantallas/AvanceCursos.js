@@ -7,8 +7,8 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useState } from "react";
-import { ModalConfirmarEliminarCurso } from "../componentes/ModalConfirmarEliminarCurso";
-import { ModalSolicitarEliminarCurso } from "../componentes/ModalSolicitarEliminarCurso";
+import { ModalConfirmarEliminarCurso } from "../modals/ModalConfirmarEliminarCurso";
+import { ModalSolicitarEliminarCurso } from "../modals/ModalSolicitarEliminarCurso";
 import { useNavigation } from "@react-navigation/native";
 
 export default function AvanceCursos() {
