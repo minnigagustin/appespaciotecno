@@ -8,9 +8,29 @@ import {
     ImageBackground} from 'react-native'
 import {Modalize} from 'react-native-modalize'
 import CourseList from './CourseList'
+import axios from "axios";
 import CategoriasList from '../pantallas/CategoriasList'
+import { BASE_URL } from "../api";
+
+
 
 export default class Cources extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+          categorias: [],
+        };
+      }
+    
+    componentDidMount(){
+        const cursos = BASE_URL + 'curso/'
+        axios.get(cursos).then((res) => {
+            const cursos = res.data;
+            this.setState({categorias: cursos})
+            console.log(cursos);
+});
+    };
+
     render(){
         return(
             <ImageBackground
@@ -49,49 +69,20 @@ export default class Cources extends React.Component{
                                 bg="#fdddf3"
                                 activado
                             />
-                        
+                        {
+               this.state.categorias.map((item,i)=>{
+                 return(
                             <CourseList
+                                id={i}
                                 onPress={()=>this.props.navigation.navigate("Perfil")}
-                                img={require('../assets/xd.png')}
-                                title="Adobe XD Prototyping"
+                                img={item.picture}
+                                title={item.nombre}
                                 bg="#fdddf3"
                             />
-                             <CourseList
-                                img={require('../assets/sketch.png')}
-                                title="Sketch shortcuts and tricks"
-                                bg="#fef8e3"
-                            />
-                            <CategoriasList
-                                onPress={()=>this.props.navigation.navigate("Perfil")}
-                                img={require('../assets/fondo_login.jpg')}
-                                title="FABRICACION"
-                                bg="#fdddf3"
-                            />
-                             <CourseList
-                                img={require('../assets/ae.png')}
-                                title="UI Motion Design in After Effects"
-                                bg="#fcf2ff"
-                            />
-                             <CourseList
-                                img={require('../assets/f.png')}
-                                title="Figma Essentials"
-                                bg="#fff0ee"
-                            />
-                             <CourseList
-                                img={require('../assets/ps.png')}
-                                title="Adobe Photoshop. Retouching"
-                                bg="#fdddf3"
-                            />
-                             <CourseList
-                                img={require('../assets/sketch.png')}
-                                title="Sketch shortcuts and tricks"
-                                bg="#fef8e3"
-                            />
-                             <CourseList
-                                img={require('../assets/ae.png')}
-                                title="UI Motion Design in After Effects"
-                                bg="#fcf2ff"
-                            />
+                            )
+                        })
+                      }
+                             
                     </View>
                 </Modalize>
             </ImageBackground>

@@ -58,6 +58,7 @@ export default class Home extends React.Component {
     };
   }
   componentDidMount() {
+    
     AsyncStorage.getItem("perfil").then((perfil) => {
       if (perfil !== null) {
         const perfilparse = JSON.parse(perfil);

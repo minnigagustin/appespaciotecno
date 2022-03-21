@@ -50,7 +50,7 @@ export default class CourseList extends React.Component {
           marginTop: 10,
         }}
       >
-        <Image source={img} style={{ width: 40, height: 40 }} />
+        <Image source={{uri: img}} style={{ width: 40, height: 40, borderRadius: 10 }} />
 
         <View>
           <Text
@@ -71,7 +71,7 @@ export default class CourseList extends React.Component {
             flexDirection: "row",
             backgroundColor: "#0088c2",
             alignItems: "center",
-            width: 110,
+            width: width / 3.5,
             paddingVertical: 10,
             borderRadius: 10,
             marginLeft: -5,
