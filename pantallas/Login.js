@@ -31,7 +31,7 @@ const width = Dimensions.get("window").width;
 
 const height = Dimensions.get("window").height;
 
-export default function Login({ route }) {
+export default function Login({  }) {
   const [dni, setDni] = useState("");
 
   const [loading, setLoading] = useState(false);

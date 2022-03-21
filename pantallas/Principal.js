@@ -50,6 +50,7 @@ LocaleConfig.locales["fr"] = {
 };
 LocaleConfig.defaultLocale = "fr";
 export default class Home extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -61,6 +62,7 @@ export default class Home extends React.Component {
       if (perfil !== null) {
         const perfilparse = JSON.parse(perfil);
         this.setState({ perfil: perfilparse });
+        this.desloguearUsuario();
       } else {
         console.log("NO HAY NADAAA");
       }
@@ -70,6 +72,9 @@ export default class Home extends React.Component {
   //de abandonar sesión, en cambio si es falso (por defecto), no muestra nada
   async desloguearUsuario() {
     await axios.get(BASE_URL + "logout/");
+    global.authenticated = false;
+    this.setState({cerrarSesion : false})
+    console.log("Global: "+global.authenticated)
   }
   render() {
     return (
