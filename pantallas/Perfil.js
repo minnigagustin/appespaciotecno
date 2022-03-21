@@ -14,6 +14,8 @@ import { useNavigation } from "@react-navigation/native";
 
 import { BASE_URL } from "../api";
 
+import global from "../componentes/global"
+
 export default function MisCursos({ route }) {
   const navigation = useNavigation();
 
@@ -53,6 +55,7 @@ export default function MisCursos({ route }) {
         {" "}
         Bienvenido, {param_usuario.nombre} {param_usuario.apellido}
       </Text>
+
       <Image
         source={{ uri: BASE_URL + param_usuario.picture }}
         style={{
