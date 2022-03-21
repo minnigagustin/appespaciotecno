@@ -74,7 +74,7 @@ export default class CourseList extends React.Component {
             width: 110,
             paddingVertical: 10,
             borderRadius: 10,
-            marginLeft: -15,
+            marginLeft: -5,
             paddingHorizontal: 10,
             marginRight: 10,
           }}
@@ -86,9 +86,9 @@ export default class CourseList extends React.Component {
               fontSize: width / 28,
             }}
           >
-            INSCRIBIRME
+            INSCRIBIR
           </Text>
-          <Entypo name={"chevron-right"} size={18} color="white" />
+          <Entypo name={"plus"} size={18} color="white" />
         </View>
       </TouchableOpacity>
     );

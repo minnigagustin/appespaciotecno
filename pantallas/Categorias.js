@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
     ImageBackground} from 'react-native'
 import {Modalize} from 'react-native-modalize'
-import CourseList from '../pantallas/CourseList'
+import CourseList from './CourseList'
 import CategoriasList from '../pantallas/CategoriasList'
 
 export default class Cources extends React.Component{

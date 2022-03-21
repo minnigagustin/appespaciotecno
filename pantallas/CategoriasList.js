@@ -3,7 +3,7 @@ import {Text,TouchableOpacity, View,Image, ImageBackground, Dimensions} from 're
 import { Entypo } from "react-native-vector-icons";
 const { width, height } = Dimensions.get("window");
 
-export default class CourseList extends React.Component{
+export default class CategoriasList extends React.Component{
     render(){
         const {img,title, bg, onPress, activado} = this.props
         return(
