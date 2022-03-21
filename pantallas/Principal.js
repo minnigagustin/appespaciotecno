@@ -62,7 +62,7 @@ export default class Home extends React.Component {
       if (perfil !== null) {
         const perfilparse = JSON.parse(perfil);
         this.setState({ perfil: perfilparse });
-        this.desloguearUsuario();
+        global.authenticated = true
       } else {
         console.log("NO HAY NADAAA");
       }
