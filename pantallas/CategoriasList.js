@@ -1,7 +1,7 @@
 import React from 'react'
-import {Text,TouchableOpacity, View,Image, ImageBackground} from 'react-native'
+import {Text,TouchableOpacity, View,Image, ImageBackground, Dimensions} from 'react-native'
 import { Entypo } from "react-native-vector-icons";
-
+const { width, height } = Dimensions.get("window");
 
 export default class CourseList extends React.Component{
     render(){
@@ -25,12 +25,12 @@ export default class CourseList extends React.Component{
                          <Text style={{
                              color: activado ? 'white' : '#f7dc49',
                              fontWeight:"bold",
-                             fontSize:38,
+                             fontSize:width/11,
                              textShadowColor: 'rgba(0, 0, 0, 0.5)',
                              textShadowOffset: {width: 2, height: 3},
                              textShadowRadius: 10,
                              paddingHorizontal:15,
-                             width:278
+                             width:width/1.5
                          }}>{title}</Text>
                         
                     </View>
@@ -44,7 +44,7 @@ export default class CourseList extends React.Component{
                                     height:50,
                                     borderRadius:25,
                                     justifyContent: 'center',
-                                    marginLeft: 30,
+                                    marginLeft: 10,
                                 }}
                            >
                                     <View

@@ -1,42 +1,22 @@
 import React from "react";
-
 import "react-native-gesture-handler";
-
 import { Image, View } from "react-native";
-
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
 import Home from "./pantallas/Principal";
-
 import Qr from "./pantallas/Qr";
-
 import Perfil from "./pantallas/Perfil";
-
 import AvanceCursos from "./pantallas/AvanceCursos";
-
 import EditarPerfil from "./pantallas/EditarPerfil";
-
 import Login from "./pantallas/Login";
-
 import Categorias from "./pantallas/Categorias";
-
 import Registro from "./pantallas/Registro";
-
 import Marcas from "./pantallas/Marcas";
-
 import Splash from "./pantallas/Splash";
-
 import Recuperar from "./pantallas/Recuperar";
-
 import PantallaSlides from "./componentes/Slider";
-
 import { FontAwesome } from "react-native-vector-icons";
-
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from '@react-navigation/native';
-
-import { NavigationContainer } from '@react-navigation/native';
-
 const Tab = createDrawerNavigator();
 function LogoTitle() {
   return (
@@ -153,7 +133,6 @@ const App = () => {
   return (
     <NavigationContainer>
     <InicioHomeStack.Navigator
-      
     >
       <InicioHomeStack.Screen
         name="SplashScreen"
@@ -202,8 +181,6 @@ const App = () => {
           headerTitleAlign: "left",
         }}
       />
-      
-
     </InicioHomeStack.Navigator>
     </NavigationContainer>
   );

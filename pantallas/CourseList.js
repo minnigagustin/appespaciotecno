@@ -1,8 +1,9 @@
 import React from "react";
-import { Text, TouchableOpacity, View, Image } from "react-native";
+import { Text, TouchableOpacity, View, Image, Dimensions } from "react-native";
 import ProgressCircle from "react-native-progress-circle";
 import { Entypo } from "react-native-vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+const { width, height } = Dimensions.get("window");
 
 export default class CourseList extends React.Component {
   // GUARDAR CURSO FAVORITO
@@ -56,9 +57,9 @@ export default class CourseList extends React.Component {
             style={{
               color: "#345c74",
               fontWeight: "bold",
-              fontSize: 16,
-              paddingHorizontal: 20,
-              width: 170,
+              fontSize: width / 23,
+              paddingHorizontal: 15,
+              width: width / 2.5,
             }}
           >
             {title}
@@ -70,18 +71,19 @@ export default class CourseList extends React.Component {
             flexDirection: "row",
             backgroundColor: "#0088c2",
             alignItems: "center",
-            width: 130,
+            width: 110,
             paddingVertical: 10,
             borderRadius: 10,
-            marginLeft: 10,
+            marginLeft: -15,
             paddingHorizontal: 10,
+            marginRight: 10,
           }}
         >
           <Text
             style={{
               color: "#FFF",
               fontWeight: "bold",
-              fontSize: 14,
+              fontSize: width / 28,
             }}
           >
             INSCRIBIRME
