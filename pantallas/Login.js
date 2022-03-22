@@ -64,7 +64,7 @@ export default function Login({  }) {
     AsyncStorage.getItem("perfil").then((perfil) => {
       if (perfil !== null) {
         const numero = JSON.parse(perfil);
-
+        global.authenticated=false
         setDni(String(numero.numero_documento));
       } else {
         console.log("NO HAY NADAAA");

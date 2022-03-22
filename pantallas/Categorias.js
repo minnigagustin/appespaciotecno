@@ -7,9 +7,9 @@ import {
     TouchableOpacity,
     ImageBackground} from 'react-native'
 import {Modalize} from 'react-native-modalize'
-import CourseList from './CourseList'
+import CourseList from "../componentes/CourseList"
 import axios from "axios";
-import CategoriasList from '../pantallas/CategoriasList'
+import CategoriasList from '../componentes/CategoriasList'
 import { BASE_URL } from "../api";
 
 

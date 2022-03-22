@@ -2,38 +2,28 @@ import {
   View,
   Text,
   Image,
-  StyleSheet,
   Dimensions,
   ImageBackground,
   TouchableOpacity,
+  StyleSheet,
   TextInput,
-  Alert,
 } from "react-native";
 import React from "react";
-import { ModalDetallesCurso } from "../modals/ModalDetallesCurso";
-import { BASE_URL } from "../api";
-import axios from "axios";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
-export default function Recuperar() {
+export default function PantallaToken({}) {
   const [tokenModal, setTokenModal] = useState(false);
 
-  const [email, setEmail] = useState("");
+  const [token, setToken] = useState("");
 
   const navigation = useNavigation();
 
-  const actualizarMail = (text_user) => {
-    setEmail(text_user);
-  };
-
-  const validateEmail = (email) => {
-    var re =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
+  const actualizarToken = (text_user) => {
+    setToken(text_user);
   };
 
   return (
@@ -59,8 +49,7 @@ export default function Recuperar() {
           }}
         >
           {" "}
-          Para recibir tu código de acceso, ingrese la dirección de mail
-          proporcionado en el registro.
+          Ingrese el código enviado a su correo electrónico.
         </Text>
 
         <TextInput
@@ -68,29 +57,23 @@ export default function Recuperar() {
           textAlign={"center"}
           placeholderTextColor="#000"
           keyboardType="email-address"
-          placeholder={"Ingrese su email"}
-          onChangeText={(text_user) => actualizarMail(text_user)}
-          onBlur={() => {
-            if (!validateEmail(email)) 
-              Alert.alert("Mail inválido. Intentalo nuevamente.")
-          }}
-          value={email}
+          placeholder={"Ingrese el código"}
+          onChangeText={(text_user) => actualizarToken(text_user)}
+          value={token}
         ></TextInput>
 
         <TouchableOpacity
-          style={[
-            styles.ingresar_style,
-            { backgroundColor: email ? "#017185" : "rgba(0, 0, 0, 0.15)" },
-          ]}
+          style={[styles.ingresar_style]}
           onPress={() => navigation.navigate("LoginNavegacion", {screen: 'PantallaToken'})}
-          disabled={!email}
+          disabled={!token}
         >
-          <Text style={styles.ingresar_text}>SOLICITAR CÓDIGO</Text>
+          <Text style={styles.ingresar_text}>VERIFICAR CÓDIGO</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

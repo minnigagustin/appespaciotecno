@@ -5,7 +5,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { BASE_URL } from "../api";
-import global from "../componentes/global"
+import global from "../componentes/global";
+import axios from "axios";
+
 const { width, height } = Dimensions.get("window");
 LocaleConfig.locales["fr"] = {
   monthNames: [
@@ -50,7 +52,6 @@ LocaleConfig.locales["fr"] = {
 };
 LocaleConfig.defaultLocale = "fr";
 export default class Home extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -58,12 +59,11 @@ export default class Home extends React.Component {
     };
   }
   componentDidMount() {
-    
     AsyncStorage.getItem("perfil").then((perfil) => {
       if (perfil !== null) {
         const perfilparse = JSON.parse(perfil);
         this.setState({ perfil: perfilparse });
-        global.authenticated = true
+        global.authenticated = true;
       } else {
         console.log("NO HAY NADAAA");
       }
@@ -74,8 +74,7 @@ export default class Home extends React.Component {
   async desloguearUsuario() {
     await axios.get(BASE_URL + "logout/");
     global.authenticated = false;
-    this.setState({cerrarSesion : false})
-    console.log("Global: "+global.authenticated)
+    console.log("Se deslogueo correctamente. Global: " + global.authenticated);
   }
   render() {
     return (
@@ -87,18 +86,24 @@ export default class Home extends React.Component {
             style={{ flex: 2, padding: 10 }}
             colors={["#4D94C1", "#90C641"]}
           >
-            {global.authenticated && <TouchableOpacity
-            >
-              <Text style={{
-                paddingHorizontal: 8,
-                fontSize: 15,
-                paddingTop: 10,
-                alignSelf:"flex-end",
-                paddingRight:10,
-                fontWeight: "bold",
-                color: "#FFF",
-              }}> Cerrar Sesión </Text>
-            </TouchableOpacity>}
+            {(
+              <TouchableOpacity onPress={() => this.desloguearUsuario()}>
+                <Text
+                  style={{
+                    paddingHorizontal: 8,
+                    fontSize: 15,
+                    paddingTop: 10,
+                    alignSelf: "flex-end",
+                    paddingRight: 10,
+                    fontWeight: "bold",
+                    color: "#FFF",
+                  }}
+                >
+                  {" "}
+                  Cerrar Sesión{" "}
+                </Text>
+              </TouchableOpacity>
+            )}
             <Text
               style={{
                 paddingHorizontal: 8,

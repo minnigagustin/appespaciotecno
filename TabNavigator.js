@@ -12,11 +12,12 @@ import Categorias from "./pantallas/Categorias";
 import Registro from "./pantallas/Registro";
 import Marcas from "./pantallas/Marcas";
 import Splash from "./pantallas/Splash";
+import PantallaToken from "./pantallas/PantallaToken";
 import Recuperar from "./pantallas/Recuperar";
 import PantallaSlides from "./componentes/Slider";
 import { FontAwesome } from "react-native-vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer } from "@react-navigation/native";
 const Tab = createDrawerNavigator();
 function LogoTitle() {
   return (
@@ -43,6 +44,7 @@ function HomeStackScreen() {
       <HomeStack.Screen name="PantallaSlides" component={PantallaSlides} />
       <HomeStack.Screen name="Registro" component={Registro} />
       <HomeStack.Screen name="Recuperar" component={Recuperar} />
+      <HomeStack.Screen name="PantallaToken" component={PantallaToken} />
     </HomeStack.Navigator>
   );
 }

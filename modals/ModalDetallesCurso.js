@@ -9,37 +9,24 @@ export const ModalDetallesCurso = (props) => {
     <Modal isVisible={props.state} transparent={true} animationType="slide">
       <View style={styles.background_second_plane}>
         <View style={styles.container}>
-          <Text style={styles.titulo_style}> {props.nombre}</Text>
+          <Text> {props.nombre}</Text>
           <FontAwesome
             name="save"
             size={70}
             marginRight={55}
             backgroundColor={"#90C641"}
           />
-          <Text style={styles.subtitulo_style}>
-            {props.subtitulo}
-          </Text>
-          <Text style={styles.subtitulo_style}>
-            {props.descripcion}
-          </Text>
-          <Text style={styles.subtitulo_style}>
-            {props.fecha_inicio}
-          </Text>
-          <Text style={styles.subtitulo_style}>
-            {props.carga_horaria}
-          </Text>
-          <Text style={styles.subtitulo_style}>
-            {props.profesor}
-          </Text>
-          <Image> {props.picture}</Image>
+          <Text>{props.subtitulo}</Text>
+          <Text>{props.descripcion}</Text>
+          <Text>{props.profesor}</Text>
           <TouchableOpacity
             style={styles.aceptar_style}
             onPress={() => {
               props.restore;
-              navigation.goBack()
+              navigation.goBack();
             }}
             onRequestClose={() => {
-              this.visibleModal(false);
+              isVisible(false);
             }}
           >
             <Text style={styles.button_text}> Regresar </Text>
@@ -49,11 +36,11 @@ export const ModalDetallesCurso = (props) => {
             onPress={() => {
               props.restore;
               navigation.navigate("Mis Cursos", {
-                param_usuario: props.user
+                param_usuario: props.user,
               });
             }}
             onRequestClose={() => {
-              this.visibleModal(false);
+              isVisible(false);
             }}
           >
             <Text style={styles.button_text}> Inscribirse </Text>
@@ -66,7 +53,7 @@ export const ModalDetallesCurso = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.8,
+    flex: 1,
     backgroundColor: "#FFFFFF",
     alignItems: "center",
     justifyContent: "center",
