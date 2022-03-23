@@ -7,23 +7,36 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  Alert,
 } from "react-native";
 import React from "react";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { ModalCambiarPsw } from "../modals/ModalCambiarPsw";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 export default function PantallaToken({}) {
-  const [tokenModal, setTokenModal] = useState(false);
-
   const [token, setToken] = useState("");
+
+  const [apiToken, setApiToken] = useState("prueba123");
+
+  const [modalCambioPsw, setModalCambioPsw] = useState(false);
 
   const navigation = useNavigation();
 
   const actualizarToken = (text_user) => {
     setToken(text_user);
+  };
+
+  const verificarToken = () => {
+    if (token === apiToken) setModalCambioPsw(true);
+    else Alert.alert("Código incorrecto");
+  };
+
+  const restore = () => {
+    setModalCambioPsw(false);
   };
 
   return (
@@ -64,11 +77,15 @@ export default function PantallaToken({}) {
 
         <TouchableOpacity
           style={[styles.ingresar_style]}
-          onPress={() => navigation.navigate("LoginNavegacion", {screen: 'PantallaToken'})}
+          onPress={() => verificarToken()}
           disabled={!token}
         >
           <Text style={styles.ingresar_text}>VERIFICAR CÓDIGO</Text>
         </TouchableOpacity>
+
+        {modalCambioPsw && (
+          <ModalCambiarPsw state = {modalCambioPsw}></ModalCambiarPsw>
+        )}
       </View>
     </ImageBackground>
   );
