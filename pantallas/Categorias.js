@@ -1,5 +1,6 @@
 import React from "react";
 import {
+<<<<<<< HEAD
   View,
   Text,
   Image,
@@ -16,6 +17,18 @@ import CourseList from "./CourseList";
 import axios from "axios";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import CategoriasList from "../pantallas/CategoriasList";
+=======
+    View,
+    Text,
+    Image,
+    ScrollView,
+    TouchableOpacity,
+    ImageBackground} from 'react-native'
+import {Modalize} from 'react-native-modalize'
+import CourseList from "../componentes/CourseList"
+import axios from "axios";
+import CategoriasList from '../componentes/CategoriasList'
+>>>>>>> 0d02757f7bc5cdfe0f51e4a2268b53bdd5c0bc68
 import { BASE_URL } from "../api";
 import moment from "moment";
 

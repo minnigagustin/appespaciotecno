@@ -1,7 +1,7 @@
 import React from 'react'
 import {View,Text,Image,ImageBackground,TouchableOpacity,} from 'react-native'
 import { Modalize } from 'react-native-modalize'
-import CourseList from './CourseList'
+import CourseList from '../componentes/CourseList'
 
 export default class Xd extends React.Component{
     render(){

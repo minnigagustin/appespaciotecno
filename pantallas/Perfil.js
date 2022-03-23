@@ -36,7 +36,6 @@ export default function MisCursos({ route }) {
   const getCursos = () => {
     BASE_URL.get(`curso/`).then((res) => {
       const cursos = res.data;
-
       setCursos(cursos);
     });
   };
@@ -44,7 +43,6 @@ export default function MisCursos({ route }) {
   const getCursosFavoritos = () => {
     BASE_URL.get(`comisionesbypersona/` + param_usuario.id).then((res) => {
       const cursos = res.data;
-
       setCursosFavoritos(cursos);
     });
   };
