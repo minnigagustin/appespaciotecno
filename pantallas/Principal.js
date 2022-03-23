@@ -436,7 +436,7 @@ export default class Home extends React.Component {
                 console.log("month changed", month);
               }}
               markedDates={{
-                date: { selected: true, selectedColor: "white" },
+                '2022-03-22': { selected: true, selectedColor: "white" },
               }}
               disableAllTouchEventsForDisabledDays={true}
               disabledDaysIndexes={[5, 6]}

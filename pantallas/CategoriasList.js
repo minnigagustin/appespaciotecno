@@ -17,7 +17,7 @@ export default class CategoriasList extends React.Component{
                     marginTop:10
                 }}
             >
-                <ImageBackground source={img}
+                <ImageBackground source={img} resizeMode="cover"
                 style={{width: '100%', borderRadius: 10, overflow: 'hidden'}}>
                     <View style={{flexDirection: 'row', padding: 10, paddingVertical: 20}}>
 

@@ -50,7 +50,14 @@ export default class CourseList extends React.Component {
           marginTop: 10,
         }}
       >
-        <Image source={{uri: img}} style={{ width: 40, height: 40, borderRadius: 10 }} />
+        <Image
+          source={{
+            uri: img
+              ? img
+              : "http://espaciotecno.com.ar/img/espacio-tecno-bahia-blanca.png",
+          }}
+          style={{ width: 40, height: 40, borderRadius: 10 }}
+        />
 
         <View>
           <Text
@@ -59,7 +66,7 @@ export default class CourseList extends React.Component {
               fontWeight: "bold",
               fontSize: width / 23,
               paddingHorizontal: 15,
-              width: width / 2.5,
+              width: width / 2.3,
             }}
           >
             {title}
@@ -74,7 +81,7 @@ export default class CourseList extends React.Component {
             width: width / 3.5,
             paddingVertical: 10,
             borderRadius: 10,
-            marginLeft: -5,
+            marginLeft: -10,
             paddingHorizontal: 10,
             marginRight: 10,
           }}
