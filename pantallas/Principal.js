@@ -1,9 +1,10 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image, Dimensions } from "react-native";
+import { View, Text, TouchableOpacity, Image, Dimensions, ImageBackground } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Calendar, LocaleConfig } from "react-native-calendars";
+import moment from "moment";
 import { BASE_URL } from "../api";
 import global from "../componentes/global";
 import axios from "axios";
@@ -56,9 +57,16 @@ export default class Home extends React.Component {
     super(props);
     this.state = {
       perfil: [],
+      slider: []
     };
   }
   componentDidMount() {
+    const cursos = BASE_URL + "curso/";
+    axios.get(cursos).then((res) => {
+      const cursos = res.data;
+      this.setState({ slider: cursos });
+      console.log(cursos);
+    });
     AsyncStorage.getItem("perfil").then((perfil) => {
       if (perfil !== null) {
         const perfilparse = JSON.parse(perfil);
@@ -77,6 +85,11 @@ export default class Home extends React.Component {
     console.log("Se deslogueo correctamente. Global: " + global.authenticated);
   }
   render() {
+    var today = new Date();
+    const fecha = moment(today).format("YYYY-MM-DD");
+    const markedDatesArray = {
+      [fecha]: { selected: true, selectedColor: "white" },
+    };
     return (
       <ScrollView style={{ backgroundColor: "white" }}>
         <View>
@@ -132,7 +145,11 @@ export default class Home extends React.Component {
               horizontal
               style={{ position: "absolute", bottom: -85, width: width }}
             >
-              <View
+              {this.state.slider
+                .filter((cat) => cat.banner)
+                .map((item, i) => {
+                  return (
+                    <View
                 style={{
                   flexDirection: "row",
                   backgroundColor: "red",
@@ -141,56 +158,17 @@ export default class Home extends React.Component {
                   elevation: 7,
                   borderRadius: 20,
                   marginBottom: 16,
-                  paddingVertical: 30,
-                  paddingLeft: 30,
                   width: width - 20,
                 }}
               >
-                <View>
-                  <Text
-                    style={{
-                      color: "white",
-                      fontSize: 20,
-                      fontWeight: "bold",
-                      width: 250,
-                      paddingRight: 100,
-                    }}
-                  >
-                    ¿Queres emprender?
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate("Categorias")}
-                    style={{
-                      flexDirection: "row",
-                      backgroundColor: "#90C641",
-                      alignItems: "center",
-                      marginTop: 20,
-                      width: 150,
-                      paddingVertical: 10,
-                      borderRadius: 14,
-                      paddingHorizontal: 10,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: "#FFF",
-                        fontWeight: "bold",
-                        fontSize: 12,
-                      }}
-                    >
-                      Conocenos
-                    </Text>
-                    <Image
-                      source={require("../assets/a3.png")}
-                      style={{ marginLeft: 20, width: 8, height: 8 }}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <Image
-                  source={require("../assets/undraw.png")}
-                  style={{ marginLeft: -80, marginTop: 35 }}
-                />
+                <ImageBackground source={{uri: item.banner}} resizeMode="cover"
+                style={{width: '100%', borderRadius: 10, overflow: 'hidden'}}></ImageBackground>
+               
+              
               </View>
+                  );
+                })}
+              
               <View
                 style={{
                   flexDirection: "row",
@@ -417,7 +395,7 @@ export default class Home extends React.Component {
               onDayPress={(day) => {
                 console.log("selected day", day);
               }}
-              minDate={"2022-03-10"}
+              minDate={fecha}
               theme={{
                 calendarBackground: "transparent",
                 todayTextColor: "white",
@@ -440,9 +418,7 @@ export default class Home extends React.Component {
               onMonthChange={(month) => {
                 console.log("month changed", month);
               }}
-              markedDates={{
-                '2022-03-22': { selected: true, selectedColor: "white" },
-              }}
+              markedDates={markedDatesArray}
               disableAllTouchEventsForDisabledDays={true}
               disabledDaysIndexes={[5, 6]}
               // Hide month navigation arrows. Default = false
