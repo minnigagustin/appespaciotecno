@@ -99,15 +99,18 @@ export default function Login({  }) {
       .then((response) => {
         if (response.status === 200) {
 
+
+          console.log(global.authenticated)
+
           global.authenticated = true;
 
           setLoading(false);
 
           AsyncStorage.setItem("perfil", JSON.stringify(response.data));
 
-          navigation.navigate("Principal", {
-            param_usuario: response.data,
-          });
+          navigation.navigate("Principal");
+
+          console.log(global.authenticated)
         }
       })
 

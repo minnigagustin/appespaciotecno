@@ -63,6 +63,7 @@ function InicioStackScreen() {
     </InicioStack.Navigator>
   );
 }
+
 function TabNavigator() {
   return (
     <Tab.Navigator
