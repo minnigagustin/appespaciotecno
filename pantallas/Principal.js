@@ -8,6 +8,8 @@ import moment from "moment";
 import { BASE_URL } from "../api";
 import global from "../componentes/global";
 import axios from "axios";
+import { useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
 LocaleConfig.locales["fr"] = {
@@ -52,44 +54,45 @@ LocaleConfig.locales["fr"] = {
   today: "Aujourd'hui",
 };
 LocaleConfig.defaultLocale = "fr";
-export default class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      perfil: [],
-      slider: []
-    };
-  }
-  componentDidMount() {
+
+export default function Principal({}) {
+
+  const [perfil, setPerfil] = useState([])
+
+  const [slider, setSlider] = useState([])
+
+  const navigation = useNavigation();
+
+  useEffect(() =>{
     const cursos = BASE_URL + "curso/";
     axios.get(cursos).then((res) => {
       const cursos = res.data;
-      this.setState({ slider: cursos });
+      setSlider(cursos)
       console.log(cursos);
     });
     AsyncStorage.getItem("perfil").then((perfil) => {
       if (perfil !== null) {
         const perfilparse = JSON.parse(perfil);
-        this.setState({ perfil: perfilparse });
+        setPerfil(perfilparse)
         global.authenticated = true;
       } else {
         console.log("NO HAY NADAAA");
       }
     });
-  }
-  //cuando se deje de usar clase, crear un state que consulte si el usuario esta logueado, si es true, entonces mostrar el texto
-  //de abandonar sesión, en cambio si es falso (por defecto), no muestra nada
-  async desloguearUsuario() {
+  },[])
+
+  const desloguearUsuario = async () => {
     await axios.get(BASE_URL + "logout/");
     global.authenticated = false;
     console.log("Se deslogueo correctamente. Global: " + global.authenticated);
-  }
-  render() {
-    var today = new Date();
+  } 
+
+  var today = new Date();
     const fecha = moment(today).format("YYYY-MM-DD");
     const markedDatesArray = {
       [fecha]: { selected: true, selectedColor: "white" },
     };
+
     return (
       <ScrollView style={{ backgroundColor: "white" }}>
         <View>
@@ -100,7 +103,7 @@ export default class Home extends React.Component {
             colors={["#4D94C1", "#90C641"]}
           >
             {(
-              <TouchableOpacity onPress={() => this.desloguearUsuario()}>
+              <TouchableOpacity onPress={() => desloguearUsuario()}>
                 <Text
                   style={{
                     paddingHorizontal: 8,
@@ -127,7 +130,7 @@ export default class Home extends React.Component {
               }}
             >
               Bienvenido{" "}
-              {this.state.perfil ? this.state.perfil.nombre : "Registrate"}!
+              {perfil ? perfil.nombre : "Registrate"}!
             </Text>
             <Text
               style={{
@@ -145,7 +148,7 @@ export default class Home extends React.Component {
               horizontal
               style={{ position: "absolute", bottom: -85, width: width }}
             >
-              {this.state.slider
+              {slider
                 .filter((cat) => cat.banner)
                 .map((item, i) => {
                   return (
@@ -228,7 +231,7 @@ export default class Home extends React.Component {
                     ¿Queres capacitarte?
                   </Text>
                   <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate("Categorias")}
+                    onPress={() => navigation.navigate("Categorias")}
                     style={{
                       flexDirection: "row",
                       backgroundColor: "#90C641",
@@ -321,7 +324,7 @@ export default class Home extends React.Component {
                 width: width / 3.5,
               }}
               onPress={() =>
-                this.props.navigation.navigate("Cate", { screen: "Categorias" })
+                navigation.navigate("Cate", { screen: "Categorias" })
               }
             >
               <View>
@@ -443,4 +446,4 @@ export default class Home extends React.Component {
       </ScrollView>
     );
   }
-}
+
