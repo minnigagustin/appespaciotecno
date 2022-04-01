@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  Button,
 } from "react-native";
 import React from "react";
 

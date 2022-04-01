@@ -23,13 +23,15 @@ import axios from "axios";
 
 import { BASE_URL } from "../api";
 
+import global from "../componentes/global"
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const width = Dimensions.get("window").width;
 
 const height = Dimensions.get("window").height;
 
-export default function Login({ route }) {
+export default function Login({  }) {
   const [dni, setDni] = useState("");
 
   const [loading, setLoading] = useState(false);
@@ -56,11 +58,13 @@ export default function Login({ route }) {
     resetearCampos();
   };
 
+  
+
   useEffect(() => {
     AsyncStorage.getItem("perfil").then((perfil) => {
       if (perfil !== null) {
         const numero = JSON.parse(perfil);
-
+        global.authenticated=false
         setDni(String(numero.numero_documento));
       } else {
         console.log("NO HAY NADAAA");
@@ -94,17 +98,23 @@ export default function Login({ route }) {
     })
       .then((response) => {
         if (response.status === 200) {
+
+
+          console.log(global.authenticated)
+
+          global.authenticated = true;
+
           setLoading(false);
 
           AsyncStorage.setItem("perfil", JSON.stringify(response.data));
 
-          navigation.navigate("Mis Cursos", {
-            param_usuario: response.data,
-          });
+          navigation.navigate("Principal");
+
+          console.log(global.authenticated)
         }
       })
 
-      .catch(function (error) {
+      .catch(function () {
         // handle error
 
         Alert.alert("ALERTA!", "DNI O CONTRASEÑA INCORRECTA");
@@ -114,9 +124,8 @@ export default function Login({ route }) {
   };
 
   const resetearCampos = () => {
-
     setDni("");
-    
+
     setContrasenia("");
   };
 

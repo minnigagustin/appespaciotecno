@@ -14,6 +14,8 @@ import { useNavigation } from "@react-navigation/native";
 
 import { BASE_URL } from "../api";
 
+import global from "../componentes/global"
+
 export default function MisCursos({ route }) {
   const navigation = useNavigation();
 
@@ -25,8 +27,6 @@ export default function MisCursos({ route }) {
 
   const [mostrarCursos, setMostrarCursos] = useState(false);
 
-  const [mostrarCursosFavoritos, setMostrarCursosFavoritos] = useState(false);
-
   const abrirFavoritos = () => {
     getCursos();
 
@@ -34,17 +34,15 @@ export default function MisCursos({ route }) {
   };
 
   const getCursos = () => {
-    API.get(`curso/`).then((res) => {
+    BASE_URL.get(`curso/`).then((res) => {
       const cursos = res.data;
-
       setCursos(cursos);
     });
   };
 
   const getCursosFavoritos = () => {
-    API.get(`comisionesbypersona/` + param_usuario.id).then((res) => {
+    BASE_URL.get(`comisionesbypersona/` + param_usuario.id).then((res) => {
       const cursos = res.data;
-
       setCursosFavoritos(cursos);
     });
   };
@@ -55,6 +53,7 @@ export default function MisCursos({ route }) {
         {" "}
         Bienvenido, {param_usuario.nombre} {param_usuario.apellido}
       </Text>
+
       <Image
         source={{ uri: BASE_URL + param_usuario.picture }}
         style={{

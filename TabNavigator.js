@@ -1,41 +1,23 @@
 import React from "react";
-
 import "react-native-gesture-handler";
-
 import { Image, View } from "react-native";
-
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
 import Home from "./pantallas/Principal";
-
 import Qr from "./pantallas/Qr";
-
 import Perfil from "./pantallas/Perfil";
-
 import AvanceCursos from "./pantallas/AvanceCursos";
-
 import EditarPerfil from "./pantallas/EditarPerfil";
-
 import Login from "./pantallas/Login";
-
 import Categorias from "./pantallas/Categorias";
-
 import Registro from "./pantallas/Registro";
-
 import Marcas from "./pantallas/Marcas";
-
 import Splash from "./pantallas/Splash";
-
+import PantallaToken from "./pantallas/PantallaToken";
 import Recuperar from "./pantallas/Recuperar";
-
 import PantallaSlides from "./componentes/Slider";
-
 import { FontAwesome } from "react-native-vector-icons";
-
 import { createDrawerNavigator } from "@react-navigation/drawer";
-
-import { NavigationContainer } from '@react-navigation/native';
-
+import { NavigationContainer } from "@react-navigation/native";
 const Tab = createDrawerNavigator();
 function LogoTitle() {
   return (
@@ -62,6 +44,7 @@ function HomeStackScreen() {
       <HomeStack.Screen name="PantallaSlides" component={PantallaSlides} />
       <HomeStack.Screen name="Registro" component={Registro} />
       <HomeStack.Screen name="Recuperar" component={Recuperar} />
+      <HomeStack.Screen name="PantallaToken" component={PantallaToken} />
     </HomeStack.Navigator>
   );
 }
@@ -80,16 +63,17 @@ function InicioStackScreen() {
     </InicioStack.Navigator>
   );
 }
+
 function TabNavigator() {
   return (
     <Tab.Navigator
-      initialRouteName="Cursos"
+      initialRouteName="Principal"
       screenOptions={{
         drawerPosition: "left",
       }}
     >
       <Tab.Screen
-        name="Cursos"
+        name="Principal"
         component={Home}
         options={{
           tabBarIcon: ({ size, color }) => (
@@ -124,17 +108,19 @@ function TabNavigator() {
           headerTitleAlign: "center",
         }}
       />
+      {!global.authenticated && (
+        <Tab.Screen
+          name="Perfil"
+          component={HomeStackScreen}
+          options={{
+            tabBarIcon: ({ size, color }) => (
+              <FontAwesome name={"user"} color={"#90C641"} size={size} />
+            ),
+            headerShown: false,
+          }}
+        />
+      )}
       <Tab.Screen
-        name="Perfil"
-        component={HomeStackScreen}
-        options={{
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome name={"user"} color={"#90C641"} size={size} />
-          ),
-          headerShown: false,
-        }}
-      />
-       <Tab.Screen
         name="Recuperar"
         component={Recuperar}
         options={{
@@ -146,61 +132,60 @@ function TabNavigator() {
       />
     </Tab.Navigator>
   );
-};
+}
 const InicioHomeStack = createNativeStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-    <InicioHomeStack.Navigator
-    >
-      <InicioHomeStack.Screen
-        name="SplashScreen"
-        component={Splash}
-        options={{
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome name={"home"} color={"#90C641"} size={size} />
-          ),
-          headerTitle: (props) => <LogoTitle {...props} />,
-          headerTitleAlign: "left",
-          headerShown: false
-        }}
-      />
-<InicioHomeStack.Screen
-        name="HomeInicio"
-        component={TabNavigator}
-        options={{
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome name={"home"} color={"#90C641"} size={size} />
-          ),
-          headerTitle: (props) => <LogoTitle {...props} />,
-          headerTitleAlign: "left",
-          headerShown: false
-        }}
-      />
-<InicioHomeStack.Screen
-        name="LoginNavegacion"
-        component={HomeStackScreen}
-        options={{
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome name={"home"} color={"#90C641"} size={size} />
-          ),
-          headerTitle: (props) => <LogoTitle {...props} />,
-          headerTitleAlign: "left",
-          headerShown: false
-        }}
-      />
-<InicioHomeStack.Screen
-        name="Cate"
-        component={InicioStackScreen}
-        options={{
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome name={"home"} color={"#90C641"} size={size} />
-          ),
-          headerTitle: (props) => <LogoTitle {...props} />,
-          headerTitleAlign: "left",
-        }}
-      />
-    </InicioHomeStack.Navigator>
+      <InicioHomeStack.Navigator>
+        <InicioHomeStack.Screen
+          name="SplashScreen"
+          component={Splash}
+          options={{
+            tabBarIcon: ({ size, color }) => (
+              <FontAwesome name={"home"} color={"#90C641"} size={size} />
+            ),
+            headerTitle: (props) => <LogoTitle {...props} />,
+            headerTitleAlign: "left",
+            headerShown: false,
+          }}
+        />
+        <InicioHomeStack.Screen
+          name="HomeInicio"
+          component={TabNavigator}
+          options={{
+            tabBarIcon: ({ size, color }) => (
+              <FontAwesome name={"home"} color={"#90C641"} size={size} />
+            ),
+            headerTitle: (props) => <LogoTitle {...props} />,
+            headerTitleAlign: "left",
+            headerShown: false,
+          }}
+        />
+        <InicioHomeStack.Screen
+          name="LoginNavegacion"
+          component={HomeStackScreen}
+          options={{
+            tabBarIcon: ({ size, color }) => (
+              <FontAwesome name={"home"} color={"#90C641"} size={size} />
+            ),
+            headerTitle: (props) => <LogoTitle {...props} />,
+            headerTitleAlign: "left",
+            headerShown: false,
+          }}
+        />
+        <InicioHomeStack.Screen
+          name="Cate"
+          component={InicioStackScreen}
+          options={{
+            tabBarIcon: ({ size, color }) => (
+              <FontAwesome name={"home"} color={"#90C641"} size={size} />
+            ),
+            headerTitle: (props) => <LogoTitle {...props} />,
+            headerTitleAlign: "left",
+          }}
+        />
+      </InicioHomeStack.Navigator>
     </NavigationContainer>
   );
 };
