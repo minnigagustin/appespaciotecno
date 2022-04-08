@@ -16,7 +16,7 @@ import { BASE_URL } from "../api";
 
 import global from "../componentes/global"
 
-export default function MisCursos({ route }) {
+export default function Perfil({ route }) {
   const navigation = useNavigation();
 
   const { param_usuario } = route.params;
@@ -97,6 +97,20 @@ export default function MisCursos({ route }) {
           </TouchableOpacity>
         </View>
       </View>
+
+
+      <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Principal", {
+                param_nombre: param_usuario.nombre,
+                param_apellido: param_usuario.apellido,
+                param_dni: param_usuario.numero_documento,
+                param_avatar: param_usuario.picture,
+              });
+            }}
+          >
+            <Text style={{ fontSize: 18, marginLeft: 5 }}>Volver</Text>
+          </TouchableOpacity>
 
       {mostrarCursos && (
         <FlatList
