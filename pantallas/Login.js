@@ -23,7 +23,7 @@ import axios from "axios";
 
 import { BASE_URL } from "../api";
 
-import global from "../componentes/global"
+import global from "../componentes/global";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -31,12 +31,14 @@ const width = Dimensions.get("window").width;
 
 const height = Dimensions.get("window").height;
 
-export default function Login({  }) {
+export default function Login({}) {
   const [dni, setDni] = useState("");
 
   const [loading, setLoading] = useState(false);
 
   const [contrasenia, setContrasenia] = useState("");
+
+  const [usuario, setUsuario] = useState("");
 
   const navigation = useNavigation();
 
@@ -50,21 +52,16 @@ export default function Login({  }) {
 
   const chequearValidacion = () => {
     Keyboard.dismiss();
-
     setLoading(true);
-
     verificarUsuario();
-
     resetearCampos();
   };
-
-  
 
   useEffect(() => {
     AsyncStorage.getItem("perfil").then((perfil) => {
       if (perfil !== null) {
         const numero = JSON.parse(perfil);
-        global.authenticated=false
+        global.authenticated = false;
         setDni(String(numero.numero_documento));
       } else {
         console.log("NO HAY NADAAA");
@@ -74,38 +71,23 @@ export default function Login({  }) {
 
   const verificarUsuario = async () => {
     const formData = {};
-
     const url_logout = BASE_URL + "logout/";
-
     const url_login = BASE_URL + "login/";
-
     console.log(url_login);
-
     await axios.get(url_logout);
-
     formData.numero_documento = dni;
-
     formData.password = contrasenia;
-
     console.log(formData);
-
     axios({
       url: url_login,
-
       method: "POST",
-
       data: formData,
     })
       .then((response) => {
         if (response.status === 200) {
-
-
-          console.log(global.authenticated)
-
           global.authenticated = true;
-
+          console.log(global.authenticated);
           setLoading(false);
-
           AsyncStorage.setItem("perfil", JSON.stringify(response.data));
 
           navigation.replace("HomeInicio");
@@ -125,7 +107,6 @@ export default function Login({  }) {
 
   const resetearCampos = () => {
     setDni("");
-
     setContrasenia("");
   };
 

@@ -10,114 +10,122 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
+import { BASE_URL } from "../api";
 import { useState } from "react";
+import axios from "axios";
+import global from "../componentes/global"
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 export const ModalCambiarPsw = (props) => {
   const navigation = useNavigation();
 
-  const [dni, setDni] = useState("");
+  const [currentPsw, setCurrentPsw] = useState("");
 
-  const [psw, setPsw] = useState("");
+  const [newPsw, setNewPsw] = useState("");
 
-  const [pswIguales, setPswIguales] = useState();
-
-  const actualizarDni = (text_user) => {
-    setDni(text_user);
-  };
+  const [repeatPsw, setRepeatPsw] = useState("");
 
   const actualizarPsw = (text_user) => {
-    setPsw(text_user);
+    setCurrentPsw(text_user);
   };
 
-  const verificarPsw = (text_user) => {
-    if (text_user !== psw) {
-      setPswIguales(false);
-      Alert.alert("Las contaseñas deben ser las mismas.");
-    } else {
-      setPswIguales(true);
-    }
+  const actualizarNewPsw = (text_user) => {
+    setNewPsw(text_user);
+  };
+
+  const actualizarRepeatNewPsw = (text_user) => {
+    setRepeatPsw(text_user);
+  };
+
+  const chequearCampos = () => {
+    const url_reset = BASE_URL + "resetpassword/";
+    console.log(url_reset);
+    const formData = {};
+    formData.current_password = currentPsw;
+    (formData.new_password = newPsw),
+      (formData.new_password_repeat = repeatPsw);
+
+    console.log(formData);
+    axios({
+      url: url_reset,
+      method: "POST",
+      data: formData,
+    })
+      .then((response) => {
+        console.log(response.status);
+        if (response.status === 200) {
+          Alert.alert("Contraseña cambiada con exito");
+          navigation.navigate("Mi Perfil", { param_usuario: usuario });
+        }
+      })
+      .catch(function (error) {
+        console.log(error.response)
+      });
   };
 
   return (
     <Modal isVisible={props.state} transparent={true} animationType="slide">
       <View style={styles.background_second_plane}>
-          <View style={styles.container}>
-            <Text
-              style={styles.text_labels}
-            >
-              {" "}
-              Número de documento.
-            </Text>
+        <View style={styles.container}>
+          <Text style={styles.text_labels}> Contraseña actual</Text>
 
-            <TextInput
-              style={styles.input_style}
-              textAlign={"center"}
-              keyboardType="number-pad"
-              placeholder={"Ingrese su dni"}
-              placeholderTextColor= "#b4b4b4"
-              onChangeText={(text_user) => actualizarDni(text_user)}
-              value={dni}
-            ></TextInput>
+          <TextInput
+            style={styles.input_style}
+            textAlign={"center"}
+            keyboardType="default"
+            placeholder={"Ingrese su contraseña"}
+            placeholderTextColor="#b4b4b4"
+            onChangeText={(text_user) => actualizarPsw(text_user)}
+            value={currentPsw}
+          ></TextInput>
 
-            <Text
-              style={styles.text_labels}
-            >
-              {" "}
-              Nueva contraseña.
-            </Text>
+          <Text style={styles.text_labels}> Nueva contraseña.</Text>
 
-            <TextInput
-              style={styles.input_style}
-              textAlign={"center"}
-              keyboardType="default"
-              placeholder={"Ingrese su nueva contraseña"}
-              placeholderTextColor="#b4b4b4"
-              onChangeText={(text_user) => actualizarPsw(text_user)}
-              value={psw}
-            ></TextInput>
+          <TextInput
+            style={styles.input_style}
+            textAlign={"center"}
+            keyboardType="default"
+            placeholder={"Ingrese su nueva contraseña"}
+            placeholderTextColor="#b4b4b4"
+            onChangeText={(text_user) => actualizarNewPsw(text_user)}
+            value={newPsw}
+          ></TextInput>
 
-            <Text
-              style={styles.text_labels}
-            >
-              {" "}
-              Repetir contraseña.
-            </Text>
-            <TextInput
-              style={styles.input_style}
-              keyboardType="default"
-              textAlign={"center"}
-              placeholder={"Repita su nueva contraseña"}
-              placeholderTextColor="#b4b4b4"
-              onChangeText={(text_user) => verificarPsw()}
-            ></TextInput>
+          <Text style={styles.text_labels}> Repetir contraseña.</Text>
+          <TextInput
+            style={styles.input_style}
+            keyboardType="default"
+            textAlign={"center"}
+            placeholder={"Repita su nueva contraseña"}
+            placeholderTextColor="#b4b4b4"
+            onChangeText={(text_user) => actualizarRepeatNewPsw(text_user)}
+          ></TextInput>
 
-            <TouchableOpacity
-              style={[
-                styles.ingresar_style,
-                {
-                  backgroundColor:
-                    !dni && !pswIguales ? "#017185" : "rgba(0, 0, 0, 0.15)",
-                },
-              ]}
-              onPress={() => {}}
-              disabled={!dni && !pswIguales}
-            >
-              <Text style={styles.ingresar_text}>GUARDAR</Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.ingresar_style,
+              {
+                backgroundColor:
+                  currentPsw !== "" && newPsw !== "" && repeatPsw !== ""
+                    ? "#017185"
+                    : "rgba(0, 0, 0, 0.15)",
+              },
+            ]}
+            onPress={() => {
+              chequearCampos();
+            }}
+          >
+            <Text style={styles.ingresar_text}>GUARDAR</Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[
-                styles.ingresar_style,
-              ]}
-              onPress={ () => navigation.navigate("Principal")}
-            >
-              <Text style={styles.ingresar_text}>CANCELAR</Text>
-            </TouchableOpacity>
-
-          </View>
+          <TouchableOpacity
+            style={[styles.ingresar_style]}
+            onPress={() => navigation.navigate("Principal")}
+          >
+            <Text style={styles.ingresar_text}>CANCELAR</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </Modal>
   );
@@ -125,7 +133,7 @@ export const ModalCambiarPsw = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom:10,
+    paddingBottom: 10,
     margin: 10,
     backgroundColor: "white",
     borderRadius: 20,
@@ -134,12 +142,12 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation:4,
-    bottom:0
+    elevation: 4,
+    bottom: 0,
   },
   ingresar_style: {
     borderRadius: 30,
@@ -148,7 +156,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 48,
     backgroundColor: "rgba(0, 0, 0, 0.15)",
     alignSelf: "center",
-    marginBottom:30
+    marginBottom: 30,
   },
   input_style: {
     alignSelf: "center",
@@ -170,11 +178,11 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
   },
   text_labels: {
-      paddingHorizontal: 15,
-      color: "#000000",
-      textAlign: "center",
-      fontSize: width / 18,
-      fontWeight: "900",
-      marginBottom: 30,
-  }
+    paddingHorizontal: 15,
+    color: "#000000",
+    textAlign: "center",
+    fontSize: width / 18,
+    fontWeight: "900",
+    marginBottom: 30,
+  },
 });

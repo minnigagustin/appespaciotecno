@@ -104,6 +104,17 @@ export default function Recuperar() {
         >
           <Text style={styles.ingresar_text}>SOLICITAR CÓDIGO</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.ingresar_style,
+            { backgroundColor: email ? "#017185" : "rgba(0, 0, 0, 0.15)", marginVertical:10 },
+          ]}
+          onPress={() => navigation.navigate("Principal")}
+          disabled={!email}
+        >
+          <Text style={styles.ingresar_text}>VOLVER</Text>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );

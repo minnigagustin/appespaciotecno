@@ -114,7 +114,7 @@ function TabNavigator() {
       />
       {!global.authenticated && (
         <Tab.Screen
-          name="Perfil"
+          name="Iniciar Sesión"
           component={HomeStackScreen}
           options={{
             tabBarIcon: ({ size, color }) => (
@@ -124,16 +124,18 @@ function TabNavigator() {
           }}
         />
       )}
-      <Tab.Screen
-        name="Recuperar"
-        component={Recuperar}
-        options={{
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome name={"user"} color={"#90C641"} size={size} />
-          ),
-          headerShown: false,
-        }}
-      />
+      {global.authenticated && (
+        <Tab.Screen
+          name="Recuperar"
+          component={Recuperar}
+          options={{
+            tabBarIcon: ({ size, color }) => (
+              <FontAwesome name={"user"} color={"#90C641"} size={size} />
+            ),
+            headerShown: false,
+          }}
+        />
+      )}
     </Tab.Navigator>
   );
 }
