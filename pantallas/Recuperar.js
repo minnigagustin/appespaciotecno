@@ -25,9 +25,26 @@ export default function Recuperar() {
   const [email, setEmail] = useState("");
 
   const navigation = useNavigation();
+  const formData = {};
 
   const actualizarMail = (text_user) => {
     setEmail(text_user);
+  };
+
+  const enviarRegistro = async () => {
+    formData.email = email;
+
+    axios({
+      url: BASE_URL + "forgotpassword/",
+
+      method: "POST",
+
+      data: formData,
+    }).then((result) => {
+      if (result.status === 200) {
+        navigation.navigate("LoginNavegacion", {screen: 'PantallaToken'})
+      }
+    });
   };
 
   const validateEmail = (email) => {
@@ -82,7 +99,7 @@ export default function Recuperar() {
             styles.ingresar_style,
             { backgroundColor: email ? "#017185" : "rgba(0, 0, 0, 0.15)" },
           ]}
-          onPress={() => navigation.navigate("LoginNavegacion", {screen: 'PantallaToken'})}
+          onPress={() => enviarRegistro()}
           disabled={!email}
         >
           <Text style={styles.ingresar_text}>SOLICITAR CÓDIGO</Text>

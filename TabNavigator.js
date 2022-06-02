@@ -9,6 +9,8 @@ import AvanceCursos from "./pantallas/AvanceCursos";
 import EditarPerfil from "./pantallas/EditarPerfil";
 import Login from "./pantallas/Login";
 import Categorias from "./pantallas/Categorias";
+import Capacitar from "./pantallas/Capacitar";
+import Emprender from "./pantallas/Emprender";
 import Registro from "./pantallas/Registro";
 import Marcas from "./pantallas/Marcas";
 import Splash from "./pantallas/Splash";
@@ -26,7 +28,7 @@ function LogoTitle() {
       source={require("./assets/LOGO-ESPACIOTECNO-HORIZONTAL-01.png")}
     />
   );
-}
+} 
 const HomeStack = createNativeStackNavigator();
 function HomeStackScreen() {
   return (
@@ -59,6 +61,8 @@ function InicioStackScreen() {
       <InicioStack.Screen name="Mi Perfil" component={Home} />
       <InicioStack.Screen name="Mis Cursos" component={Perfil} />
       <InicioStack.Screen name="Categorias" component={Categorias} />
+      <InicioStack.Screen name="Capacitar" component={Capacitar} />
+      <InicioStack.Screen name="Emprender" component={Emprender} />
       <InicioStack.Screen name="Marcas" component={Marcas} />
     </InicioStack.Navigator>
   );

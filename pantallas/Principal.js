@@ -4,19 +4,27 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  Modal,
+  StyleSheet,
+  Pressable,
   Dimensions,
+  Alert,
+  Linking,
   ImageBackground,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CourseList from "../componentes/CoursePrincipal";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import moment from "moment";
 import { BASE_URL } from "../api";
 import global from "../componentes/global";
 import axios from "axios";
 import { useState, useEffect } from "react";
+ import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useNavigation } from "@react-navigation/native";
+import { FontAwesome } from "react-native-vector-icons";
 
 const { width, height } = Dimensions.get("window");
 LocaleConfig.locales["fr"] = {
@@ -62,12 +70,24 @@ LocaleConfig.locales["fr"] = {
 };
 LocaleConfig.defaultLocale = "fr";
 
-export default function Principal({route}) {
+export default function Principal({ route }) {
   const [perfil, setPerfil] = useState([]);
 
   const [slider, setSlider] = useState([]);
+  const [modaldata, setModaldata] = useState([]);
+  const [modaldataInfo, setModaldataInfo] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [modalInfo, setModalInfo] = useState(false);
+  const [modalCalendario, setModalCalendario] = useState(false);
+  const [modalHorarios, setModalHorarios] = useState(false);
+  const [modalConfirmado, setModalConfirmado] = useState(false);
 
   const [isLogged, setIsLogged] = useState(global.authenticated);
+
+  const [catg, setCatg] = useState(0);
+  const [selectcatg, setselectCatg] = useState(0);
+
+  const [dia, setDia] = useState([]);
 
   const navigation = useNavigation();
 
@@ -90,7 +110,7 @@ export default function Principal({route}) {
   }, []);
 
   useEffect(() => {
-    console.log("ENTRE AL USEEFFECT");
+    console.log("height:" + width / 2.5 + "width:" + (width - 20));
     global.authenticated = isLogged;
   }, [isLogged]);
 
@@ -100,14 +120,463 @@ export default function Principal({route}) {
     console.log("Se deslogueo correctamente. " + global.authenticated);
   };
 
+  const abrirmodal = (item) => {
+    setModal(true);
+
+    const dias = [
+      "Lunes",
+      "Martes",
+      "Miercoles",
+      "Jueves",
+      "Viernes",
+      "Sabado",
+      "Domingo",
+    ];
+
+    const monthNames = [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
+    ];
+    const numeroDia = new Date(item.dateString).getDay();
+    const numeroMes = new Date(item.dateString).getMonth();
+    const nombreDia = dias[numeroDia];
+    const nombreMes = monthNames[numeroMes];
+    const traduccion = {
+      dia: nombreDia,
+      mes: nombreMes,
+    };
+    setDia(traduccion);
+    setModaldata(item);
+    console.log(item);
+  };
+
   var today = new Date();
   const fecha = moment(today).format("YYYY-MM-DD");
   const markedDatesArray = {
     [fecha]: { selected: true, selectedColor: "white" },
   };
 
+  const markedDatesArraycalendario = {
+    [fecha]: { selected: true, selectedColor: "#055c6e" },
+  };
+
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
+      {/* COMIENZO MODALS  */}
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalConfirmado}
+        onRequestClose={() => {
+          setModalConfirmado(false);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+          
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: width / 15,
+                marginHorizontal: 20,
+                marginTop: 0,
+                fontWeight: "bold",
+                color: 'green'
+              }}
+            >
+              ¡Curso registrado!
+            </Text>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: width / 23,
+                marginHorizontal: 20,
+                marginTop: 5,
+              }}
+            >
+              {modaldataInfo.nombre}
+            </Text>
+            <FontAwesome
+          name="check"
+          size={50}
+          color="green"
+        />
+            
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalHorarios}
+          onRequestClose={() => {
+            setModalHorarios(false);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: width / 15,
+                  marginHorizontal: 20,
+                  marginTop: 0,
+                  fontWeight: "bold",
+                }}
+              >
+                Taller de {"\n"} {modaldataInfo.nombre}
+              </Text>
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: width / 23,
+                  marginHorizontal: 20,
+                  marginTop: 5,
+                }}
+              >
+                Por favor seleccioná el turno en la cual quisieras asistir:
+              </Text>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  padding: 3,
+                  marginVertical: 20,
+                }}
+              >
+                <View style={{ marginHorizontal: 10 }}>
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: 20,
+                      textAlign: "center",
+                    }}
+                  >
+                    Mañana
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => setselectCatg(1)}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: 24,
+                        backgroundColor:
+                          selectcatg=== 1
+                            ? "#0088c2"
+                            : "transparent",
+                        color: selectcatg === 1 ? "white" : "gray",
+                        paddingHorizontal: 8,
+                        paddingVertical: 3,
+                        marginTop: 5,
+                        borderRadius: 6,
+                      }}
+                    >
+                      09:00Hs
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => setselectCatg(2)}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: 24,
+                        color: selectcatg=== 2 ? "white" : "gray",
+                        backgroundColor:
+                          selectcatg === 2
+                            ? "#0088c2"
+                            : "transparent",
+                        paddingHorizontal: 8,
+                        paddingVertical: 3,
+                        marginTop: 5,
+                        borderRadius: 6,
+                      }}
+                    >
+                      12:30Hs
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={{ borderWidth: 0.3, borderColor: "black" }} />
+
+                <View style={{ marginHorizontal: 10 }}>
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: 20,
+                      textAlign: "center",
+                    }}
+                  >
+                    Tarde
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => setselectCatg(3)}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: 24,
+                        backgroundColor:
+                          selectcatg === 3
+                            ? "#0088c2"
+                            : "transparent",
+                        color: selectcatg === 3 ? "white" : "gray",
+                        paddingHorizontal: 8,
+                        paddingVertical: 3,
+                        marginTop: 5,
+                        borderRadius: 6,
+                      }}
+                    >
+                      16:30Hs
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => setselectCatg(4)}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: 24,
+                        color: selectcatg === 4 ? "white" : "gray",
+                        backgroundColor:
+                          selectcatg === 4
+                            ? "#0088c2"
+                            : "transparent",
+                        paddingHorizontal: 8,
+                        paddingVertical: 3,
+                        marginTop: 5,
+                        borderRadius: 6,
+                      }}
+                    >
+                      18:00Hs
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => {setModalHorarios(false);
+                setModalConfirmado(true);}}
+              >
+                <Text style={styles.textStyle}>INSCRIBIRME {">"}</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalInfo}
+        onRequestClose={() => {
+          setModalInfo(false);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Image
+              source={{
+                uri: modaldataInfo.picture
+                  ? modaldataInfo.picture
+                  : "http://espaciotecno.com.ar/img/espacio-tecno-bahia-blanca.png",
+              }}
+              resizeMode="contain"
+              style={{ width: 100, height: 100, borderRadius: 10 }}
+            />
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: width / 15,
+                marginHorizontal: 20,
+                marginTop: 0,
+                fontWeight: "bold",
+              }}
+            >
+              Taller de {"\n"} {modaldataInfo.nombre}
+            </Text>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: width / 23,
+                marginHorizontal: 20,
+                marginTop: 5,
+              }}
+            >
+              {modaldataInfo.descripcion}
+            </Text>
+
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => {setModalInfo(false)
+              setModalHorarios(true)}}
+            >
+              <Text style={styles.textStyle}>INSCRIBIRME {">"}</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modal}
+        onRequestClose={() => {
+          setModal(false);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: width / 15,
+                marginHorizontal: 20,
+                marginTop: 0,
+                fontWeight: "bold",
+              }}
+            >
+              Talleres Disponibles
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                setModal(false), setModalCalendario(true);
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: width / 15,
+                  marginHorizontal: 20,
+                  marginTop: 0,
+                  fontWeight: "bold",
+                  color: "#2783C5",
+                }}
+              >
+                {dia.dia} {modaldata.day} de {dia.mes}
+              </Text>
+            </TouchableOpacity>
+
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: width / 18,
+                marginHorizontal: 20,
+                marginTop: 5,
+              }}
+            >
+              Por favor seleccioná el taller al cual quisieras asistir:
+            </Text>
+            <View>
+              {slider.map((item, i) => {
+                return (
+                  <CourseList
+                    onPress={() => {
+                      setCatg(item.id);
+                      setModaldataInfo(item);
+                    }}
+                    img={item.picture}
+                    title={item.nombre}
+                    categoria={item.categoria}
+                    bg="#fdddf3"
+                    seleccionado={catg === item.id ? true : false}
+                  />
+                );
+              })}
+            </View>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => {
+                setModalInfo(true);
+                setModal(false);
+              }}
+            >
+              <Text style={styles.textStyle}>SIGUIENTE {">"}</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalCalendario}
+        onRequestClose={() => {
+          setModalCalendario(false);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: width / 15,
+                marginHorizontal: 20,
+                marginTop: 0,
+                fontWeight: "bold",
+              }}
+            >
+              Selecciona una fecha
+            </Text>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: width / 23,
+                marginHorizontal: 20,
+                marginTop: 5,
+              }}
+            >
+              Por favor seleccioná la fecha en la cual quisieras asistir:
+            </Text>
+            <Calendar
+              enableSwipeMonths
+              minDate={fecha}
+              onDayPress={(day) => {
+                setModalCalendario(false);
+                abrirmodal(day);
+              }}
+              theme={{
+                calendarBackground: "white",
+                todayTextColor: "white",
+                monthTextColor: "black",
+                dayTextColor: "black",
+                textMonthFontSize: 20,
+                arrowColor: "black",
+                dotColor: "black",
+                todayTextColor: "#00789d",
+                textDayHeaderFontSize: 20,
+                textSectionTitleColor: "black",
+                textMonthFontWeight: "bold",
+                selectedDayTextColor: "white",
+              }}
+              // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+              // Handler which gets executed when visible month changes in calendar. Default = undefined
+              onMonthChange={(month) => {
+                console.log("month changed", month);
+              }}
+              firstDay={1}
+              markedDates={markedDatesArraycalendario}
+              disableAllTouchEventsForDisabledDays={true}
+              disabledDaysIndexes={[5, 6]}
+            />
+          </View>
+        </View>
+      </Modal>
+
       <View>
         <LinearGradient
           start={{ x: 0.0, y: 0.25 }}
@@ -115,24 +584,6 @@ export default function Principal({route}) {
           style={{ flex: 2, padding: 10 }}
           colors={["#4D94C1", "#90C641"]}
         >
-          {isLogged && (
-            <TouchableOpacity onPress={() => desloguearUsuario()}>
-              <Text
-                style={{
-                  paddingHorizontal: 8,
-                  fontSize: 15,
-                  paddingTop: 5,
-                  alignSelf: "flex-end",
-                  paddingRight: 10,
-                  fontWeight: "bold",
-                  color: "#FFF",
-                }}
-              >
-                {" "}
-                Cerrar Sesión{" "}
-              </Text>
-            </TouchableOpacity>
-          )}
           <Text
             style={{
               paddingHorizontal: 8,
@@ -156,7 +607,45 @@ export default function Principal({route}) {
             ¿Que taller te gustaria hacer?
           </Text>
           <View style={{ height: 100 }} />
-          <ScrollView
+          <View style={{ position: "absolute", bottom: -85, width: width }}>
+          <SwiperFlatList
+      autoplay
+      autoplayDelay={2}
+      autoplayLoop
+      autoplayLoopKeepAnimation
+      data={slider}
+      renderItem={({ item }) => (
+        <TouchableOpacity
+        onPress={() =>{
+         setModaldataInfo(item)
+         setModalInfo(true)}
+        }
+        style={{
+          flexDirection: "row",
+          backgroundColor: "red",
+          marginTop: 15,
+          marginHorizontal: 10,
+          elevation: 7,
+          borderRadius: 20,
+          marginBottom: 16,
+          height: width / 2.5,
+          width: width - 20,
+        }}
+      >
+        <ImageBackground
+          source={{ uri: item.banner }}
+          resizeMode="cover"
+          style={{
+            width: "100%",
+            borderRadius: 10,
+            overflow: "hidden",
+          }}
+        ></ImageBackground>
+      </TouchableOpacity>
+      )}
+    />
+    </View>
+        {/*  <ScrollView
             horizontal
             style={{ position: "absolute", bottom: -85, width: width }}
           >
@@ -173,6 +662,7 @@ export default function Principal({route}) {
                       elevation: 7,
                       borderRadius: 20,
                       marginBottom: 16,
+                      height: width / 2.5,
                       width: width - 20,
                     }}
                   >
@@ -188,99 +678,7 @@ export default function Principal({route}) {
                   </View>
                 );
               })}
-
-            <View
-              style={{
-                flexDirection: "row",
-                backgroundColor: "#e41c24",
-                marginTop: 15,
-                marginHorizontal: 20,
-                elevation: 7,
-                borderRadius: 20,
-                marginBottom: 16,
-                paddingVertical: 30,
-                paddingLeft: 30,
-                width: width - 20,
-              }}
-            >
-              <View>
-                <Text
-                  style={{
-                    color: "white",
-                    fontSize: 20,
-                    fontWeight: "bold",
-                    width: 250,
-                    paddingRight: 100,
-                  }}
-                >
-                  ¿Queres aprender?
-                </Text>
-              </View>
-              <Image
-                source={require("../assets/undraw.png")}
-                style={{ marginLeft: -80, marginTop: 35 }}
-              />
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                backgroundColor: "#3499c2",
-                marginTop: 15,
-                marginHorizontal: 20,
-                elevation: 7,
-                borderRadius: 20,
-                marginBottom: 16,
-                paddingVertical: 30,
-                paddingLeft: 30,
-                width: width - 20,
-              }}
-            >
-              <View>
-                <Text
-                  style={{
-                    color: "white",
-                    fontSize: 20,
-                    fontWeight: "bold",
-                    width: 250,
-                    paddingRight: 100,
-                  }}
-                >
-                  ¿Queres capacitarte?
-                </Text>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("Categorias")}
-                  style={{
-                    flexDirection: "row",
-                    backgroundColor: "#90C641",
-                    alignItems: "center",
-                    marginTop: 20,
-                    width: 150,
-                    paddingVertical: 10,
-                    borderRadius: 14,
-                    paddingHorizontal: 10,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "#FFF",
-                      fontWeight: "bold",
-                      fontSize: 12,
-                    }}
-                  >
-                    Conocenos
-                  </Text>
-                  <Image
-                    source={require("../assets/a3.png")}
-                    style={{ marginLeft: 20, width: 8, height: 8 }}
-                  />
-                </TouchableOpacity>
-              </View>
-              <Image
-                source={require("../assets/undraw.png")}
-                style={{ marginLeft: -80, marginTop: 35 }}
-              />
-            </View>
-          </ScrollView>
+            </ScrollView> */}
         </LinearGradient>
       </View>
       <View style={{ marginTop: 90 }}>
@@ -350,7 +748,8 @@ export default function Principal({route}) {
               />
             </View>
           </TouchableOpacity>
-          <View
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Cate", { screen: "Capacitar" })}
             style={{
               backgroundColor: "#3499c2",
               marginTop: 15,
@@ -368,8 +767,9 @@ export default function Principal({route}) {
                 style={{ width: 110, height: 110 }}
               />
             </View>
-          </View>
-          <View
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Cate", { screen: "Emprender" })}
             style={{
               backgroundColor: "#a1b94b",
               marginTop: 15,
@@ -386,7 +786,7 @@ export default function Principal({route}) {
                 style={{ width: 110, height: 110 }}
               />
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
         <Text
           style={{
@@ -412,7 +812,7 @@ export default function Principal({route}) {
             // Handler which gets executed on day press. Default = undefined
             // Handler which gets executed on day long press. Default = undefined
             onDayPress={(day) => {
-              console.log("selected day", day);
+              abrirmodal(day);
             }}
             minDate={fecha}
             theme={{
@@ -462,3 +862,50 @@ export default function Principal({route}) {
     </ScrollView>
   );
 }
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    paddingVertical: 35,
+    paddingHorizontal: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 10,
+    marginTop: 14,
+    padding: 10,
+    width: 240,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 18,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+  },
+});

@@ -9,6 +9,7 @@ import {
   Dimensions,
   StyleSheet,
   Pressable,
+  Linking,
   ImageBackground,
   Alert,
 } from "react-native";
@@ -16,11 +17,10 @@ import { Modalize } from "react-native-modalize";
 import CourseList from "../componentes/CourseList";
 import axios from "axios";
 import { Calendar, LocaleConfig } from "react-native-calendars";
-import CategoriasList from "../componentes/CategoriasList";
+import CategoriasList from "../componentes/EmprendeButton";
 import { BASE_URL } from "../api";
 import { ModalDetallesCurso } from "../modals/ModalDetallesCurso";
 import moment from "moment";
-import { FontAwesome } from "react-native-vector-icons";
 const { width, height } = Dimensions.get("window");
 
 export default class Cources extends React.Component {
@@ -35,12 +35,10 @@ export default class Cources extends React.Component {
       modalOk: false,
       multimedia: true,
       fabricacion: false,
-      modalConfirmado: false,
       minilab: false,
       ciencias: false,
       sonidos: false,
       modalHorarios: false,
-      modalConfirmadoCheck: false,
     };
   }
 
@@ -60,15 +58,6 @@ export default class Cources extends React.Component {
     });
   }
 
-  
-
-  onClickAddModalIns(data) {
-    this.setState({
-      modalVisible: true,
-      dataModal: data,
-    });
-  }
-
   render() {
     var today = new Date();
     const fecha = moment(today).format("YYYY-MM-DD");
@@ -78,114 +67,15 @@ export default class Cources extends React.Component {
 
     return (
       <ImageBackground
-        source={require("../assets/FONDO-DESCUBRIR.jpg")}
+        source={require("../assets/EMPRENDER-FONDO.jpg")}
         style={{ width: "100%", height: "100%" }}
       >
-        {/* CONFIRMACION */}
-
-        <Modal
-        animationType="slide"
-        transparent={true}
-        visible={this.state.modalConfirmadoCheck}
-        onRequestClose={() => {
-          this.setState({modalConfirmadoCheck: false});
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-          
-            <Text
-              style={{
-                textAlign: "center",
-                fontSize: width / 15,
-                marginHorizontal: 20,
-                marginTop: 0,
-                fontWeight: "bold",
-                color: 'green'
-              }}
-            >
-              ¡Curso registrado!
-            </Text>
-            <Text
-              style={{
-                textAlign: "center",
-                fontSize: width / 23,
-                marginHorizontal: 20,
-                marginTop: 5,
-              }}
-            >
-              {this.state.dataModal.nombre}
-            </Text>
-            <FontAwesome
-          name="check"
-          size={50}
-          color="green"
-        />
-            
-          </View>
-        </View>
-      </Modal>
-
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalConfirmado}
-          onRequestClose={() => {
-            this.setState({ modalConfirmado: false });
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Image
-                source={{
-                  uri: this.state.dataModal.picture
-                    ? this.state.dataModal.picture
-                    : "http://espaciotecno.com.ar/img/espacio-tecno-bahia-blanca.png",
-                }}
-                resizeMode="contain"
-                style={{ width: 100, height: 100, borderRadius: 10 }}
-              />
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: width / 15,
-                  marginHorizontal: 20,
-                  marginTop: 0,
-                  fontWeight: "bold",
-                }}
-              >
-                Taller de {"\n"} {this.state.dataModal.nombre}
-              </Text>
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: width / 23,
-                  marginHorizontal: 20,
-                  marginTop: 5,
-                }}
-              >
-                {this.state.dataModal.descripcion}
-              </Text>
-
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() =>
-                  this.setState({ modalConfirmado: false })
-                }
-              >
-                <Text style={styles.textStyle}>INSCRIBIRME {">"}</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
-
-
         <Modal
           animationType="slide"
           transparent={true}
           visible={this.state.modalOk}
           onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
             this.setState({ modalOk: false });
           }}
         >
@@ -239,6 +129,7 @@ export default class Cources extends React.Component {
           transparent={true}
           visible={this.state.modalHorarios}
           onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
             this.setState({ modalHorarios: false });
           }}
         >
@@ -387,7 +278,7 @@ export default class Cources extends React.Component {
 
               <Pressable
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => this.setState({ modalHorarios: false, modalConfirmadoCheck: true })}
+                onPress={() => this.setState({ modalHorarios: false })}
               >
                 <Text style={styles.textStyle}>INSCRIBIRME {">"}</Text>
               </Pressable>
@@ -400,6 +291,7 @@ export default class Cources extends React.Component {
           transparent={true}
           visible={this.state.modalVisible}
           onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
             this.setState({ modalVisible: false });
           }}
         >
@@ -429,9 +321,6 @@ export default class Cources extends React.Component {
               <Calendar
                 enableSwipeMonths
                 minDate={fecha}
-                onDayPress={(day) => {
-                  this.setState({ modalVisible: false, modalHorarios: true })
-                }}
                 theme={{
                   calendarBackground: "white",
                   todayTextColor: "white",
@@ -454,14 +343,14 @@ export default class Cources extends React.Component {
                 firstDay={1}
                 markedDates={markedDatesArray}
               />
-              {/* <Pressable
+              <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() =>
                   this.setState({ modalVisible: false, modalHorarios: true })
                 }
               >
                 <Text style={styles.textStyle}>SIGUIENTE {">"}</Text>
-              </Pressable> */}
+              </Pressable>
             </View>
           </View>
         </Modal>
@@ -471,6 +360,7 @@ export default class Cources extends React.Component {
           transparent={true}
           visible={this.state.modalHoras}
           onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
             this.setState({ modalHoras: false });
           }}
         >
@@ -532,149 +422,29 @@ export default class Cources extends React.Component {
           </View>
         </Modal>
         <Image
-          source={require("../assets/DESCUBRIR-VERTICAL-01.png")}
+          source={require("../assets/EMPRENDER-CABEZAL.png")}
           resizeMode="contain"
           style={{
             width: width / 1.5,
-            height: width / 0.8,
+            height: width / 2,
             alignSelf: "center",
-            top: -(width / 3.4),
+            top: 30,
           }}
         />
 
-        <Modalize
-          handleStyle={{
-            backgroundColor: "#e9e9e9",
-            width: 80,
-          }}
-          modalStyle={{
-            borderTopLeftRadius: 60,
-            borderTopRightRadius: 60,
-          }}
-          alwaysOpen={height-350}
-          scrollViewProps={{ showsVerticalScrollIndicator: false }}
-        >
-          <View style={{ paddingVertical: 30 }}>
-            <CategoriasList
-              onPress={() =>
-                this.setState({ multimedia: !this.state.multimedia })
-              }
-              img={require("../assets/fondo-multimedia.png")}
-              title="MULTIMEDIA"
-              bg="#FFFFFF"
-              activado={this.state.multimedia}
-            />
-            <View style={{ display: this.state.multimedia ? "flex" : "none" }}>
-              {this.state.categorias
-                .filter((cat) => cat.categoria.id === 1)
-                .map((item, i) => {
-                  return (
-                    <CourseList
-                      id={i}
-                      onPressComun={() => this.onClickAddModal(item)}
-                      onPress={() => this.onClickAddModalIns(item)}
-                      img={item.picture}
-                      title={item.nombre}
-                      bg="#fdddf3"
-                    />
-                  );
-                })}
-            </View>
-            <CategoriasList
-              onPress={() =>
-                this.setState({ fabricacion: !this.state.fabricacion })
-              }
-              img={require("../assets/fondo-fabricacion.png")}
-              title="FABRICACIÓN"
-              bg="#F3D64D"
-              activado={this.state.fabricacion}
-            />
-            <View style={{ display: this.state.fabricacion ? "flex" : "none" }}>
-              {this.state.categorias
-                .filter((cat) => cat.categoria.id === 2)
-                .map((item, i) => {
-                  return (
-                    <CourseList
-                      id={i}
-                      onPress={() => this.onClickAddModal(item)}
-                      img={item.picture}
-                      title={item.nombre}
-                      bg="#fdddf3"
-                    />
-                  );
-                })}
-            </View>
+<Text style={{marginTop:30, width: width/1.2, color: 'white', fontSize: 20, textAlign: 'center', alignSelf: 'center'}}>Un espacio donde la ciudadanía, organizaciones, emprendedores y el gobierno nos encontramos para <Text style={{fontWeight: 'bold'}}>pensar ideas creativas para diseñar y construir a Bahía como ciudad del conocimiento, la innovación y las tecnologías.</Text> </Text>
 
-            <CategoriasList
-              onPress={() => this.setState({ minilab: !this.state.minilab })}
-              img={require("../assets/fondo-minilab.png")}
-              title="MINILAB"
-              bg="#7E4487"
-              activado={this.state.minilab}
-            />
-            <View style={{ display: this.state.minilab ? "flex" : "none" }}>
-              {this.state.categorias
-                .filter((cat) => cat.categoria.id === 3)
-                .map((item, i) => {
-                  return (
-                    <CourseList
-                      id={i}
-                      onPress={() => this.onClickAddModal(item)}
-                      img={item.picture}
-                      title={item.nombre}
-                      bg="#fdddf3"
-                    />
-                  );
-                })}
-            </View>
+<Text style={{marginTop:30, width: width/1.38, color: 'black',fontWeight: 'bold', fontSize: 20, textAlign: 'center', alignSelf: 'center'}}>Te invitamos a descubrir cómo este espacio de vinculación, puede potenciar tu emprendimiento.</Text>
+<View style={{position: 'absolute', bottom: 20, width: width}}>
 
-            <CategoriasList
-              onPress={() => this.setState({ ciencias: !this.state.ciencias })}
-              img={require("../assets/fondo-ciencia.png")}
-              title="CIENCIAS"
-              bg="#F2D94B"
-              activado={this.state.ciencias}
+<CategoriasList
+              onPress={() => Linking.openURL('https://espaciotecno.bahia.gob.ar/emprender')}
+              img={require("../assets/fondo-emprender.png")}
+              title="¡EMPRENDER!"
+              bg="white"
             />
-            <View style={{ display: this.state.ciencias ? "flex" : "none" }}>
-              {this.state.categorias
-                .filter((cat) => cat.categoria.id === 4)
-                .map((item, i) => {
-                  return (
-                    <CourseList
-                      id={i}
-                      onPress={() => this.onClickAddModal(item)}
-                      img={item.picture}
-                      title={item.nombre}
-                      bg="#fdddf3"
-                    />
-                  );
-                })}
-            </View>
-
-            <CategoriasList
-              onPress={() => this.setState({ sonidos: !this.state.sonidos })}
-              img={require("../assets/fondo-sonidos.png")}
-              title="SONIDOS"
-              bg="#E2004B"
-              activado={this.state.sonidos}
-            />
-            <View style={{ display: this.state.sonidos ? "flex" : "none" }}>
-              {this.state.categorias
-                .filter((cat) => cat.categoria.id === 5)
-                .map((item, i) => {
-                  return (
-                    <CourseList
-                      id={i}
-                      onPress={() => this.onClickAddModal(item)}
-                      img={item.picture}
-                      title={item.nombre}
-                      bg="#fdddf3"
-                    />
-                  );
-                })}
-            </View>
-          </View>
-        </Modalize>
+</View>
+        
       </ImageBackground>
     );
   }

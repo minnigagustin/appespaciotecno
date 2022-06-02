@@ -28,7 +28,12 @@ export default class CourseList extends React.Component {
       });
   }
   render() {
-    const { img, title, bg, onPressComun, onPress } = this.props;
+    let { img, title, bg, onPress, seleccionado, categoria } = this.props;
+    if(categoria){
+      categoria = categoria.id;
+    } else {
+      categoria = null;
+    };
 
     const verificarRegistro = () => {
       if (checkCampos()) {
@@ -37,19 +42,50 @@ export default class CourseList extends React.Component {
       } else Alert.alert("POR FAVOR, COMPLETE LOS CAMPOS SOLICITADOS");
     };
 
+    const dias = [
+      'Multimedia',
+      'Fabricación',
+      'Minilab',
+      'Ciencias',
+      'Sonidos'
+    ];
+
     return (
       <TouchableOpacity
-        onPress={onPressComun}
+        onPress={onPress}
         style={{
           flexDirection: "row",
           backgroundColor: "#d9eefb",
           padding: 20,
-          marginHorizontal: 20,
+          marginHorizontal: 2,
           borderRadius: 20,
           alignItems: "center",
           marginTop: 10,
         }}
       >
+        <View
+          style={{
+            width: 30,
+            height: 30,
+            borderRadius: 30 / 2,
+            borderWidth: 2,
+            borderColor: seleccionado ? "#0088c2" : "gray",
+            marginRight: 10,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {seleccionado ? (
+            <View
+              style={{
+                width: 15,
+                height: 15,
+                borderRadius: 15 / 2,
+                backgroundColor: seleccionado ? "#0088c2" : "gray",
+              }}
+            ></View>
+          ) : null}
+        </View>
         <Image
           source={{
             uri: img
@@ -59,44 +95,25 @@ export default class CourseList extends React.Component {
           style={{ width: 40, height: 40, borderRadius: 10 }}
         />
 
-        <View>
-          <Text
-            style={{
-              color: "#345c74",
-              fontWeight: "bold",
-              fontSize: width / 23,
-              paddingHorizontal: 15,
-              width: width / 2.3,
-            }}
-          >
-            {title}
-          </Text>
-        </View>
-        <TouchableOpacity
-          onPress={onPress}
+        <Text
           style={{
-            flexDirection: "row",
-            backgroundColor: "#0088c2",
-            alignItems: "center",
-            width: width / 3.5,
-            paddingVertical: 10,
-            borderRadius: 10,
-            marginLeft: -10,
-            paddingHorizontal: 10,
-            marginRight: 10,
+            color: "black",
+            fontWeight: "bold",
+            fontSize: width / 23,
+            paddingLeft: 15,
+            width: width / 1.6,
           }}
         >
+          {title} |{" "}
           <Text
             style={{
-              color: "#FFF",
+              color: "#E73B77",
               fontWeight: "bold",
-              fontSize: width / 28,
             }}
           >
-            INSCRIBIR
+            {dias[categoria-1]}
           </Text>
-          <Entypo name={"plus"} size={18} color="white" />
-        </TouchableOpacity>
+        </Text>
       </TouchableOpacity>
     );
   }

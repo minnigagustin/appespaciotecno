@@ -1,34 +1,25 @@
 Arguments: 
-<<<<<<< HEAD
-  /usr/bin/node /usr/share/yarn/bin/yarn.js add expo-updates@~0.11.6
-=======
-  /snap/node/5953/bin/node /snap/node/5953/bin/yarn.js global dir
->>>>>>> 5a10a0f0483c27cf354a1021942b3f6d9969f071
+  /usr/bin/node /usr/share/yarn/bin/yarn.js
 
 PATH: 
-  /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+  /home/mesa20/.local/bin:/home/mesa20/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 
 Yarn version: 
-  1.22.17
+  1.22.18
 
 Node version: 
-  16.14.0
+  14.19.0
 
 Platform: 
   linux x64
 
 Trace: 
-  Error: EACCES: permission denied, write
-      at writeSync (node:fs:884:3)
-      at SyncWriteStream._write (node:internal/fs/sync_write_stream:25:3)
-      at writeOrBuffer (node:internal/streams/writable:389:12)
-      at _write (node:internal/streams/writable:330:10)
-      at SyncWriteStream.Writable.write (node:internal/streams/writable:334:10)
-      at ConsoleReporter._log (/snap/node/5953/lib/cli.js:96904:17)
-      at ConsoleReporter.log (/snap/node/5953/lib/cli.js:96892:10)
-      at dir (/snap/node/5953/lib/cli.js:36299:14)
-      at Object.<anonymous> (/snap/node/5953/lib/cli.js:25983:25)
+  SyntaxError: /home/mesa20/Documentos/GitHub/appespaciotecno/package.json: Unexpected token < in JSON at position 988
+      at JSON.parse (<anonymous>)
+      at /usr/share/yarn/lib/cli.js:1625:59
       at Generator.next (<anonymous>)
+      at step (/usr/share/yarn/lib/cli.js:310:30)
+      at /usr/share/yarn/lib/cli.js:321:13
 
 npm manifest: 
   {
@@ -60,6 +51,11 @@ npm manifest:
       "expo-image-picker": "~12.0.1",
       "expo-linear-gradient": "^11.0.3",
       "expo-status-bar": "~1.2.0",
+  <<<<<<< HEAD
+      "expo-updates": "^0.11.6",
+  =======
+      "moment": "^2.29.1",
+  >>>>>>> 5a10a0f0483c27cf354a1021942b3f6d9969f071
       "or": "^0.2.0",
       "react": "17.0.1",
       "react-dom": "17.0.1",
@@ -75,7 +71,7 @@ npm manifest:
       "react-native-progress-circle": "^2.1.0",
       "react-native-qrcode-svg": "^6.1.0",
       "react-native-reanimated": "~2.3.1",
-      "react-native-safe-area-context": "3.3.2",
+      "react-native-safe-area-context": "^3.3.2",
       "react-native-screens": "~3.10.1",
       "react-native-slideshow": "^1.0.1",
       "react-native-svg": "^12.3.0",
@@ -4517,7 +4513,7 @@ Lockfile:
     "resolved" "https://registry.npmjs.org/mockdate/-/mockdate-3.0.5.tgz"
     "version" "3.0.5"
   
-  "moment@^2.24.0":
+  "moment@^2.24.0", "moment@^2.29.1":
     "integrity" "sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ=="
     "resolved" "https://registry.npmjs.org/moment/-/moment-2.29.1.tgz"
     "version" "2.29.1"
@@ -5199,7 +5195,7 @@ Lockfile:
       "react-native-screens" "^3.4.0"
       "string-hash-64" "^1.0.3"
   
-  "react-native-safe-area-context@>= 0.6.0", "react-native-safe-area-context@>= 3.0.0", "react-native-safe-area-context@3.3.2":
+  "react-native-safe-area-context@^3.3.2", "react-native-safe-area-context@>= 0.6.0", "react-native-safe-area-context@>= 3.0.0":
     "integrity" "sha512-yOwiiPJ1rk+/nfK13eafbpW6sKW0jOnsRem2C1LPJjM3tfTof6hlvV5eWHATye3XOpu2cJ7N+HdkUvUDGwFD2Q=="
     "resolved" "https://registry.npmjs.org/react-native-safe-area-context/-/react-native-safe-area-context-3.3.2.tgz"
     "version" "3.3.2"

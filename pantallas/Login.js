@@ -108,7 +108,7 @@ export default function Login({  }) {
 
           AsyncStorage.setItem("perfil", JSON.stringify(response.data));
 
-          navigation.navigate("Principal");
+          navigation.replace("HomeInicio");
 
           console.log(global.authenticated)
         }
