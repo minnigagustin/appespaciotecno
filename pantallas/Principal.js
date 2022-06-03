@@ -588,7 +588,7 @@ export default function Principal({ route }) {
           <Text
             style={{
               paddingHorizontal: 8,
-              fontSize: 35,
+              fontSize: (width/14)-2,
               paddingTop: 10,
               fontWeight: "bold",
               color: "#FFF",
@@ -600,14 +600,14 @@ export default function Principal({ route }) {
             style={{
               paddingHorizontal: 15,
               textAlign: "center",
-              fontSize: width / 18,
+              fontSize: (width / 18)-2,
               fontWeight: "900",
               color: "#FFF",
             }}
           >
             ¿Que taller te gustaria hacer?
           </Text>
-          <View style={{ height: 100 }} />
+          <View style={{ height: width/4.2 }} />
           <View style={{ position: "absolute", bottom: -85, width: width }}>
           <SwiperFlatList
       autoplay
@@ -646,50 +646,16 @@ export default function Principal({ route }) {
       )}
     />
     </View>
-        {/*  <ScrollView
-            horizontal
-            style={{ position: "absolute", bottom: -85, width: width }}
-          >
-            {slider
-              .filter((cat) => cat.banner)
-              .map((item, i) => {
-                return (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      backgroundColor: "red",
-                      marginTop: 15,
-                      marginHorizontal: 10,
-                      elevation: 7,
-                      borderRadius: 20,
-                      marginBottom: 16,
-                      height: width / 2.5,
-                      width: width - 20,
-                    }}
-                  >
-                    <ImageBackground
-                      source={{ uri: item.banner }}
-                      resizeMode="cover"
-                      style={{
-                        width: "100%",
-                        borderRadius: 10,
-                        overflow: "hidden",
-                      }}
-                    ></ImageBackground>
-                  </View>
-                );
-              })}
-            </ScrollView> */}
         </LinearGradient>
       </View>
       <View style={{ marginTop: 90 }}>
-        <Text style={{ textAlign: "center", fontSize: width / 19 }}>
+        <Text style={{ textAlign: "center", fontSize: (width / 19)-2 }}>
           En ESPACIO TECNO podras
         </Text>
         <Text
           style={{
             textAlign: "center",
-            fontSize: width / 18,
+            fontSize: (width / 18)-2,
             fontWeight: "bold",
           }}
         >
@@ -700,7 +666,7 @@ export default function Principal({ route }) {
         <Text
           style={{
             textAlign: "center",
-            fontSize: width / 19,
+            fontSize: (width / 19)-2,
             marginHorizontal: 20,
             marginTop: 20,
           }}
@@ -711,7 +677,7 @@ export default function Principal({ route }) {
           style={{
             color: "#353535",
             fontWeight: "bold",
-            fontSize: 24,
+            fontSize: (width/18)-2,
             paddingHorizontal: 20,
             textAlign: "center",
             marginBottom: 1,
@@ -792,7 +758,7 @@ export default function Principal({ route }) {
         <Text
           style={{
             color: "#055c6e",
-            fontSize: width / 18,
+            fontSize: (width / 18)-2,
             marginTop: 23,
             paddingHorizontal: 20,
             paddingVertical: 10,

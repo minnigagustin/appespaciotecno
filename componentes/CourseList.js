@@ -64,7 +64,7 @@ export default class CourseList extends React.Component {
             style={{
               color: "#345c74",
               fontWeight: "bold",
-              fontSize: width / 23,
+              fontSize: (width / 23)-4,
               paddingHorizontal: 15,
               width: width / 2.3,
             }}
@@ -84,13 +84,14 @@ export default class CourseList extends React.Component {
             marginLeft: -10,
             paddingHorizontal: 10,
             marginRight: 10,
+            justifyContent: 'center'
           }}
         >
           <Text
             style={{
               color: "#FFF",
               fontWeight: "bold",
-              fontSize: width / 28,
+              fontSize: (width / 28)-2,
             }}
           >
             INSCRIBIR

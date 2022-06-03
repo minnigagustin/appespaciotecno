@@ -149,7 +149,7 @@ export default class Cources extends React.Component {
               <Text
                 style={{
                   textAlign: "center",
-                  fontSize: width / 15,
+                  fontSize: (width / 15)-2,
                   marginHorizontal: 20,
                   marginTop: 0,
                   fontWeight: "bold",
@@ -203,7 +203,7 @@ export default class Cources extends React.Component {
               <Text
                 style={{
                   textAlign: "center",
-                  fontSize: width / 15,
+                  fontSize: (width / 15)-2,
                   marginHorizontal: 20,
                   marginTop: 0,
                   fontWeight: "bold",
@@ -247,7 +247,7 @@ export default class Cources extends React.Component {
               <Text
                 style={{
                   textAlign: "center",
-                  fontSize: width / 15,
+                  fontSize: (width / 15)-2,
                   marginHorizontal: 20,
                   marginTop: 0,
                   fontWeight: "bold",
@@ -551,7 +551,7 @@ export default class Cources extends React.Component {
             borderTopLeftRadius: 60,
             borderTopRightRadius: 60,
           }}
-          alwaysOpen={height-350}
+          alwaysOpen={height/1.7}
           scrollViewProps={{ showsVerticalScrollIndicator: false }}
         >
           <View style={{ paddingVertical: 30 }}>
