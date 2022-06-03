@@ -25,7 +25,7 @@ export default class CategoriasList extends React.Component{
                          <Text style={{
                              color: bg,
                              fontWeight:"bold",
-                             fontSize:width/11,
+                             fontSize:width/12,
                              // textShadowColor: 'rgba(0, 0, 0, 0.5)',
                              // textShadowOffset: {width: 2, height: 3},
                              // textShadowRadius: 10,

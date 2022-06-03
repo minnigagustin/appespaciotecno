@@ -432,13 +432,13 @@ export default class Cources extends React.Component {
           }}
         />
 
-<Text style={{marginTop:30, width: width/1.2, color: 'white', fontSize: 20, textAlign: 'center', alignSelf: 'center'}}>Un espacio donde la ciudadanía, organizaciones, emprendedores y el gobierno nos encontramos para <Text style={{fontWeight: 'bold'}}>pensar ideas creativas para diseñar y construir a Bahía como ciudad del conocimiento, la innovación y las tecnologías.</Text> </Text>
+<Text style={{marginTop:30, width: width/1.2, color: 'white', fontSize: width/20, textAlign: 'center', alignSelf: 'center'}}>Un espacio donde la ciudadanía, organizaciones, emprendedores y el gobierno nos encontramos para <Text style={{fontWeight: 'bold'}}>pensar ideas creativas para diseñar y construir a Bahía como ciudad del conocimiento, la innovación y las tecnologías.</Text> </Text>
 
-<Text style={{marginTop:30, width: width/1.38, color: 'black',fontWeight: 'bold', fontSize: 20, textAlign: 'center', alignSelf: 'center'}}>Te invitamos a descubrir cómo este espacio de vinculación, puede potenciar tu emprendimiento.</Text>
+<Text style={{marginTop:30, width: width/1.38, color: 'black',fontWeight: 'bold', fontSize: width/20, textAlign: 'center', alignSelf: 'center'}}>Te invitamos a descubrir cómo este espacio de vinculación, puede potenciar tu emprendimiento.</Text>
 <View style={{position: 'absolute', bottom: 20, width: width}}>
 
 <CategoriasList
-              onPress={() => Linking.openURL('https://espaciotecno.bahia.gob.ar/emprender')}
+              onPress={() => Linking.openURL('https://espaciotecno.bahia.gob.ar/#emprender')}
               img={require("../assets/fondo-emprender.png")}
               title="¡EMPRENDER!"
               bg="white"

@@ -47,7 +47,7 @@ export default class Cources extends React.Component {
   componentDidMount() {
     const cursos = BASE_URL + "curso/";
     axios.get(cursos).then((res) => {
-      const cursos = res.data;
+      const cursos = res.data.filter((cat) => cat.categoria);
       this.setState({ categorias: cursos });
       console.log(cursos);
     });
@@ -566,7 +566,7 @@ export default class Cources extends React.Component {
             />
             <View style={{ display: this.state.multimedia ? "flex" : "none" }}>
               {this.state.categorias
-                .filter((cat) => cat.categoria.id === 1)
+                .filter((cat) => cat.categoria=== 1)
                 .map((item, i) => {
                   return (
                     <CourseList
@@ -591,7 +591,7 @@ export default class Cources extends React.Component {
             />
             <View style={{ display: this.state.fabricacion ? "flex" : "none" }}>
               {this.state.categorias
-                .filter((cat) => cat.categoria.id === 2)
+                .filter((cat) => cat.categoria === 2)
                 .map((item, i) => {
                   return (
                     <CourseList
@@ -614,7 +614,7 @@ export default class Cources extends React.Component {
             />
             <View style={{ display: this.state.minilab ? "flex" : "none" }}>
               {this.state.categorias
-                .filter((cat) => cat.categoria.id === 3)
+                .filter((cat) => cat.categoria === 3)
                 .map((item, i) => {
                   return (
                     <CourseList
@@ -637,7 +637,7 @@ export default class Cources extends React.Component {
             />
             <View style={{ display: this.state.ciencias ? "flex" : "none" }}>
               {this.state.categorias
-                .filter((cat) => cat.categoria.id === 4)
+                .filter((cat) => cat.categoria.id ===  7)
                 .map((item, i) => {
                   return (
                     <CourseList
@@ -660,7 +660,7 @@ export default class Cources extends React.Component {
             />
             <View style={{ display: this.state.sonidos ? "flex" : "none" }}>
               {this.state.categorias
-                .filter((cat) => cat.categoria.id === 5)
+                .filter((cat) => cat.categoria === 5)
                 .map((item, i) => {
                   return (
                     <CourseList

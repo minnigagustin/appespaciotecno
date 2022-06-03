@@ -95,7 +95,8 @@ export default function Principal({ route }) {
     const cursos = BASE_URL + "curso/";
     axios.get(cursos).then((res) => {
       const cursos = res.data;
-      setSlider(cursos);
+      const slid = cursos.filter((cat) => cat.banner);
+      setSlider(slid);
       console.log(cursos);
     });
     AsyncStorage.getItem("perfil").then((perfil) => {
@@ -182,7 +183,7 @@ export default function Principal({ route }) {
           setModalConfirmado(false);
         }}
       >
-        <View style={styles.centeredView}>
+        <TouchableOpacity onPressOut={() => setModalConfirmado(false)} activeOpacity={1} style={styles.centeredView}>
           <View style={styles.modalView}>
           
             <Text
@@ -214,7 +215,7 @@ export default function Principal({ route }) {
         />
             
           </View>
-        </View>
+        </TouchableOpacity>
       </Modal>
 
       <Modal
@@ -622,7 +623,7 @@ export default function Principal({ route }) {
         }
         style={{
           flexDirection: "row",
-          backgroundColor: "red",
+          backgroundColor: "transparent",
           marginTop: 15,
           marginHorizontal: 10,
           elevation: 7,
@@ -734,7 +735,7 @@ export default function Principal({ route }) {
               justifyContent: "center",
               alignItems: "center",
               paddingVertical: 3,
-              borderRadius: 20,
+              borderRadius: 10,
               width: width / 3.5,
             }}
             onPress={() =>
@@ -776,7 +777,7 @@ export default function Principal({ route }) {
               justifyContent: "center",
               alignItems: "center",
               paddingVertical: 3,
-              borderRadius: 20,
+              borderRadius: 10,
               width: width / 3.5,
             }}
           >
