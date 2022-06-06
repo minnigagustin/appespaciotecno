@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Dimensions, ImageBackground } from "react-native";
+import { View, Dimensions, ImageBackground, Text } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {LocaleConfig} from 'react-native-calendars';
 import { AnimatedSVGPaths } from "react-native-svg-animations";
@@ -61,16 +61,13 @@ export default class Home extends React.Component {
       <ImageBackground
       source={require("../assets/fondo_login.jpg")}
       style={{ resizeMode: "stretch", width: width, height: height+30 }}>
-      <View style={{alignItems: 'center',
-      flex: 1,
-      justifyContent: 'center'}}>
-    
+      <View style={{justifyContent: 'center', //Centered horizontally
+       alignItems: 'center', //Centered vertically
+       flex:1}}>
         <AnimatedSVGPaths
           strokeColor={"white"}
           strokeWidth={4}
           duration={1000}
-          height={width/1.5}
-          width={width/1.5}
           scale={0.8}
           fill={"#6da290"}
           delay={100}

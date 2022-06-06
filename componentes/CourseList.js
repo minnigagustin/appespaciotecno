@@ -66,7 +66,7 @@ export default class CourseList extends React.Component {
               fontWeight: "bold",
               fontSize: (width / 23)-4,
               paddingHorizontal: 15,
-              width: width / 2.3,
+              width: (width / 2.3)-2,
             }}
           >
             {title}
@@ -78,7 +78,7 @@ export default class CourseList extends React.Component {
             flexDirection: "row",
             backgroundColor: "#0088c2",
             alignItems: "center",
-            width: width / 3.5,
+            width: (width / 3.5)-2,
             paddingVertical: 10,
             borderRadius: 10,
             marginLeft: -10,

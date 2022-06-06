@@ -40,8 +40,8 @@ export default class CategoriasList extends React.Component{
                                     flexDirection:"row",
                                     backgroundColor:"rgba(0,0,0,0.3)",
                                     alignItems:"center",
-                                    width:50,
-                                    height:50,
+                                    width:(width/8)-2,
+                                    height:(width/8)-2,
                                     borderRadius:25,
                                     justifyContent: 'center',
                                     marginLeft: 10,
@@ -49,7 +49,7 @@ export default class CategoriasList extends React.Component{
                            >
                                     <View
                                     >
-                                        <Entypo name={activado ? 'chevron-down' : 'chevron-up'} size={35} color="white" />
+                                        <Entypo name={activado ? 'chevron-up' : 'chevron-down'} size={35} color="white" />
                                         </View>
                            </View>
                            </View>

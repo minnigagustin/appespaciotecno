@@ -134,7 +134,7 @@ export default function Login({}) {
           resizeMode="contain"
           source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
         />
-        <KeyboardAvoidingView behavior="height" keyboardVerticalOffset={25}>
+        <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={15} enabled>
           <TextInput
             style={styles.input_style}
             textAlign={"center"}

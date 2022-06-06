@@ -231,7 +231,7 @@ export default function Principal({ route }) {
               <Text
                 style={{
                   textAlign: "center",
-                  fontSize: width / 15,
+                  fontSize: (width / 17)-2,
                   marginHorizontal: 20,
                   marginTop: 0,
                   fontWeight: "bold",
@@ -402,9 +402,9 @@ export default function Principal({ route }) {
             <Text
               style={{
                 textAlign: "center",
-                fontSize: width / 15,
+                fontSize: (width / 17)-2,
                 marginHorizontal: 20,
-                marginTop: 0,
+                marginTop: 2,
                 fontWeight: "bold",
               }}
             >
@@ -445,7 +445,7 @@ export default function Principal({ route }) {
             <Text
               style={{
                 textAlign: "center",
-                fontSize: width / 15,
+                fontSize: (width / 15)-2,
                 marginHorizontal: 20,
                 marginTop: 0,
                 fontWeight: "bold",
@@ -461,7 +461,7 @@ export default function Principal({ route }) {
               <Text
                 style={{
                   textAlign: "center",
-                  fontSize: width / 15,
+                  fontSize: (width / 15)-2,
                   marginHorizontal: 20,
                   marginTop: 0,
                   fontWeight: "bold",
@@ -475,7 +475,7 @@ export default function Principal({ route }) {
             <Text
               style={{
                 textAlign: "center",
-                fontSize: width / 18,
+                fontSize: (width / 18)-2,
                 marginHorizontal: 20,
                 marginTop: 5,
               }}

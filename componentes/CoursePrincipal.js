@@ -3,6 +3,7 @@ import { Text, TouchableOpacity, View, Image, Dimensions } from "react-native";
 import ProgressCircle from "react-native-progress-circle";
 import { Entypo } from "react-native-vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 const { width, height } = Dimensions.get("window");
 
 export default class CourseList extends React.Component {
@@ -30,7 +31,7 @@ export default class CourseList extends React.Component {
   render() {
     let { img, title, bg, onPress, seleccionado, categoria } = this.props;
     if(categoria){
-      categoria = categoria.id;
+      categoria = categoria.descripcion;
     } else {
       categoria = null;
     };
@@ -56,7 +57,7 @@ export default class CourseList extends React.Component {
         style={{
           flexDirection: "row",
           backgroundColor: "#d9eefb",
-          padding: 20,
+          padding: 12,
           marginHorizontal: 2,
           borderRadius: 20,
           alignItems: "center",
@@ -65,9 +66,9 @@ export default class CourseList extends React.Component {
       >
         <View
           style={{
-            width: 30,
-            height: 30,
-            borderRadius: 30 / 2,
+            width: (width/12)-2,
+            height: (width/12)-2,
+            borderRadius: (width/12)-2,
             borderWidth: 2,
             borderColor: seleccionado ? "#0088c2" : "gray",
             marginRight: 10,
@@ -92,14 +93,14 @@ export default class CourseList extends React.Component {
               ? img
               : "http://espaciotecno.com.ar/img/espacio-tecno-bahia-blanca.png",
           }}
-          style={{ width: 40, height: 40, borderRadius: 10 }}
+          style={{ width: (width/10)-2, height: (width/10)-2, borderRadius: (width/10)-2 }}
         />
 
         <Text
           style={{
             color: "black",
             fontWeight: "bold",
-            fontSize: width / 23,
+            fontSize: (width / 23)-2,
             paddingLeft: 15,
             width: width / 1.6,
           }}
@@ -111,7 +112,7 @@ export default class CourseList extends React.Component {
               fontWeight: "bold",
             }}
           >
-            {dias[categoria-1]}
+            {categoria}
           </Text>
         </Text>
       </TouchableOpacity>
