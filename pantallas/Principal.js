@@ -475,7 +475,7 @@ export default function Principal({ route }) {
             <Text
               style={{
                 textAlign: "center",
-                fontSize: (width / 18)-2,
+                fontSize: (width / 20)-2,
                 marginHorizontal: 20,
                 marginTop: 5,
               }}

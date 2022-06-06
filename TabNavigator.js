@@ -112,7 +112,7 @@ function TabNavigator() {
           headerTitleAlign: "center",
         }}
       />
-      {!global.authenticated && (
+      {/* !global.authenticated && (
         <Tab.Screen
           name="Iniciar Sesión"
           component={HomeStackScreen}
@@ -135,7 +135,7 @@ function TabNavigator() {
             headerShown: false,
           }}
         />
-      )}
+        ) */}
     </Tab.Navigator>
   );
 }

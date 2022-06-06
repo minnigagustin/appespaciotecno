@@ -61,6 +61,7 @@ export default class CourseList extends React.Component {
           marginHorizontal: 2,
           borderRadius: 20,
           alignItems: "center",
+          opacity: seleccionado ? 1 : 0.5,
           marginTop: 10,
         }}
       >
@@ -93,7 +94,7 @@ export default class CourseList extends React.Component {
               ? img
               : "http://espaciotecno.com.ar/img/espacio-tecno-bahia-blanca.png",
           }}
-          style={{ width: (width/10)-2, height: (width/10)-2, borderRadius: (width/10)-2 }}
+          style={{ width: (width/10)-2, height: (width/10)-2, borderRadius: 2 }}
         />
 
         <Text
@@ -102,7 +103,7 @@ export default class CourseList extends React.Component {
             fontWeight: "bold",
             fontSize: (width / 23)-2,
             paddingLeft: 15,
-            width: width / 1.6,
+            width: width / 1.8,
           }}
         >
           {title} |{" "}
