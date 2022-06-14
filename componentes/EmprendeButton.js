@@ -25,12 +25,12 @@ export default class CategoriasList extends React.Component{
                          <Text style={{
                              color: bg,
                              fontWeight:"bold",
-                             fontSize:(width/12)-2,
+                             fontSize:(width/13)-2,
                              // textShadowColor: 'rgba(0, 0, 0, 0.5)',
                              // textShadowOffset: {width: 2, height: 3},
                              // textShadowRadius: 10,
                              paddingHorizontal:15,
-                             width:width/1.5
+                             width:width/1.4
                          }}>{title}</Text>
                         
                     </View>

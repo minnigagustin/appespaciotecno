@@ -29,8 +29,8 @@ export default class CategoriasList extends React.Component{
                              // textShadowColor: 'rgba(0, 0, 0, 0.5)',
                              // textShadowOffset: {width: 2, height: 3},
                              // textShadowRadius: 10,
-                             paddingHorizontal:15,
-                             width:width/1.4
+                             paddingHorizontal:width/40,
+                             width:width/1.4,
                          }}>{title}</Text>
                         
                     </View>
