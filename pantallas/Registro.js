@@ -25,6 +25,7 @@ import { ModalRegistroOk } from "../modals/ModalRegistroOk";
 import { BASE_URL } from "../api";
 
 const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 
 export default function Registro() {
   const [nombre, setNombre] = useState("");
@@ -165,20 +166,28 @@ export default function Registro() {
   return (
     <ImageBackground
       source={require("../assets/fondo_login.jpg")}
-      style={{ width: "100%", height: "100%" }}
+      style={{ resizeMode: "stretch", width: width, height: height+30 }}
     >
-      <View style={styles.container}>
         <ScrollView>
           <Image
             style={styles.imagen_style}
             resizeMode="contain"
             source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
           />
-          <View>
+          <View style={{flex: 1,
+    flexDirection: "row", alignContent: 'center', alignItems: 'center', alignSelf: 'center', textAlign: 'center'}}>
             <TextInput
-              style={styles.input_style}
+              style={{
+              fontSize: 20,
+              marginBottom: 20,
+              borderRadius: 30,
+              marginRight: 5,
+              borderColor: "#90C641",
+              width: width / 2.7,
+              padding: 10,
+              backgroundColor: "white",}}
               textAlign={"center"}
-              placeholderTextColor="#c9c8c8"
+              placeholderTextColor="#000"
               placeholder={"Nombre"}
               color="black"
               onChangeText={(text_user) => actualizarNombre(text_user)}
@@ -186,18 +195,26 @@ export default function Registro() {
             ></TextInput>
 
             <TextInput
-              style={styles.input_style}
+              style={{
+              fontSize: 20,
+              marginBottom: 20,
+              borderRadius: 30,
+              borderColor: "#90C641",
+              width: width / 2.7,
+              padding: 10,
+              backgroundColor: "white",}}
               textAlign={"center"}
-              placeholderTextColor="#c9c8c8"
+              placeholderTextColor="#000"
               placeholder={"Apellido"}
               onChangeText={(text_user) => actualizarApellido(text_user)}
               value={apellido}
             ></TextInput>
+            </View>
 
             <TextInput
               style={styles.input_style}
               textAlign={"center"}
-              placeholderTextColor="#c9c8c8"
+              placeholderTextColor="#000"
               placeholder={"Ingrese su DNI"}
               onChangeText={(text_user) => actualizarDni(text_user)}
               value={dni}
@@ -206,7 +223,7 @@ export default function Registro() {
             <TextInput
               style={styles.input_style}
               textAlign={"center"}
-              placeholderTextColor="#c9c8c8"
+              placeholderTextColor="#000"
               placeholder={"Email"}
               keyboardType="email-address"
               onChangeText={(text_user) => actualizarMail(text_user)}
@@ -216,7 +233,7 @@ export default function Registro() {
             <TextInput
               style={styles.input_style}
               textAlign={"center"}
-              placeholderTextColor="#c9c8c8"
+              placeholderTextColor="#000"
               placeholder={"Localidad"}
               onChangeText={(text_user) => actualizarLocalidad(text_user)}
               value={localidad}
@@ -225,17 +242,17 @@ export default function Registro() {
             <View
               style={{
                 flexDirection: "row",
-                justifyContent: "space-around",
-                marginVertical: 20,
+                marginBottom: 20,
+                alignContent: 'center', alignItems: 'center', alignSelf: 'center', textAlign: 'center',
               }}
             >
               <TouchableOpacity
                 onPress={() => {
                   setGenero("m");
                 }}
-                backgroundColor="#ffff"
+                style={{backgroundColor: genero === "m" ? "#055c6e" : 'white', padding: genero === "m" ? 11: 8, margin: genero === "m" ? 0 : 3}}
               >
-                <Text color="black"> Masculino </Text>
+                <Text style={{fontSize: width/20, color: genero === "m" ? 'white' : 'black'}}> Masculino </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -243,14 +260,15 @@ export default function Registro() {
                   setGenero("f");
                 }}
                 backgroundColor="#ffff"
+                style={{backgroundColor: genero === "f" ? "#055c6e" : 'white', padding: genero === "f" ? 11 : 8, margin: genero === "f" ? 0 : 3}}
               >
-                <Text color="black"> Femenino </Text>
+                <Text style={{fontSize: width/20, color: genero === "f" ? 'white' : 'black'}}> Femenino </Text>
               </TouchableOpacity>
             </View>
             <TextInput
               style={styles.input_style}
               textAlign={"center"}
-              placeholderTextColor="#c9c8c8"
+              placeholderTextColor="#000"
               placeholder={"Escriba una contraseña"}
               secureTextEntry={true}
               onChangeText={(text_user) => actualizarContrasenia(text_user)}
@@ -260,7 +278,7 @@ export default function Registro() {
             <TextInput
               style={styles.input_style}
               textAlign={"center"}
-              placeholderTextColor="#c9c8c8"
+              placeholderTextColor="#000"
               secureTextEntry={true}
               placeholder={"Confirme su contraseña"}
             ></TextInput>
@@ -274,17 +292,7 @@ export default function Registro() {
               <Text style={styles.ingresar_text}>REGISTRARSE</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.regresar_style}
-              onPress={() => {
-                regresarScreen();
-              }}
-            >
-              <Text style={styles.ingresar_text}>REGRESAR</Text>
-            </TouchableOpacity>
-          </View>
         </ScrollView>
-      </View>
       {loading && <ActivityIndicator size="small" color="#0000ff" />}
       {modalOk && (
         <ModalRegistroOk
@@ -306,9 +314,9 @@ const styles = StyleSheet.create({
   imagen_style: {
     alignSelf: "center",
     marginTop: 90,
-    marginBottom: 80,
-    width: 150,
-    height: 150,
+    marginBottom: 50,
+    width: width/2.5,
+    height: width/2.5,
   },
   logo_container: {
     flexDirection: "row",

@@ -12,12 +12,14 @@ import {
   ActivityIndicator,
   TextInput,
 } from "react-native";
-
+import { Entypo } from "react-native-vector-icons"
 import React from "react";
 
 import { useNavigation } from "@react-navigation/native";
 
 import { useState, useEffect } from "react";
+
+import * as Facebook from 'expo-facebook';
 
 import axios from "axios";
 
@@ -31,6 +33,28 @@ const width = Dimensions.get("window").width;
 
 const height = Dimensions.get("window").height;
 
+async function logIn() {
+  try {
+    await Facebook.initializeAsync({
+      appId: '584511442999527', facebookDisplayName: 'Espacio Tecno'
+    });
+    const { type, token, expirationDate, permissions, declinedPermissions } =
+      await Facebook.logInWithReadPermissionsAsync({
+        permissions: ['public_profile', 'email'],
+      });
+    if (type === 'success') {
+      // Get the user's name using Facebook's Graph API
+      const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+      Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
+    } else {
+      // type === 'cancel'
+      Alert.alert('Cancelado', `Inicio de sesion cancelado`);
+    }
+  } catch ({ message }) {
+    alert(`Facebook Login Error: ${message}`);
+  }
+}
+
 export default function Login({}) {
   const [dni, setDni] = useState("");
 
@@ -42,6 +66,7 @@ export default function Login({}) {
 
   const navigation = useNavigation();
 
+  
   const actualizarUser = (text_user) => {
     setDni(text_user);
   };
@@ -128,13 +153,13 @@ export default function Login({}) {
             }}
           />
         )}
+        <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={15} enabled>
 
         <Image
           style={styles.imagen_style}
           resizeMode="contain"
           source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
         />
-        <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={15} enabled>
           <TextInput
             style={styles.input_style}
             textAlign={"center"}
@@ -175,12 +200,18 @@ export default function Login({}) {
           >
             <Text style={styles.recuperar_text}>¿Olvidó su contraseña?</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={{backgroundColor: '#4267b2',
+    paddingVertical: 10,
+    paddingHorizontal: 10, marginTop: 34,
+    borderRadius: 20, alignItems: 'center'}} onPress={logIn}>
+          <Text style={{ color: "#fff", fontSize: width/28 }}><Entypo name={'facebook'} size={16} color="white" /> Inicia sesion con <Text style={{ fontWeight: 'bold' }}>Facebook</Text></Text>
+        </TouchableOpacity>
         </KeyboardAvoidingView>
       </View>
-
+      
       <View
         style={{
-          bottom: 41,
+          bottom: 50,
           position: "relative",
         }}
       >
@@ -208,8 +239,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 90,
     marginBottom: 80,
-    width: 150,
-    height: 150,
+    width: width/2.5,
+    height: width/2.5,
   },
   logo_container: {
     flexDirection: "row",
@@ -226,7 +257,7 @@ const styles = StyleSheet.create({
   input_style: {
     alignSelf: "center",
     alignItems: "stretch",
-    fontSize: 20,
+    fontSize: width/22,
     marginBottom: 20,
     borderRadius: 30,
     borderColor: "#90C641",
@@ -250,13 +281,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.1)",
     alignSelf: "center",
   },
-  ingresar_text: {
-    fontSize: 13,
-    color: "white",
-    marginVertical: 7,
-    marginHorizontal: 7,
-    fontFamily: "Roboto",
-  },
   crear_style: {
     borderRadius: 300 / 40,
     borderColor: "black",
@@ -271,22 +295,16 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     fontFamily: "Roboto",
   },
-  recuperar_text: {
-    color: "white",
-    fontSize: 19,
-    textAlign: "center",
-    fontFamily: "Roboto",
-    fontWeight: "bold",
-  },
   ingresar_text: {
-    fontSize: 25,
+    fontSize: width/22,
     color: "white",
     marginVertical: 7,
     marginHorizontal: 7,
   },
   recuperar_text: {
     color: "white",
-    fontSize: 20,
+    fontSize: width/26,
+    marginTop: 10,
     textAlign: "center",
     fontFamily: "Roboto",
   },

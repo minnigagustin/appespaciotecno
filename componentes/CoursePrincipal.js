@@ -61,7 +61,6 @@ export default class CourseList extends React.Component {
           marginHorizontal: 2,
           borderRadius: 20,
           alignItems: "center",
-          opacity: seleccionado ? 1 : 0.5,
           marginTop: 10,
         }}
       >

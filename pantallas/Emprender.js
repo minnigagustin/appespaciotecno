@@ -98,8 +98,7 @@ export default class Cources extends React.Component {
                   marginTop: 0,
                   fontWeight: "bold",
                 }}
-              >
-                Taller de {"\n"} {this.state.dataModal.nombre}
+              >{this.state.dataModal.nombre}
               </Text>
               <Text
                 style={{
@@ -143,8 +142,7 @@ export default class Cources extends React.Component {
                   marginTop: 0,
                   fontWeight: "bold",
                 }}
-              >
-                Taller de {"\n"} {this.state.dataModal.nombre}
+              >{this.state.dataModal.nombre}
               </Text>
               <Text
                 style={{
@@ -305,8 +303,7 @@ export default class Cources extends React.Component {
                   marginTop: 0,
                   fontWeight: "bold",
                 }}
-              >
-                Taller de {"\n"} {this.state.dataModal.nombre}
+              >{this.state.dataModal.nombre}
               </Text>
               <Text
                 style={{
@@ -374,8 +371,7 @@ export default class Cources extends React.Component {
                   marginTop: 0,
                   fontWeight: "bold",
                 }}
-              >
-                Taller de {"\n"} Arduino + bloques
+              >Arduino + bloques
               </Text>
               <Text
                 style={{

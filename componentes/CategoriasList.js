@@ -19,18 +19,18 @@ export default class CategoriasList extends React.Component{
             >
                 <ImageBackground source={img} resizeMode="cover"
                 style={{width: '100%', borderRadius: 10, overflow: 'hidden'}}>
-                    <View style={{flexDirection: 'row', padding: 10, paddingVertical: 20}}>
+                    <View style={{flexDirection: 'row', paddingVertical: 20}}>
 
                     <View>
                          <Text style={{
                              color: bg,
                              fontWeight:"bold",
-                             fontSize:(width/11)-4,
+                             fontSize:(width/12)-4,
                              // textShadowColor: 'rgba(0, 0, 0, 0.5)',
                              // textShadowOffset: {width: 2, height: 3},
                              // textShadowRadius: 10,
                              paddingHorizontal:15,
-                             width:width/1.5
+                             width:width/1.4
                          }}>{title}</Text>
                         
                     </View>

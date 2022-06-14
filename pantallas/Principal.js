@@ -236,8 +236,7 @@ export default function Principal({ route }) {
                   marginTop: 0,
                   fontWeight: "bold",
                 }}
-              >
-                Taller de {"\n"} {modaldataInfo.nombre}
+              >{modaldataInfo.nombre}
               </Text>
               <Text
                 style={{
@@ -370,9 +369,11 @@ export default function Principal({ route }) {
               </View>
 
               <Pressable
-                style={[styles.button, styles.buttonClose]}
+                style={[styles.button, styles.buttonClose, {marginTop: 2, backgroundColor:
+                  selectcatg > 0 ? "#0086bf" : "rgba(0, 0, 0, 0.15)"}]}
                 onPress={() => {setModalHorarios(false);
                 setModalConfirmado(true);}}
+                disabled={selectcatg === 0 ? true : false}
               >
                 <Text style={styles.textStyle}>INSCRIBIRME {">"}</Text>
               </Pressable>
@@ -404,11 +405,10 @@ export default function Principal({ route }) {
                 textAlign: "center",
                 fontSize: (width / 17)-2,
                 marginHorizontal: 20,
-                marginTop: 2,
+                marginTop: 8,
                 fontWeight: "bold",
               }}
-            >
-              Taller de {"\n"} {modaldataInfo.nombre}
+            >{modaldataInfo.nombre}
             </Text>
             <Text
               style={{
@@ -500,11 +500,15 @@ export default function Principal({ route }) {
               })}
             </View>
             <Pressable
-              style={[styles.button, styles.buttonClose]}
+              style={[styles.button, styles.buttonClose, {
+                backgroundColor:
+                  catg > 0 ? "#0086bf" : "rgba(0, 0, 0, 0.15)",
+              },]}
               onPress={() => {
                 setModalInfo(true);
                 setModal(false);
               }}
+              disabled={catg === 0 ? true : false}
             >
               <Text style={styles.textStyle}>SIGUIENTE {">"}</Text>
             </Pressable>
@@ -840,7 +844,7 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
-    paddingVertical: 35,
+    paddingVertical: 24,
     paddingHorizontal: 10,
     alignItems: "center",
     shadowColor: "#000",
@@ -854,22 +858,21 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 10,
-    marginTop: 14,
+    marginTop: 24,
     padding: 10,
-    width: 240,
-    elevation: 2,
+    width: width/1.3,
   },
   buttonOpen: {
     backgroundColor: "#F194FF",
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: "#0086bf",
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 22,
   },
   modalText: {
     marginBottom: 15,

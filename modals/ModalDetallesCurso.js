@@ -36,8 +36,7 @@ export const ModalDetallesCurso = (props) => {
                   marginTop: 0,
                   fontWeight: "bold",
                 }}
-              >
-                Taller de {"\n"} {props.data.nombre}
+              >{props.data.nombre}
               </Text>
               <Text
                 style={{

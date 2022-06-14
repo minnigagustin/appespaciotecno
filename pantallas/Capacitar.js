@@ -50,11 +50,18 @@ export default class Cources extends React.Component {
     });
   }
 
-  onClickAddModal(data) {
+  onClickAddModal(data, tipos) {
+    if(tipos === "comun"){
     this.setState({
       modalOk: true,
       dataModal: data,
     });
+    }else{
+      this.setState({
+        modalVisible: true,
+        dataModal: data,
+      });
+    }
   }
 
   render() {
@@ -85,8 +92,7 @@ export default class Cources extends React.Component {
                     ? this.state.dataModal.picture
                     : "http://espaciotecno.com.ar/img/espacio-tecno-bahia-blanca.png",
                 }}
-                resizeMode="contain"
-                style={{ width: 100, height: 100, borderRadius: 10 }}
+                style={{ width: width/4, height: width/4, borderRadius: 10 }}
               />
               <Text
                 style={{
@@ -96,8 +102,7 @@ export default class Cources extends React.Component {
                   marginTop: 0,
                   fontWeight: "bold",
                 }}
-              >
-                Taller de {"\n"} {this.state.dataModal.nombre}
+              >{this.state.dataModal.nombre}
               </Text>
               <Text
                 style={{
@@ -140,8 +145,7 @@ export default class Cources extends React.Component {
                   marginTop: 0,
                   fontWeight: "bold",
                 }}
-              >
-                Taller de {"\n"} {this.state.dataModal.nombre}
+              >{this.state.dataModal.nombre}
               </Text>
               <Text
                 style={{
@@ -301,8 +305,7 @@ export default class Cources extends React.Component {
                   marginTop: 0,
                   fontWeight: "bold",
                 }}
-              >
-                Taller de {"\n"} {this.state.dataModal.nombre}
+              >{this.state.dataModal.nombre}
               </Text>
               <Text
                 style={{
@@ -317,6 +320,9 @@ export default class Cources extends React.Component {
               <Calendar
                 enableSwipeMonths
                 minDate={fecha}
+                onDayPress={(day) => {
+                  this.setState({ modalVisible: false, modalHorarios: true })
+                }}
                 theme={{
                   calendarBackground: "white",
                   todayTextColor: "white",
@@ -339,14 +345,6 @@ export default class Cources extends React.Component {
                 firstDay={1}
                 markedDates={markedDatesArray}
               />
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() =>
-                  this.setState({ modalVisible: false, modalHorarios: true })
-                }
-              >
-                <Text style={styles.textStyle}>SIGUIENTE {">"}</Text>
-              </Pressable>
             </View>
           </View>
         </Modal>
@@ -369,8 +367,7 @@ export default class Cources extends React.Component {
                   marginTop: 0,
                   fontWeight: "bold",
                 }}
-              >
-                Taller de {"\n"} {this.state.dataModal.nombre}
+              >{this.state.dataModal.nombre}
               </Text>
               <Text
                 style={{
@@ -446,6 +443,7 @@ export default class Cources extends React.Component {
                   <CourseList
                     id={i}
                     onPress={() => this.onClickAddModal(item)}
+                    onPressComun={() => this.onClickAddModal(item, 'comun')}
                     img={item.picture}
                     title={item.nombre}
                     bg="#fdddf3"

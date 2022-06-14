@@ -108,10 +108,9 @@ export default function Recuperar() {
         <TouchableOpacity
           style={[
             styles.ingresar_style,
-            { backgroundColor: email ? "#017185" : "rgba(0, 0, 0, 0.15)", marginVertical:10 },
+            { backgroundColor: "rgba(0, 0, 0, 0.15)", marginVertical:10 },
           ]}
-          onPress={() => navigation.navigate("Principal")}
-          disabled={!email}
+          onPress={() => navigation.goBack()}
         >
           <Text style={styles.ingresar_text}>VOLVER</Text>
         </TouchableOpacity>
@@ -147,7 +146,7 @@ const styles = StyleSheet.create({
   input_style: {
     alignSelf: "center",
     alignItems: "stretch",
-    fontSize: 20,
+    fontSize: width/20,
     marginBottom: 20,
     borderRadius: 30,
     borderColor: "#90C641",
@@ -200,7 +199,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   ingresar_text: {
-    fontSize: 25,
+    fontSize: width/20,
     color: "white",
     marginVertical: 7,
     marginHorizontal: 7,

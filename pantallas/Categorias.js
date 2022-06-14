@@ -53,21 +53,21 @@ export default class Cources extends React.Component {
     });
   }
 
-  onClickAddModal(data) {
+  onClickAddModal(data, tipos) {
+    if(tipos === "comun"){
     this.setState({
       modalOk: true,
       dataModal: data,
     });
+    }else{
+      this.setState({
+        modalVisible: true,
+        dataModal: data,
+      });
+    }
   }
 
   
-
-  onClickAddModalIns(data) {
-    this.setState({
-      modalVisible: true,
-      dataModal: data,
-    });
-  }
 
   render() {
     var today = new Date();
@@ -154,8 +154,7 @@ export default class Cources extends React.Component {
                   marginTop: 0,
                   fontWeight: "bold",
                 }}
-              >
-                Taller de {"\n"} {this.state.dataModal.nombre}
+              >{this.state.dataModal.nombre}
               </Text>
               <Text
                 style={{
@@ -205,17 +204,17 @@ export default class Cources extends React.Component {
                   textAlign: "center",
                   fontSize: (width / 15)-2,
                   marginHorizontal: 20,
-                  marginTop: 0,
+                  marginTop: 8,
                   fontWeight: "bold",
                 }}
-              >
-                Taller de {"\n"} {this.state.dataModal.nombre}
+              >{this.state.dataModal.nombre}
               </Text>
               <Text
                 style={{
                   textAlign: "center",
                   fontSize: width / 23,
                   marginHorizontal: 20,
+                  color: 'gray',
                   marginTop: 5,
                 }}
               >
@@ -252,8 +251,7 @@ export default class Cources extends React.Component {
                   marginTop: 0,
                   fontWeight: "bold",
                 }}
-              >
-                Taller de {"\n"} {this.state.dataModal.nombre}
+              >{this.state.dataModal.nombre}
               </Text>
               <Text
                 style={{
@@ -413,8 +411,7 @@ export default class Cources extends React.Component {
                   marginTop: 0,
                   fontWeight: "bold",
                 }}
-              >
-                Taller de {"\n"} {this.state.dataModal.nombre}
+              >{this.state.dataModal.nombre}
               </Text>
               <Text
                 style={{
@@ -484,8 +481,7 @@ export default class Cources extends React.Component {
                   marginTop: 0,
                   fontWeight: "bold",
                 }}
-              >
-                Taller de {"\n"} Arduino + bloques
+              >Arduino + bloques
               </Text>
               <Text
                 style={{
@@ -571,8 +567,8 @@ export default class Cources extends React.Component {
                   return (
                     <CourseList
                       id={i}
-                      onPressComun={() => this.onClickAddModal(item)}
-                      onPress={() => this.onClickAddModalIns(item)}
+                      onPressComun={() => this.onClickAddModal(item, 'comun')}
+                      onPress={() => this.onClickAddModal(item)}
                       img={item.picture}
                       title={item.nombre}
                       bg="#fdddf3"
@@ -596,6 +592,7 @@ export default class Cources extends React.Component {
                   return (
                     <CourseList
                       id={i}
+                      onPressComun={() => this.onClickAddModal(item, 'comun')}
                       onPress={() => this.onClickAddModal(item)}
                       img={item.picture}
                       title={item.nombre}
@@ -619,6 +616,7 @@ export default class Cources extends React.Component {
                   return (
                     <CourseList
                       id={i}
+                      onPressComun={() => this.onClickAddModal(item, 'comun')}
                       onPress={() => this.onClickAddModal(item)}
                       img={item.picture}
                       title={item.nombre}
@@ -642,6 +640,7 @@ export default class Cources extends React.Component {
                   return (
                     <CourseList
                       id={i}
+                      onPressComun={() => this.onClickAddModal(item, 'comun')}
                       onPress={() => this.onClickAddModal(item)}
                       img={item.picture}
                       title={item.nombre}
@@ -665,6 +664,7 @@ export default class Cources extends React.Component {
                   return (
                     <CourseList
                       id={i}
+                      onPressComun={() => this.onClickAddModal(item, 'comun')}
                       onPress={() => this.onClickAddModal(item)}
                       img={item.picture}
                       title={item.nombre}
@@ -704,22 +704,21 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 10,
-    marginTop: 14,
+    marginTop: 24,
     padding: 10,
-    width: 240,
-    elevation: 2,
+    width: width/1.3,
   },
   buttonOpen: {
     backgroundColor: "#F194FF",
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: "#0086bf",
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 22,
   },
   modalText: {
     marginBottom: 15,
