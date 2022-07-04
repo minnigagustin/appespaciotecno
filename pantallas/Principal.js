@@ -19,6 +19,8 @@ import CourseList from "../componentes/CoursePrincipal";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import moment from "moment";
 import { BASE_URL } from "../api";
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+
 import global from "../componentes/global";
 import axios from "axios";
 import { useState, useEffect } from "react";
@@ -592,7 +594,7 @@ export default function Principal({ route }) {
           <Text
             style={{
               paddingHorizontal: 8,
-              fontSize: (width/14)-2,
+              fontSize: scale(22),
               paddingTop: 10,
               fontWeight: "bold",
               color: "#FFF",
@@ -604,7 +606,7 @@ export default function Principal({ route }) {
             style={{
               paddingHorizontal: 15,
               textAlign: "center",
-              fontSize: (width / 18)-2,
+              fontSize: scale(18),
               fontWeight: "900",
               color: "#FFF",
             }}
@@ -653,13 +655,13 @@ export default function Principal({ route }) {
         </LinearGradient>
       </View>
       <View style={{ marginTop: 90 }}>
-        <Text style={{ textAlign: "center", fontSize: (width / 19)-2 }}>
+        <Text style={{ textAlign: "center", fontSize: scale(16) }}>
           En ESPACIO TECNO podras
         </Text>
         <Text
           style={{
             textAlign: "center",
-            fontSize: (width / 18)-2,
+            fontSize:  scale(18),
             fontWeight: "bold",
           }}
         >

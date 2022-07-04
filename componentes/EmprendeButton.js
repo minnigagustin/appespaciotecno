@@ -2,6 +2,7 @@ import React from 'react'
 import {Text,TouchableOpacity, View,Image, ImageBackground, Dimensions} from 'react-native'
 import { Entypo } from "react-native-vector-icons";
 const { width, height } = Dimensions.get("window");
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
 export default class CategoriasList extends React.Component{
     render(){
@@ -11,7 +12,7 @@ export default class CategoriasList extends React.Component{
                 onPress={onPress}
                 style={{
 
-                    marginHorizontal:20,
+                    marginHorizontal:14,
                     alignItems:"center",
                     
                     marginTop:10
@@ -19,18 +20,17 @@ export default class CategoriasList extends React.Component{
             >
                 <ImageBackground source={img} resizeMode="cover"
                 style={{width: '100%', borderRadius: 10, overflow: 'hidden'}}>
-                    <View style={{flexDirection: 'row', padding: 10, paddingVertical: 20}}>
+                    <View style={{flexDirection: 'row', padding: scale(5), paddingVertical: 20}}>
 
                     <View>
                          <Text style={{
                              color: bg,
                              fontWeight:"bold",
-                             fontSize:(width/13)-2,
+                             fontSize:width*0.080,
                              // textShadowColor: 'rgba(0, 0, 0, 0.5)',
                              // textShadowOffset: {width: 2, height: 3},
                              // textShadowRadius: 10,
-                             paddingHorizontal:15,
-                             width:width/1.4
+                             width:width*0.76
                          }}>{title}</Text>
                         
                     </View>
@@ -40,16 +40,16 @@ export default class CategoriasList extends React.Component{
                                     flexDirection:"row",
                                     backgroundColor:"#8BC544",
                                     alignItems:"center",
-                                    width:(width/8)-2,
-                                    height:(width/8)-2,
-                                    borderRadius:25,
+                                    width: scale(40),
+                                    height: scale(40),
+                                    borderRadius:scale(25),
                                     justifyContent: 'center',
-                                    marginLeft: 10,
+                                    marginLeft: scale(2),
                                 }}
                            >
                                     <View
                                     >
-                                        <Entypo name={'chevron-right'} size={35} color="white" />
+                                        <Entypo name={'chevron-right'} size={scale(35)} color="white" />
                                         </View>
                            </View>
                            </View>

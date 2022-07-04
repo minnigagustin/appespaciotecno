@@ -7,16 +7,20 @@ import {
   ImageBackground,
   TouchableOpacity,
   TextInput,
+  Modal,
   ScrollView,
   ActivityIndicator,
   Alert,
 } from "react-native";
 
 import React from "react";
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+import { BarCodeScanner } from "expo-barcode-scanner";
+
 
 import { useNavigation } from "@react-navigation/native";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import axios from "axios";
 
@@ -39,6 +43,11 @@ export default function Registro() {
   const [localidad, setLocalidad] = useState("");
 
   const [genero, setGenero] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [escanea, setEscanea] = useState(false);
+  const [scanned, setScanned] = useState(false);
+  const [nivel, setNivel] = useState(true);
+  const [hasPermission, setHasPermission] = useState(null);
 
   const [contrasenia, setContrasenia] = useState("");
 
@@ -163,17 +172,80 @@ export default function Registro() {
     setContrasenia("");
   };
 
+  useEffect(() => {
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
+
+  const handleBarCodeScanned = ({ data }) => {
+    setDni(data.split('@')[4]);
+    setApellido(data.split('@')[1]);
+    setNombre(data.split('@')[2].split(' ')[0]);
+    setGenero(data.split('@')[3]);
+    setModalVisible(false);
+  };
+
+  if (hasPermission === null) {
+    return <Text>Admita el permiso a la camara</Text>;
+  }
+  if (hasPermission === false) {
+    return <Text>Sin acceso a camara</Text>;
+  }
+
   return (
     <ImageBackground
       source={require("../assets/fondo_login.jpg")}
       style={{ resizeMode: "stretch", width: width, height: height+30 }}
     >
         <ScrollView>
+        <Modal
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Login cancelado", "No ingresaste tu DNI");
+          setModalVisible(!modalVisible);
+        }}
+      ><ImageBackground
+      source={require("../assets/fondo_login.jpg")}
+      style={{ resizeMode: "stretch", width: width, height: height + 30 }}
+    >
+        <View style={styles.centeredView}>
+        <Text style={{color: "white",
+    fontSize: width/20,
+    marginBottom: 20,
+    textAlign: "center",
+    fontFamily: "Roboto",}}>Ingresa tu <Text style={{fontWeight: 'bold', color: 'white'}}>DNI</Text></Text>
+          <View style={[styles.modalView, {
+    backgroundColor: escanea ? "white" : null,}]}>
+            <BarCodeScanner
+        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+        style={{height: width*0.80, width: width*0.65}}
+      />
+         
+          </View>
+
+        </View>
+        </ImageBackground>
+      </Modal>
           <Image
             style={styles.imagen_style}
             resizeMode="contain"
             source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
-          />
+          /><TouchableOpacity onPress={() => setModalVisible(true)} style={{borderRadius: 30,
+            borderColor: "black",
+            paddingVertical: 6,
+            paddingHorizontal: 48,
+            marginBottom: 10,
+            backgroundColor: "#017185",
+            alignSelf: "center",}}>
+          <Text style={{color: "white",
+    fontSize: width/20,
+    textAlign: "center",
+    fontFamily: "Roboto",}}>Escanea tu <Text style={{fontWeight: 'bold', color: 'white'}}>DNI</Text></Text></TouchableOpacity>
+    {nivel ? (
+      <View>
           <View style={{flex: 1,
     flexDirection: "row", alignContent: 'center', alignItems: 'center', alignSelf: 'center', textAlign: 'center'}}>
             <TextInput
@@ -238,7 +310,30 @@ export default function Registro() {
               onChangeText={(text_user) => actualizarLocalidad(text_user)}
               value={localidad}
             ></TextInput>
-
+            
+            <TouchableOpacity onPress={() => setNivel(!nivel)} style={{borderRadius: 30,
+            borderColor: "black",
+            paddingVertical: 6,
+            paddingHorizontal: 48,
+            marginBottom: 10,
+            backgroundColor: "#017185",
+            alignSelf: "center",}}>
+          <Text style={{color: "white",
+    fontSize: width/20,
+    textAlign: "center",
+    fontFamily: "Roboto",}}><Text style={{fontWeight: 'bold', color: 'white'}}>Siguiente {'>>'}</Text></Text></TouchableOpacity>
+    </View>) : (<View>
+      <TouchableOpacity onPress={() => setNivel(!nivel)} style={{borderRadius: 30,
+            borderColor: "black",
+            paddingVertical: 6,
+            paddingHorizontal: 48,
+            marginBottom: 10,
+            backgroundColor: "#017185",
+            alignSelf: "center",}}>
+          <Text style={{color: "white",
+    fontSize: width/20,
+    textAlign: "center",
+    fontFamily: "Roboto",}}><Text style={{fontWeight: 'bold', color: 'white'}}>{'<<'} Retroceder</Text></Text></TouchableOpacity>
             <View
               style={{
                 flexDirection: "row",
@@ -248,21 +343,21 @@ export default function Registro() {
             >
               <TouchableOpacity
                 onPress={() => {
-                  setGenero("m");
+                  setGenero("M");
                 }}
-                style={{backgroundColor: genero === "m" ? "#055c6e" : 'white', padding: genero === "m" ? 11: 8, margin: genero === "m" ? 0 : 3}}
+                style={{backgroundColor: genero === "M" ? "#055c6e" : 'white', padding: genero === "M" ? 11: 8, margin: genero === "M" ? 0 : 3}}
               >
-                <Text style={{fontSize: width/20, color: genero === "m" ? 'white' : 'black'}}> Masculino </Text>
+                <Text style={{fontSize: width/20, color: genero === "M" ? 'white' : 'black'}}> Masculino </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 onPress={() => {
-                  setGenero("f");
+                  setGenero("F");
                 }}
                 backgroundColor="#ffff"
-                style={{backgroundColor: genero === "f" ? "#055c6e" : 'white', padding: genero === "f" ? 11 : 8, margin: genero === "f" ? 0 : 3}}
+                style={{backgroundColor: genero === "F" ? "#055c6e" : 'white', padding: genero === "F" ? 11 : 8, margin: genero === "F" ? 0 : 3}}
               >
-                <Text style={{fontSize: width/20, color: genero === "f" ? 'white' : 'black'}}> Femenino </Text>
+                <Text style={{fontSize: width/20, color: genero === "F" ? 'white' : 'black'}}> Femenino </Text>
               </TouchableOpacity>
             </View>
             <TextInput
@@ -291,7 +386,8 @@ export default function Registro() {
             >
               <Text style={styles.ingresar_text}>REGISTRARSE</Text>
             </TouchableOpacity>
-
+            </View>
+            )}
         </ScrollView>
       {loading && <ActivityIndicator size="small" color="#0000ff" />}
       {modalOk && (
@@ -315,8 +411,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 90,
     marginBottom: 50,
-    width: width/2.5,
-    height: width/2.5,
+    width: scale(130),
+    height: scale(130),
   },
   logo_container: {
     flexDirection: "row",
@@ -405,4 +501,34 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Roboto",
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    borderRadius: 20,
+    padding: 4,
+    alignItems: "center",
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  }
 });

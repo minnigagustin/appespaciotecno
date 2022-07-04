@@ -3,6 +3,9 @@ import {Text,TouchableOpacity, View,Image, ImageBackground, Dimensions} from 're
 import { Entypo } from "react-native-vector-icons";
 const { width, height } = Dimensions.get("window");
 
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+
+
 export default class CategoriasList extends React.Component{
     render(){
         const {img,title, bg, onPress, activado} = this.props
@@ -19,13 +22,13 @@ export default class CategoriasList extends React.Component{
             >
                 <ImageBackground source={img} resizeMode="cover"
                 style={{width: '100%', borderRadius: 10, overflow: 'hidden'}}>
-                    <View style={{flexDirection: 'row', paddingVertical: 20}}>
+                    <View style={{flexDirection: 'row', paddingVertical: 10}}>
 
                     <View>
                          <Text style={{
                              color: bg,
                              fontWeight:"bold",
-                             fontSize:(width/12)-4,
+                             fontSize:scale(27),
                              // textShadowColor: 'rgba(0, 0, 0, 0.5)',
                              // textShadowOffset: {width: 2, height: 3},
                              // textShadowRadius: 10,

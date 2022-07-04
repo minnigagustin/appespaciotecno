@@ -18,7 +18,7 @@ export default function App() {
 
   const handleBarCodeScanned = ({ data }) => {
     setScanned(true);
-    Alert.alert('Escaneado!', 'El link es: ' + data);
+    Alert.alert('Escaneado!', 'Su DNI es: ' + data.split('@')[4]);
   };
 
   if (hasPermission === null) {
@@ -108,7 +108,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 10,
     padding: 10,
-    elevation: 2
   },
   buttonOpen: {
     backgroundColor: "#F194FF",

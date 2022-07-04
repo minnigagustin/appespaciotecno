@@ -8,17 +8,20 @@ import {
   Alert,
   TouchableOpacity,
   Keyboard,
+  Modal,
   KeyboardAvoidingView,
   ActivityIndicator,
-  TextInput,
+  Pressable,
+  TextInput
 } from "react-native";
 import { Entypo } from "react-native-vector-icons"
 import React from "react";
 
 import { useNavigation } from "@react-navigation/native";
+import { BarCodeScanner } from "expo-barcode-scanner";
 
 import { useState, useEffect } from "react";
-
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import * as Facebook from 'expo-facebook';
 
 import axios from "axios";
@@ -26,39 +29,29 @@ import axios from "axios";
 import { BASE_URL } from "../api";
 
 import global from "../componentes/global";
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const width = Dimensions.get("window").width;
 
+
 const height = Dimensions.get("window").height;
 
-async function logIn() {
-  try {
-    await Facebook.initializeAsync({
-      appId: '584511442999527', facebookDisplayName: 'Espacio Tecno'
-    });
-    const { type, token, expirationDate, permissions, declinedPermissions } =
-      await Facebook.logInWithReadPermissionsAsync({
-        permissions: ['public_profile', 'email'],
-      });
-    if (type === 'success') {
-      // Get the user's name using Facebook's Graph API
-      const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-      Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
-    } else {
-      // type === 'cancel'
-      Alert.alert('Cancelado', `Inicio de sesion cancelado`);
-    }
-  } catch ({ message }) {
-    alert(`Facebook Login Error: ${message}`);
-  }
-}
 
-export default function Login({}) {
+const formData = {};
+
+
+export default function Login({ }) {
   const [dni, setDni] = useState("");
 
+  const [hasPermission, setHasPermission] = useState(null);
+  const [facebook, setFacebook] = useState({});
+  const [scanned, setScanned] = useState(false);
+
   const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [escanea, setEscanea] = useState(false);
+  const [modalDocumento, setModalDocumento] = useState(false);
 
   const [contrasenia, setContrasenia] = useState("");
 
@@ -66,7 +59,7 @@ export default function Login({}) {
 
   const navigation = useNavigation();
 
-  
+
   const actualizarUser = (text_user) => {
     setDni(text_user);
   };
@@ -75,6 +68,75 @@ export default function Login({}) {
     setContrasenia(text_contra);
   };
 
+  async function logIn() {
+    try {
+      await Facebook.initializeAsync({
+        appId: '587909999636433',
+      });
+      const { type, token, expirationDate, permissions, declinedPermissions } =
+        await Facebook.logInWithReadPermissionsAsync({
+          permissions: ['public_profile', 'email'],
+        });
+      if (type === 'success') {
+        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,about,picture.type(large)`);
+        const data = await response.json();
+        // Alert.alert('Usted esta logueado!', 'Bienvenido ' + data.name + ' su email es ' + data.email);
+        console.log(data);
+        console.log(data.name.split(' ')[0]);
+        console.log(data.name.split(' ').slice(1).join(' '));
+        console.log(data.picture.data.url);
+        actualizarContra(data.id);
+        setLoading(true);
+        const formFace = {};
+        const url_logout = BASE_URL + "logout/";
+        const url_login = BASE_URL + "login/";
+        console.log(url_login);
+        await axios.get(url_logout);
+        formFace.numero_documento = '';
+        formFace.password = data.id;
+        formFace.email = data.email ? data.email : data.id + '@facebook.com';
+        formFace.picture_facebook = data.picture.data.url;
+        formFace.numero_documento = null;
+        formFace.nombre = data.name.split(' ')[0];
+        formFace.apellido = data.name.split(' ').slice(1).join(' ');
+        formFace.registrado_desde = 1;
+        console.log(formFace);
+        setFacebook(formFace);
+
+        axios({
+          url: url_login,
+          method: "POST",
+          data: formFace,
+        })
+          .then((response) => {
+            if (response.status === 200) {
+              global.authenticated = true;
+              console.log(global.authenticated);
+              setLoading(false);
+              AsyncStorage.setItem("perfil", JSON.stringify(response.data));
+
+              navigation.replace("HomeInicio");
+
+              console.log(global.authenticated)
+            }
+          })
+
+          .catch(function () {
+            // handle error
+
+            setLoading(false);
+            setModalVisible(true);
+
+          });
+
+      } else {
+        // type === 'cancel'
+      }
+    } catch ({ message }) {
+      alert(`Facebook Login Error: ${message}`);
+    }
+  }
+
   const chequearValidacion = () => {
     Keyboard.dismiss();
     setLoading(true);
@@ -82,17 +144,19 @@ export default function Login({}) {
     resetearCampos();
   };
 
+
   useEffect(() => {
     AsyncStorage.getItem("perfil").then((perfil) => {
       if (perfil !== null) {
         const numero = JSON.parse(perfil);
         global.authenticated = false;
         setDni(String(numero.numero_documento));
-      } else {
-        console.log("NO HAY NADAAA");
       }
     });
   }, []);
+
+
+
 
   const verificarUsuario = async () => {
     const formData = {};
@@ -102,6 +166,7 @@ export default function Login({}) {
     await axios.get(url_logout);
     formData.numero_documento = dni;
     formData.password = contrasenia;
+    formData.email = '';
     console.log(formData);
     axios({
       url: url_login,
@@ -135,31 +200,285 @@ export default function Login({}) {
     setContrasenia("");
   };
 
+  useEffect(() => {
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
+
+  const handleBarCodeScanned = ({ data }) => {
+    enviarRegistro(data.split('@')[4]);
+    setModalVisible(false);
+  };
+
+  const handleBarDocumentoScanned = ({ data }) => {
+    setModalDocumento(false);
+    setLoading(true);
+    loginDocumento(data);
+  };
+  const loginDocumento = async (data) => {
+    const formDoc = {};
+    const url_logout = BASE_URL + "logout/";
+    const url_login = BASE_URL + "login/";
+    const nombre = data.split('@')[2].toLowerCase().replace(/\b[a-z]/g,c=>c.toUpperCase());
+    const apellido = data.split('@')[1].toLowerCase().replace(/\b[a-z]/g,c=>c.toUpperCase());
+    console.log(url_login);
+    await axios.get(url_logout);
+    formDoc.numero_documento = data.split('@')[4];
+    formDoc.password = data.split('@')[0];
+    formDoc.email = null;
+    formDoc.nombre = nombre.split(' ')[0];
+    formDoc.apellido = apellido;
+    formDoc.registrado_desde = 3;
+    console.log(formDoc);
+
+    axios({
+      url: url_login,
+      method: "POST",
+      data: formDoc,
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          global.authenticated = true;
+          console.log(global.authenticated);
+          setLoading(false);
+          AsyncStorage.setItem("perfil", JSON.stringify(response.data));
+
+          navigation.replace("HomeInicio");
+
+          console.log(global.authenticated)
+        }
+      })
+
+      .catch(function () {
+        // handle error
+
+        setLoading(true);
+        registraDocumento(formDoc);
+
+      });
+    };
+
+    const registraDocumento = async (data) => {
+      const dataDoc = data;
+      dataDoc.email = dataDoc.numero_documento + '@documento.com';
+      const url_login = BASE_URL + "login/";
+      axios({
+        url: BASE_URL + "user/",
+  
+        method: "POST",
+  
+        data: dataDoc,
+      }).then((result) => {
+        if (result.status === 201) {
+          dataDoc.email = null;
+          axios({
+            url: url_login,
+            method: "POST",
+            data: dataDoc,
+          })
+            .then((response) => {
+              if (response.status === 200) {
+                global.authenticated = true;
+                console.log(global.authenticated);
+                setLoading(false);
+                AsyncStorage.setItem("perfil", JSON.stringify(response.data));
+  
+                navigation.replace("HomeInicio");
+  
+                console.log(global.authenticated)
+              }
+            })
+  
+            .catch(function () {
+              // handle error
+  
+              setLoading(false);
+              Alert.alert('ocurrio un error', 'Esta cuenta ya esta siendo utilizada')
+  
+            });
+        }
+      }).catch(function () {
+        setLoading(false);
+      Alert.alert('Error', 'Este usuario ya tiene una cuenta aqui.')
+    }
+
+    );
+      };
+
+  const enviarRegistro = async (numerito) => {
+    const facebookform = facebook;
+    const url_login = BASE_URL + "login/";
+    facebookform.numero_documento = numerito;
+    console.log(facebookform);
+    axios({
+      url: BASE_URL + "user/",
+
+      method: "POST",
+
+      data: facebookform,
+    }).then((result) => {
+      if (result.status === 201) {
+        axios({
+          url: url_login,
+          method: "POST",
+          data: facebook,
+        })
+          .then((response) => {
+            if (response.status === 200) {
+              global.authenticated = true;
+              console.log(global.authenticated);
+              setLoading(false);
+              AsyncStorage.setItem("perfil", JSON.stringify(response.data));
+
+              navigation.replace("HomeInicio");
+
+              console.log(global.authenticated)
+            }
+          })
+
+          .catch(function () {
+            // handle error
+
+            setLoading(false);
+            setModalVisible(true);
+
+          });
+      }
+    }).catch(function () {
+      setLoading(false);
+      Alert.alert('Error', 'Este usuario ya tiene una cuenta aqui.')
+    }
+
+    );
+  };
+
+  if (hasPermission === null) {
+    return <Text>Admita el permiso a la camara</Text>;
+  }
+  if (hasPermission === false) {
+    return <Text>Sin acceso a camara</Text>;
+  }
   return (
     <ImageBackground
       source={require("../assets/fondo_login.jpg")}
       style={{ resizeMode: "stretch", width: width, height: height + 30 }}
     >
       <View style={styles.container}>
-        {loading && (
-          <ActivityIndicator
-            size="large"
-            color="#FFFFFF"
-            style={{
-              position: "absolute",
-              alignItems: "center",
-              justifyContent: "center",
-              bottom: 120,
-            }}
-          />
-        )}
+        <Modal
+          animationType="slide"
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Login cancelado", "No ingresaste tu DNI");
+            setModalVisible(!modalVisible);
+          }}
+        ><ImageBackground
+          source={require("../assets/fondo_login.jpg")}
+          style={{ resizeMode: "stretch", width: width, height: height + 30 }}
+        >
+            <View style={styles.centeredView}>
+              <Text style={{
+                color: "white",
+                fontSize: width / 20,
+                marginBottom: 20,
+                textAlign: "center",
+                fontFamily: "Roboto",
+              }}>Ingresa tu <Text style={{ fontWeight: 'bold', color: 'white' }}>DNI</Text></Text>
+              <View style={[styles.modalView, {
+                backgroundColor: escanea ? "white" : null,
+              }]}>
+                {escanea ? (<BarCodeScanner
+                  onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                  barCodeTypes={[
+                    BarCodeScanner.Constants.BarCodeType.pdf417
+                  ]}
+                  style={{ height: width * 0.80, width: width * 0.65 }}
+                />) : (<TextInput
+                  style={styles.input_style}
+                  textAlign={"center"}
+                  placeholderTextColor="#000"
+                  keyboardType="numeric"
+                  placeholder={"Ingresa tu DNI manualmente"}
+                  onChangeText={(text_user) => actualizarUser(text_user)}
+                  value={dni}
+                ></TextInput>)}
+
+              </View>
+              <TouchableOpacity onPress={() => setEscanea(!escanea)} style={{
+                borderRadius: 30,
+                borderColor: "black",
+                marginTop: 10,
+                paddingVertical: 6,
+                paddingHorizontal: 48,
+                backgroundColor: "white",
+                alignSelf: "center",
+              }}><Text style={{
+                fontSize: width / 22,
+                color: "#017185",
+                marginVertical: 7,
+                marginHorizontal: 7,
+              }}>{escanea ? 'Manualmente' : 'Escanea'}</Text></TouchableOpacity>
+
+              <TouchableOpacity onPress={() => { setModalVisible(false), enviarRegistro() }} style={{
+                borderRadius: 30,
+                borderColor: "black",
+                marginTop: 10,
+                paddingVertical: 6,
+                paddingHorizontal: 48,
+                backgroundColor: dni ? "#017185" : "rgba(0, 0, 0, 0.15)",
+                alignSelf: "center",
+              }} disabled={!dni}><Text style={{
+                fontSize: width / 22,
+                color: "white",
+                marginVertical: 7,
+                marginHorizontal: 7,
+              }}>Iniciar</Text></TouchableOpacity>
+            </View>
+          </ImageBackground>
+        </Modal>
+
+        <Modal
+          animationType="slide"
+          visible={modalDocumento}
+          onRequestClose={() => {
+            Alert.alert("Login cancelado", "No escaneaste tu DNI");
+            setModalDocumento(!modalDocumento);
+          }}
+        ><ImageBackground
+          source={require("../assets/fondo_login.jpg")}
+          style={{ resizeMode: "stretch", width: width, height: height + 30 }}
+        >
+            <View style={styles.centeredView}>
+              <Text style={{
+                color: "white",
+                fontSize: width / 20,
+                marginBottom: 20,
+                textAlign: "center",
+                fontFamily: "Roboto",
+              }}>Escanea tu <Text style={{ fontWeight: 'bold', color: 'white' }}>DNI</Text></Text>
+              <View style={[styles.modalView, {
+                backgroundColor: escanea ? "white" : null,
+              }]}>
+                <BarCodeScanner
+                  onBarCodeScanned={scanned ? undefined : handleBarDocumentoScanned}
+                  barCodeTypes={[
+                    BarCodeScanner.Constants.BarCodeType.pdf417
+                  ]}
+                  style={{ height: width * 0.80, width: width * 0.65 }}
+                />
+
+              </View>
+            </View>
+          </ImageBackground>
+        </Modal>
         <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={15} enabled>
 
-        <Image
-          style={styles.imagen_style}
-          resizeMode="contain"
-          source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
-        />
+          <Image
+            style={styles.imagen_style}
+            resizeMode="contain"
+            source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
+          />
           <TextInput
             style={styles.input_style}
             textAlign={"center"}
@@ -179,7 +498,16 @@ export default function Login({}) {
             value={contrasenia}
             secureTextEntry={true}
           ></TextInput>
-
+          {loading ? (
+          <ActivityIndicator
+            size="large"
+            color="#FFFFFF"
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          />
+        ) : (
           <TouchableOpacity
             style={[
               styles.ingresar_style,
@@ -193,28 +521,31 @@ export default function Login({}) {
           >
             <Text style={styles.ingresar_text}>INGRESAR</Text>
           </TouchableOpacity>
+          )}
 
           <TouchableOpacity
-            style={{ color: "white", marginTop: 4 }}
+            style={{ color: "white"}}
             onPress={() => navigation.navigate("Recuperar")}
           >
             <Text style={styles.recuperar_text}>¿Olvidó su contraseña?</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{backgroundColor: '#4267b2',
-    paddingVertical: 10,
-    paddingHorizontal: 10, marginTop: 34,
-    borderRadius: 20, alignItems: 'center'}} onPress={logIn}>
-          <Text style={{ color: "#fff", fontSize: width/28 }}><Entypo name={'facebook'} size={16} color="white" /> Inicia sesion con <Text style={{ fontWeight: 'bold' }}>Facebook</Text></Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={{
+            backgroundColor: '#4267b2',
+            paddingVertical: 10,
+            paddingHorizontal: 10, marginTop: scale(20),
+            borderRadius: 20, alignItems: 'center'
+          }} onPress={logIn}>
+            <Text style={{ color: "#fff", fontSize: width / 28 }}><Entypo name={'facebook'} size={16} color="white" /> Inicia sesion con <Text style={{ fontWeight: 'bold' }}>Facebook</Text></Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{
+            backgroundColor: '#4267b2',
+            paddingVertical: 10,
+            paddingHorizontal: 10, marginTop: 10,
+            borderRadius: 20, alignItems: 'center'
+          }} onPress={() => setModalDocumento(true)}>
+            <Text style={{ color: "#fff", fontSize: width / 28 }}><Entypo name={'credit-card'} size={16} color="white" /> Inicia sesion con tu <Text style={{ fontWeight: 'bold' }}>Documento</Text></Text>
+          </TouchableOpacity>
         </KeyboardAvoidingView>
-      </View>
-      
-      <View
-        style={{
-          bottom: 50,
-          position: "relative",
-        }}
-      >
         <TouchableOpacity
           style={{ color: "white" }}
           onPress={() => navigation.navigate("Registro")}
@@ -237,10 +568,10 @@ const styles = StyleSheet.create({
   },
   imagen_style: {
     alignSelf: "center",
-    marginTop: 90,
-    marginBottom: 80,
-    width: width/2.5,
-    height: width/2.5,
+    marginTop:hp(8),
+    marginBottom: hp(8),
+    width: wp(34),
+    height: wp(34),
   },
   logo_container: {
     flexDirection: "row",
@@ -257,12 +588,12 @@ const styles = StyleSheet.create({
   input_style: {
     alignSelf: "center",
     alignItems: "stretch",
-    fontSize: width/22,
+    fontSize: width / 22,
     marginBottom: 20,
     borderRadius: 30,
     borderColor: "#90C641",
     width: width / 1.25,
-    padding: 10,
+    padding: hp(1.4),
     backgroundColor: "white",
   },
   ingresar_style: {
@@ -296,16 +627,47 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
   },
   ingresar_text: {
-    fontSize: width/22,
+    fontSize: width / 22,
     color: "white",
     marginVertical: 7,
     marginHorizontal: 7,
   },
   recuperar_text: {
     color: "white",
-    fontSize: width/26,
+    fontSize: width / 26,
     marginTop: 10,
     textAlign: "center",
     fontFamily: "Roboto",
   },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    borderRadius: 20,
+    padding: 4,
+    alignItems: "center",
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  }
 });

@@ -19,6 +19,7 @@ import { Calendar, LocaleConfig } from "react-native-calendars";
 import CategoriasList from "../componentes/CategoriasList";
 import { BASE_URL } from "../api";
 import { ModalDetallesCurso } from "../modals/ModalDetallesCurso";
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import moment from "moment";
 const { width, height } = Dimensions.get("window");
 
@@ -44,7 +45,7 @@ export default class Cources extends React.Component {
   componentDidMount() {
     const cursos = BASE_URL + "curso/";
     axios.get(cursos).then((res) => {
-      const cursos = res.data;
+      const cursos = res.data.filter((cat) => cat.origen.id === 2);
       this.setState({ categorias: cursos });
       console.log(cursos);
     });
@@ -74,8 +75,9 @@ export default class Cources extends React.Component {
     return (
       <ImageBackground
         source={require("../assets/FONDO-CAPACITAR.jpg")}
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%", height: "100%", flex: 1 }}
       >
+        <ScrollView style={{flex: 1}}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -417,24 +419,21 @@ export default class Cources extends React.Component {
           source={require("../assets/CAPACITAR-CABEZAL.png")}
           resizeMode="contain"
           style={{
-            width: width / 1.5,
-            height: width / 0.8,
+            width: scale(200),
+            height: scale(130),
             alignSelf: "center",
-            top: -(width / 3.4),
+            marginVertical: 8
           }}
         />
-
-        <Modalize
-          handleStyle={{
-            backgroundColor: "#e9e9e9",
-            width: 80,
-          }}
-          modalStyle={{
+<View style={{flex: 1,
+    justifyContent: 'flex-end', marginBottom: 1}}>
+<View
+          style={{
             borderTopLeftRadius: 60,
             borderTopRightRadius: 60,
+            backgroundColor: 'white',
+            flex: 1,
           }}
-          alwaysOpen={height/1.7}
-          scrollViewProps={{ showsVerticalScrollIndicator: false }}
         >
           <View style={{ paddingVertical: 30 }}>
             <View style={{ display: "flex" }}>
@@ -452,7 +451,9 @@ export default class Cources extends React.Component {
               })}
             </View>
           </View>
-        </Modalize>
+        </View>
+        </View>
+        </ScrollView>
       </ImageBackground>
     );
   }
@@ -485,7 +486,6 @@ const styles = StyleSheet.create({
     marginTop: 14,
     padding: 10,
     width: 240,
-    elevation: 2,
   },
   buttonOpen: {
     backgroundColor: "#F194FF",

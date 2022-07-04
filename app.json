@@ -8,17 +8,14 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Habilitame papu."
+          "photosPermission": "Para escanear QR necesitamos permiso en tu celular."
         }
       ]
     ],
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
+    "icon": "./assets/icononoresponsive.png",
     "updates": {
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
@@ -29,9 +26,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/iconoresponsive.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "ar.gob.bahia.espaciotecno",
+        "versionCode": 4,
+        "permissions": ["CAMERA"]
     },
     "web": {
       "favicon": "./assets/favicon.png"

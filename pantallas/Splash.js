@@ -7,28 +7,6 @@ const {width, height} = Dimensions.get("window");
 import ds from './d';
 
 
-LocaleConfig.locales['fr'] = {
-  monthNames: [
-    'Enero',
-    'Febrero',
-    'Marzo',
-    'Abril',
-    'Mayo',
-    'Junio',
-    'Julio',
-    'Agosto',
-    'Septiembre',
-    'Octubre',
-    'Noviembre',
-    'Diciembre'
-  ],
-  monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
-  dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
-  dayNamesShort: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-  today: "Aujourd'hui"
-};
-LocaleConfig.defaultLocale = 'fr';
-
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -44,7 +22,9 @@ export default class Home extends React.Component {
         this.props.navigation.replace("HomeInicio");
         }, 1000);
       } else {
+        setTimeout(() => {
         this.props.navigation.replace("LoginNavegacion");
+      }, 1000);
       }
     });
   }

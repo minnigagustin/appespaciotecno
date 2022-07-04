@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
     marginTop: 14,
     padding: 10,
     width: 240,
-    elevation: 2,
   },
   buttonOpen: {
     backgroundColor: "#F194FF",

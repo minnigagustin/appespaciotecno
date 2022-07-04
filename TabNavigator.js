@@ -109,9 +109,11 @@ function TabNavigator() {
             </View>
           ),
           headerTitle: (props) => <LogoTitle {...props} />,
-          headerTitleAlign: "center",
         }}
       />
+      <Tab.Screen name="Mi Perfil" component={Perfil} options={{
+          headerTitle: (props) => <LogoTitle {...props} />,
+        }} />
       {/* !global.authenticated && (
         <Tab.Screen
           name="Iniciar Sesión"

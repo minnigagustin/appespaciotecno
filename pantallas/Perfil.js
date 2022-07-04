@@ -1,12 +1,15 @@
-import { View, Text, Image, StyleSheet, FlatList } from "react-native";
+import { View, Text, Image, StyleSheet, FlatList, Pressable, Dimensions } from "react-native";
 
 import { FontAwesome } from "react-native-vector-icons";
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import Curso from "../componentes/curso";
 
 import { useState } from "react";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -14,17 +17,18 @@ import { useNavigation } from "@react-navigation/native";
 
 import { BASE_URL } from "../api";
 
+const { width, height } = Dimensions.get("window");
 import global from "../componentes/global"
 
 export default function Perfil({ route }) {
   const navigation = useNavigation();
 
-  const { param_usuario } = route.params;
+ 
 
   const [cursos, setCursos] = useState([]);
 
   const [cursosFavoritos, setCursosFavoritos] = useState([]);
-
+  const [perfil, setPerfil] = useState([]);
   const [mostrarCursos, setMostrarCursos] = useState(false);
 
   const abrirFavoritos = () => {
@@ -39,6 +43,7 @@ export default function Perfil({ route }) {
       setCursos(cursos);
     });
   };
+  const param_usuario  = perfil;
 
   const getCursosFavoritos = () => {
     BASE_URL.get(`comisionesbypersona/` + param_usuario.id).then((res) => {
@@ -46,16 +51,27 @@ export default function Perfil({ route }) {
       setCursosFavoritos(cursos);
     });
   };
+  useEffect(() => {
+  AsyncStorage.getItem("perfil").then((perfil) => {
+    if (perfil !== null) {
+      const perfilparse = JSON.parse(perfil);
+      console.log(perfilparse)
+      setPerfil(perfilparse);
+    } else {
+      console.log("NO HAY NADAAA");
+    }
+  });
+}, []);
 
   return (
-    <View>
+    <View style={{flex: 1, backgroundColor: 'white', alignItems: 'center'}}>
       <Text style={styles.header_text}>
         {" "}
         Bienvenido, {param_usuario.nombre} {param_usuario.apellido}
       </Text>
 
       <Image
-        source={{ uri: BASE_URL + param_usuario.picture }}
+        source={{ uri: param_usuario.picture }}
         style={{
           height: 150,
           width: 150,
@@ -128,6 +144,13 @@ export default function Perfil({ route }) {
           keyExtractor={(item) => item.nombre}
         />
       )}
+      <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => {AsyncStorage.clear()}}
+              >
+                <Text style={styles.textStyle}>Cerrar sesion</Text>
+              </Pressable>
+      
     </View>
   );
 }
@@ -164,5 +187,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 20,
     flexDirection: "row",
+  },
+  button: {
+    borderRadius: 10,
+    marginTop: 24,
+    padding: 10,
+    width: width/1.3,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#0086bf",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 22,
   },
 });

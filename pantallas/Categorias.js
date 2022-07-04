@@ -21,6 +21,8 @@ import { BASE_URL } from "../api";
 import { ModalDetallesCurso } from "../modals/ModalDetallesCurso";
 import moment from "moment";
 import { FontAwesome } from "react-native-vector-icons";
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+
 const { width, height } = Dimensions.get("window");
 
 export default class Cources extends React.Component {
@@ -47,7 +49,7 @@ export default class Cources extends React.Component {
   componentDidMount() {
     const cursos = BASE_URL + "curso/";
     axios.get(cursos).then((res) => {
-      const cursos = res.data.filter((cat) => cat.categoria);
+      const cursos = res.data.filter((cat) => cat.categoria && cat.origen.id === 1);
       this.setState({ categorias: cursos });
       console.log(cursos);
     });
@@ -81,6 +83,7 @@ export default class Cources extends React.Component {
         source={require("../assets/FONDO-DESCUBRIR.jpg")}
         style={{ width: "100%", height: "100%" }}
       >
+        <ScrollView style={{flex: 1}}>
         {/* CONFIRMACION */}
 
         <Modal
@@ -531,24 +534,20 @@ export default class Cources extends React.Component {
           source={require("../assets/DESCUBRIR-VERTICAL-01.png")}
           resizeMode="contain"
           style={{
-            width: width / 1.5,
-            height: width / 0.8,
+            width: scale(200),
+            height: scale(130),
             alignSelf: "center",
-            top: -(width / 3.4),
+            marginVertical: 8
           }}
         />
 
-        <Modalize
-          handleStyle={{
-            backgroundColor: "#e9e9e9",
-            width: 80,
-          }}
-          modalStyle={{
+        <View
+          style={{
             borderTopLeftRadius: 60,
             borderTopRightRadius: 60,
+            backgroundColor: 'white',
+            flex: 1,
           }}
-          alwaysOpen={height/1.7}
-          scrollViewProps={{ showsVerticalScrollIndicator: false }}
         >
           <View style={{ paddingVertical: 30 }}>
             <CategoriasList
@@ -562,7 +561,7 @@ export default class Cources extends React.Component {
             />
             <View style={{ display: this.state.multimedia ? "flex" : "none" }}>
               {this.state.categorias
-                .filter((cat) => cat.categoria=== 1)
+                .filter((cat) => cat.categoria.id === 1)
                 .map((item, i) => {
                   return (
                     <CourseList
@@ -587,7 +586,7 @@ export default class Cources extends React.Component {
             />
             <View style={{ display: this.state.fabricacion ? "flex" : "none" }}>
               {this.state.categorias
-                .filter((cat) => cat.categoria === 2)
+                .filter((cat) => cat.categoria.id === 2)
                 .map((item, i) => {
                   return (
                     <CourseList
@@ -611,7 +610,7 @@ export default class Cources extends React.Component {
             />
             <View style={{ display: this.state.minilab ? "flex" : "none" }}>
               {this.state.categorias
-                .filter((cat) => cat.categoria === 3)
+                .filter((cat) => cat.categoria.id === 3)
                 .map((item, i) => {
                   return (
                     <CourseList
@@ -635,7 +634,7 @@ export default class Cources extends React.Component {
             />
             <View style={{ display: this.state.ciencias ? "flex" : "none" }}>
               {this.state.categorias
-                .filter((cat) => cat.categoria.id ===  7)
+                .filter((cat) => cat.categoria.id ===  4)
                 .map((item, i) => {
                   return (
                     <CourseList
@@ -659,7 +658,7 @@ export default class Cources extends React.Component {
             />
             <View style={{ display: this.state.sonidos ? "flex" : "none" }}>
               {this.state.categorias
-                .filter((cat) => cat.categoria === 5)
+                .filter((cat) => cat.categoria.id === 5)
                 .map((item, i) => {
                   return (
                     <CourseList
@@ -674,7 +673,8 @@ export default class Cources extends React.Component {
                 })}
             </View>
           </View>
-        </Modalize>
+        </View>
+        </ScrollView>
       </ImageBackground>
     );
   }
