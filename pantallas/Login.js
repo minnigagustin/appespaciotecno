@@ -12,7 +12,8 @@ import {
   KeyboardAvoidingView,
   ActivityIndicator,
   Pressable,
-  TextInput
+  TextInput,
+  Animated
 } from "react-native";
 import { Entypo } from "react-native-vector-icons"
 import React from "react";
@@ -26,10 +27,10 @@ import * as Facebook from 'expo-facebook';
 
 import axios from "axios";
 
-import { BASE_URL } from "../api";
+import { BASE_URL, axiosLoggedOutConfig } from "../api";
 
 import global from "../componentes/global";
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const width = Dimensions.get("window").width;
@@ -58,6 +59,10 @@ export default function Login({ }) {
   const [usuario, setUsuario] = useState("");
 
   const navigation = useNavigation();
+  const [animationLineHeight, setAnimationLineHeight] = useState(0)
+  const [focusLineAnimation, setFocusLineAnimation] = useState(
+    new Animated.Value(0),
+  )
 
 
   const actualizarUser = (text_user) => {
@@ -91,7 +96,6 @@ export default function Login({ }) {
         const url_logout = BASE_URL + "logout/";
         const url_login = BASE_URL + "login/";
         console.log(url_login);
-        await axios.get(url_logout);
         formFace.numero_documento = '';
         formFace.password = data.id;
         formFace.email = data.email ? data.email : data.id + '@facebook.com';
@@ -100,20 +104,21 @@ export default function Login({ }) {
         formFace.nombre = data.name.split(' ')[0];
         formFace.apellido = data.name.split(' ').slice(1).join(' ');
         formFace.registrado_desde = 1;
+        formFace.tipo = 1;
         console.log(formFace);
         setFacebook(formFace);
-
-        axios({
-          url: url_login,
-          method: "POST",
-          data: formFace,
-        })
+        console.log('HASTA ACA LLEGA')
+        axiosLoggedOutConfig.post(url_login, formFace)
           .then((response) => {
+            console.log(response);
             if (response.status === 200) {
               global.authenticated = true;
               console.log(global.authenticated);
               setLoading(false);
+              console.log(response.data);
               AsyncStorage.setItem("perfil", JSON.stringify(response.data));
+              AsyncStorage.setItem("lgac", response.data.access);
+              AsyncStorage.setItem("lgrf", response.data.refresh);
 
               navigation.replace("HomeInicio");
 
@@ -153,9 +158,22 @@ export default function Login({ }) {
         setDni(String(numero.numero_documento));
       }
     });
+    animateLine();
   }, []);
 
-
+  const animateLine = () => {
+    Animated.sequence([
+      Animated.timing(focusLineAnimation, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: false,
+      }), Animated.timing(focusLineAnimation, {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: false,
+      }),
+    ]).start(animateLine)
+  }
 
 
   const verificarUsuario = async () => {
@@ -163,22 +181,19 @@ export default function Login({ }) {
     const url_logout = BASE_URL + "logout/";
     const url_login = BASE_URL + "login/";
     console.log(url_login);
-    await axios.get(url_logout);
     formData.numero_documento = dni;
     formData.password = contrasenia;
     formData.email = '';
     console.log(formData);
-    axios({
-      url: url_login,
-      method: "POST",
-      data: formData,
-    })
+    axiosLoggedOutConfig.post(url_login, formData)
       .then((response) => {
         if (response.status === 200) {
           global.authenticated = true;
           console.log(global.authenticated);
           setLoading(false);
           AsyncStorage.setItem("perfil", JSON.stringify(response.data));
+          AsyncStorage.setItem("lgac", response.data.access);
+              AsyncStorage.setItem("lgrf", response.data.refresh);
 
           navigation.replace("HomeInicio");
 
@@ -221,30 +236,27 @@ export default function Login({ }) {
     const formDoc = {};
     const url_logout = BASE_URL + "logout/";
     const url_login = BASE_URL + "login/";
-    const nombre = data.split('@')[2].toLowerCase().replace(/\b[a-z]/g,c=>c.toUpperCase());
-    const apellido = data.split('@')[1].toLowerCase().replace(/\b[a-z]/g,c=>c.toUpperCase());
+    const nombre = data.split('@')[2].toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase());
+    const apellido = data.split('@')[1].toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase());
     console.log(url_login);
-    await axios.get(url_logout);
     formDoc.numero_documento = data.split('@')[4];
     formDoc.password = data.split('@')[0];
     formDoc.email = null;
     formDoc.nombre = nombre.split(' ')[0];
     formDoc.apellido = apellido;
     formDoc.registrado_desde = 3;
+    formDoc.tipo = 1;
     console.log(formDoc);
 
-    axios({
-      url: url_login,
-      method: "POST",
-      data: formDoc,
-    })
+    axiosLoggedOutConfig.post(url_login, formDoc)
       .then((response) => {
         if (response.status === 200) {
           global.authenticated = true;
           console.log(global.authenticated);
           setLoading(false);
           AsyncStorage.setItem("perfil", JSON.stringify(response.data));
-
+          AsyncStorage.setItem("lgac", response.data.access);
+              AsyncStorage.setItem("lgrf", response.data.refresh);
           navigation.replace("HomeInicio");
 
           console.log(global.authenticated)
@@ -258,79 +270,63 @@ export default function Login({ }) {
         registraDocumento(formDoc);
 
       });
-    };
+  };
 
-    const registraDocumento = async (data) => {
-      const dataDoc = data;
-      dataDoc.email = dataDoc.numero_documento + '@documento.com';
-      const url_login = BASE_URL + "login/";
-      axios({
-        url: BASE_URL + "user/",
-  
-        method: "POST",
-  
-        data: dataDoc,
-      }).then((result) => {
-        if (result.status === 201) {
-          dataDoc.email = null;
-          axios({
-            url: url_login,
-            method: "POST",
-            data: dataDoc,
-          })
-            .then((response) => {
-              if (response.status === 200) {
-                global.authenticated = true;
-                console.log(global.authenticated);
-                setLoading(false);
-                AsyncStorage.setItem("perfil", JSON.stringify(response.data));
-  
-                navigation.replace("HomeInicio");
-  
-                console.log(global.authenticated)
-              }
-            })
-  
-            .catch(function () {
-              // handle error
-  
-              setLoading(false);
-              Alert.alert('ocurrio un error', 'Esta cuenta ya esta siendo utilizada')
-  
-            });
-        }
-      }).catch(function () {
-        setLoading(false);
-      Alert.alert('Error', 'Este usuario ya tiene una cuenta aqui.')
-    }
-
-    );
-      };
-
-  const enviarRegistro = async (numerito) => {
-    const facebookform = facebook;
+  const registraDocumento = async (data) => {
+    const dataDoc = data;
+    dataDoc.email = dataDoc.numero_documento + '@documento.com';
     const url_login = BASE_URL + "login/";
-    facebookform.numero_documento = numerito;
-    console.log(facebookform);
-    axios({
-      url: BASE_URL + "user/",
-
-      method: "POST",
-
-      data: facebookform,
-    }).then((result) => {
+    axiosLoggedOutConfig.post( BASE_URL + "user/", dataDoc).then((result) => {
       if (result.status === 201) {
-        axios({
-          url: url_login,
-          method: "POST",
-          data: facebook,
-        })
+        dataDoc.email = null;
+        axiosLoggedOutConfig.post( BASE_URL + "login/", dataDoc)
           .then((response) => {
             if (response.status === 200) {
               global.authenticated = true;
               console.log(global.authenticated);
               setLoading(false);
               AsyncStorage.setItem("perfil", JSON.stringify(response.data));
+              AsyncStorage.setItem("lgac", response.data.access);
+              AsyncStorage.setItem("lgrf", response.data.refresh);
+
+              navigation.replace("HomeInicio");
+
+              console.log(global.authenticated)
+            }
+          })
+
+          .catch(function () {
+            // handle error
+
+            setLoading(false);
+            Alert.alert('ocurrio un error', 'Esta cuenta ya esta siendo utilizada')
+
+          });
+      }
+    }).catch(function () {
+      setLoading(false);
+      Alert.alert('Error', 'Este usuario ya tiene una cuenta aqui.')
+    }
+
+    );
+  };
+
+  const enviarRegistro = async (numerito) => {
+    const facebookform = facebook;
+    const url_login = BASE_URL + "login/";
+    facebookform.numero_documento = numerito;
+    console.log(facebookform);
+    axiosLoggedOutConfig.post( BASE_URL + "user/", facebookform).then((result) => {
+      if (result.status === 201) {
+        axiosLoggedOutConfig.post( BASE_URL + "login/", facebook)
+          .then((response) => {
+            if (response.status === 200) {
+              global.authenticated = true;
+              console.log(global.authenticated);
+              setLoading(false);
+              AsyncStorage.setItem("perfil", JSON.stringify(response.data));
+              AsyncStorage.setItem("lgac", response.data.access);
+              AsyncStorage.setItem("lgrf", response.data.refresh);
 
               navigation.replace("HomeInicio");
 
@@ -465,8 +461,40 @@ export default function Login({ }) {
                   barCodeTypes={[
                     BarCodeScanner.Constants.BarCodeType.pdf417
                   ]}
-                  style={{ height: width * 0.80, width: width * 0.65 }}
+                  style={{ width: 1000, height: 1000 }}
                 />
+                <View style={styles.overlay}>
+                  <View style={styles.unfocusedContainer}></View>
+                  <View style={styles.middleContainer}>
+                    <View style={styles.unfocusedContainer}></View><View
+                      onLayout={e => setAnimationLineHeight(e.nativeEvent.layout.height)}
+                      style={styles.focusedContainer}><Text style={{
+                color: "white",
+                fontSize: width / 20,
+                textAlign: "center",
+                top: 15,
+                justifyContent: 'center',
+                elevation: 3, position: 'absolute',
+                fontFamily: "Roboto",
+              }}>Escanea tu <Text style={{ fontWeight: 'bold', color: 'white' }}>DNI</Text></Text>
+                      {!scanned && (
+                        <Animated.View
+                          style={[
+                            styles.animationLineStyle,
+                            {
+                              transform: [
+                                {
+                                  translateY: focusLineAnimation.interpolate({
+                                    inputRange: [0, 1],
+                                    outputRange: [0, animationLineHeight],
+                                  }),
+                                },
+                              ],
+                            },
+                          ]}
+                        />
+                      )}
+                    </View><View style={styles.unfocusedContainer}></View></View><View style={styles.unfocusedContainer}></View></View>
 
               </View>
             </View>
@@ -499,32 +527,32 @@ export default function Login({ }) {
             secureTextEntry={true}
           ></TextInput>
           {loading ? (
-          <ActivityIndicator
-            size="large"
-            color="#FFFFFF"
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          />
-        ) : (
-          <TouchableOpacity
-            style={[
-              styles.ingresar_style,
-              {
-                backgroundColor:
-                  dni && contrasenia ? "#017185" : "rgba(0, 0, 0, 0.15)",
-              },
-            ]}
-            onPress={() => chequearValidacion()}
-            disabled={!dni || !contrasenia}
-          >
-            <Text style={styles.ingresar_text}>INGRESAR</Text>
-          </TouchableOpacity>
+            <ActivityIndicator
+              size="large"
+              color="#FFFFFF"
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            />
+          ) : (
+            <TouchableOpacity
+              style={[
+                styles.ingresar_style,
+                {
+                  backgroundColor:
+                    dni && contrasenia ? "#017185" : "rgba(0, 0, 0, 0.15)",
+                },
+              ]}
+              onPress={() => chequearValidacion()}
+              disabled={!dni || !contrasenia}
+            >
+              <Text style={styles.ingresar_text}>INGRESAR</Text>
+            </TouchableOpacity>
           )}
 
           <TouchableOpacity
-            style={{ color: "white"}}
+            style={{ color: "white" }}
             onPress={() => navigation.navigate("Recuperar")}
           >
             <Text style={styles.recuperar_text}>¿Olvidó su contraseña?</Text>
@@ -559,7 +587,7 @@ export default function Login({ }) {
     </ImageBackground>
   );
 }
-
+const opacity = 'rgba(0, 0, 0, .6)';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -568,7 +596,7 @@ const styles = StyleSheet.create({
   },
   imagen_style: {
     alignSelf: "center",
-    marginTop:hp(8),
+    marginTop: hp(8),
     marginBottom: hp(8),
     width: wp(34),
     height: wp(34),
@@ -669,5 +697,10 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center"
-  }
+  },
+  overlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, }, unfocusedContainer: { flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', }, middleContainer: { flexDirection: 'row', flex: 0.5, }, focusedContainer: { flex: 6, }, animationLineStyle: {
+    height: 4, width: '100%', backgroundColor: 'red',
+    elevation:20,
+    color: 'red'
+  }, rescanIconContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', },
 });

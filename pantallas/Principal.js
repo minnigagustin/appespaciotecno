@@ -16,9 +16,9 @@ import { ScrollView } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CourseList from "../componentes/CoursePrincipal";
+import { BASE_URL, axiosLoggedInConfig } from "../api";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import moment from "moment";
-import { BASE_URL } from "../api";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
 import global from "../componentes/global";
@@ -95,8 +95,9 @@ export default function Principal({ route }) {
 
   useEffect(() => {
     const cursos = BASE_URL + "curso/";
-    axios.get(cursos).then((res) => {
+    axiosLoggedInConfig().get(cursos).then((res) => {
       const cursos = res.data;
+      console.log(cursos);
       const slid = cursos.filter((cat) => cat.banner);
       setSlider(slid);
       console.log(cursos);
@@ -118,7 +119,6 @@ export default function Principal({ route }) {
   }, [isLogged]);
 
   const desloguearUsuario = async () => {
-    await axios.get(BASE_URL + "logout/");
     setIsLogged(false);
     console.log("Se deslogueo correctamente. " + global.authenticated);
   };
@@ -488,6 +488,7 @@ export default function Principal({ route }) {
               {slider.map((item, i) => {
                 return (
                   <CourseList
+                  key={i}
                     onPress={() => {
                       setCatg(item.id);
                       setModaldataInfo(item);

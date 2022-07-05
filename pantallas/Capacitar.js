@@ -17,7 +17,7 @@ import CourseList from "../componentes/CourseList";
 import axios from "axios";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import CategoriasList from "../componentes/CategoriasList";
-import { BASE_URL } from "../api";
+import { BASE_URL, axiosLoggedInConfig } from "../api";
 import { ModalDetallesCurso } from "../modals/ModalDetallesCurso";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import moment from "moment";
@@ -44,7 +44,7 @@ export default class Cources extends React.Component {
 
   componentDidMount() {
     const cursos = BASE_URL + "curso/";
-    axios.get(cursos).then((res) => {
+    axiosLoggedInConfig().get(cursos).then((res) => {
       const cursos = res.data.filter((cat) => cat.origen.id === 2);
       this.setState({ categorias: cursos });
       console.log(cursos);

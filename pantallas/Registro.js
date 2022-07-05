@@ -21,12 +21,13 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from "@react-navigation/native";
 
 import { useState, useEffect } from "react";
+import { Entypo } from "react-native-vector-icons"
 
 import axios from "axios";
 
 import { ModalRegistroOk } from "../modals/ModalRegistroOk";
 
-import { BASE_URL } from "../api";
+import { BASE_URL, axiosLoggedOutConfig } from "../api";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -84,7 +85,6 @@ export default function Registro() {
   };
 
   const verificarRegistro = async () => {
-    await axios.get(BASE_URL + "logout/");
 
     if (checkCampos()) {
       enviarRegistro();
@@ -123,13 +123,7 @@ export default function Registro() {
 
     formData.picture = null;
 
-    axios({
-      url: BASE_URL + "user/",
-
-      method: "POST",
-
-      data: formData,
-    }).then((result) => {
+    axiosLoggedOutConfig.post( BASE_URL + "user/", formData).then((result) => {
       if (result.status === 200) {
         navigation.navigate("Principal", {
           param_usuario: result.data,
@@ -243,7 +237,7 @@ export default function Registro() {
           <Text style={{color: "white",
     fontSize: width/20,
     textAlign: "center",
-    fontFamily: "Roboto",}}>Escanea tu <Text style={{fontWeight: 'bold', color: 'white'}}>DNI</Text></Text></TouchableOpacity>
+    fontFamily: "Roboto",}}><Entypo name={'credit-card'} size={16} color="white" /> Escanea tu <Text style={{fontWeight: 'bold', color: 'white'}}>DNI</Text></Text></TouchableOpacity>
     {nivel ? (
       <View>
           <View style={{flex: 1,
