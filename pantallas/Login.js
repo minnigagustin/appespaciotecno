@@ -314,7 +314,7 @@ export default function Login({ }) {
   const enviarRegistro = async (numerito) => {
     const facebookform = facebook;
     const url_login = BASE_URL + "login/";
-    facebookform.numero_documento = numerito;
+    facebookform.numero_documento = numerito ? numerito : dni;
     console.log(facebookform);
     axiosLoggedOutConfig.post( BASE_URL + "user/", facebookform).then((result) => {
       if (result.status === 201) {

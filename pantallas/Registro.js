@@ -16,9 +16,10 @@ import {
 import React from "react";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import { BarCodeScanner } from "expo-barcode-scanner";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
-import { useNavigation } from "@react-navigation/native";
+import { BaseRouter, useNavigation } from "@react-navigation/native";
 
 import { useState, useEffect } from "react";
 import { Entypo } from "react-native-vector-icons"
@@ -27,7 +28,7 @@ import axios from "axios";
 
 import { ModalRegistroOk } from "../modals/ModalRegistroOk";
 
-import { BASE_URL, axiosLoggedOutConfig } from "../api";
+import { BASE_URL, axiosLoggedOutConfig, axiosLoggedInConfig } from "../api";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -55,8 +56,6 @@ export default function Registro() {
   const [loading, setLoading] = useState(false);
 
   const [modalOk, setModalOk] = useState(false);
-
-  const formData = {};
 
   const navigation = useNavigation();
 
@@ -89,8 +88,7 @@ export default function Registro() {
     if (checkCampos()) {
       enviarRegistro();
 
-      actualizarStates();
-    } else Alert.alert("POR FAVOR, COMPLETE LOS CAMPOS SOLICITADOS");
+    } else Alert.alert("Ey! No pudimos registrarte", 'Asegurate de completar todos los campos');
   };
 
   const checkCampos = () => {
@@ -107,37 +105,44 @@ export default function Registro() {
   };
 
   const enviarRegistro = async () => {
-    formData.nombre = nombre;
+    const formDoc = {};
+    formDoc.numero_documento = dni;
+    formDoc.password = contrasenia;
+    formDoc.email = email;
+    formDoc.nombre = nombre;
+    formDoc.apellido = apellido;
+    formDoc.registrado_desde = 2;
+    formDoc.tipo = 1;
+    console.log(formDoc);
+    axiosLoggedOutConfig.post( BASE_URL + "user/", formDoc).then((result) => {
+      if (result.status === 201) {
+        axiosLoggedOutConfig.post( BASE_URL + "login/", formDoc)
+          .then((response) => {
+            if (response.status === 200) {
+              AsyncStorage.setItem("perfil", JSON.stringify(response.data));
+              AsyncStorage.setItem("lgac", response.data.access);
+              AsyncStorage.setItem("lgrf", response.data.refresh);
 
-    formData.apellido = apellido;
+              navigation.replace("HomeInicio");
 
-    formData.numero_documento = dni;
+              console.log(global.authenticated)
+            }
+          })
 
-    formData.email = email;
+          .catch(function (prueba) {
+            // handle error
+              console.log(prueba);
+            setLoading(false);
 
-    formData.localidad = localidad;
-
-    formData.genero = genero;
-
-    formData.password = contrasenia;
-
-    formData.picture = null;
-
-    axiosLoggedOutConfig.post( BASE_URL + "user/", formData).then((result) => {
-      if (result.status === 200) {
-        navigation.navigate("Principal", {
-          param_usuario: result.data,
-        });
+          });
       }
-    });
-  };
+    }).catch(function (prueba) {
+      setLoading(false);
+      console.log(prueba);
+      Alert.alert('Error', 'Este usuario ya tiene una cuenta aqui.')
+    }
 
-  const actualizarStates = () => {
-    setLoading(true);
-
-    setModalOk(true);
-
-    resetCampos();
+    );
   };
 
   const restoreModalOk = () => {
@@ -484,7 +489,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   ingresar_text: {
-    fontSize: 25,
+    fontSize: width / 22,
     color: "white",
     marginVertical: 7,
     marginHorizontal: 7,

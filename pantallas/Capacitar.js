@@ -77,7 +77,7 @@ export default class Cources extends React.Component {
         source={require("../assets/FONDO-CAPACITAR.jpg")}
         style={{ width: "100%", height: "100%", flex: 1 }}
       >
-        <ScrollView style={{flex: 1}}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1,}}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -125,6 +125,7 @@ export default class Cources extends React.Component {
               >
                 <Text style={styles.textStyle}>INSCRIBIRME {">"}</Text>
               </Pressable>
+              <TouchableOpacity style={{backgroundColor: '#a1b94b', padding: 4, borderRadius: 2}}><Text style={{color: 'white'}}>Guardar como favorito</Text></TouchableOpacity>
             </View>
           </View>
         </Modal>
@@ -422,7 +423,7 @@ export default class Cources extends React.Component {
             width: scale(200),
             height: scale(130),
             alignSelf: "center",
-            marginVertical: 8
+            marginVertical: 14
           }}
         />
 <View style={{flex: 1,
@@ -433,6 +434,7 @@ export default class Cources extends React.Component {
             borderTopRightRadius: 60,
             backgroundColor: 'white',
             flex: 1,
+            marginBottom: 0
           }}
         >
           <View style={{ paddingVertical: 30 }}>

@@ -5,18 +5,17 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./pantallas/Principal";
 import Qr from "./pantallas/Qr";
 import Perfil from "./pantallas/Perfil";
-import AvanceCursos from "./pantallas/AvanceCursos";
 import EditarPerfil from "./pantallas/EditarPerfil";
 import Login from "./pantallas/Login";
 import Categorias from "./pantallas/Categorias";
 import Capacitar from "./pantallas/Capacitar";
 import Emprender from "./pantallas/Emprender";
 import Registro from "./pantallas/Registro";
-import Marcas from "./pantallas/Marcas";
 import Splash from "./pantallas/Splash";
 import PantallaToken from "./pantallas/PantallaToken";
+import MisCursos from "./pantallas/MisCursos";
+import Favoritos from "./pantallas/Favoritos";
 import Recuperar from "./pantallas/Recuperar";
-import PantallaSlides from "./componentes/Slider";
 import { FontAwesome } from "react-native-vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
@@ -39,11 +38,9 @@ function HomeStackScreen() {
     >
       <HomeStack.Screen name="Login" component={Login} />
       <HomeStack.Screen name="Mi Perfil" component={Perfil} />
-      <HomeStack.Screen name="Mis Cursos" component={Perfil} />
+      <HomeStack.Screen name="MisCursos" component={MisCursos} />
       <HomeStack.Screen name="Mis Favoritos" component={Perfil} />
-      <HomeStack.Screen name="AvanceCursos" component={AvanceCursos} />
       <HomeStack.Screen name="EditarPerfil" component={EditarPerfil} />
-      <HomeStack.Screen name="PantallaSlides" component={PantallaSlides} />
       <HomeStack.Screen name="Registro" component={Registro} />
       <HomeStack.Screen name="Recuperar" component={Recuperar} />
       <HomeStack.Screen name="PantallaToken" component={PantallaToken} />
@@ -60,10 +57,11 @@ function InicioStackScreen() {
     >
       <InicioStack.Screen name="Mi Perfil" component={Home} />
       <InicioStack.Screen name="Mis Cursos" component={Perfil} />
+      <InicioStack.Screen name="MisCursos" component={MisCursos} />
+      <InicioStack.Screen name="MisFavoritos" component={Favoritos} />
       <InicioStack.Screen name="Categorias" component={Categorias} />
       <InicioStack.Screen name="Capacitar" component={Capacitar} />
       <InicioStack.Screen name="Emprender" component={Emprender} />
-      <InicioStack.Screen name="Marcas" component={Marcas} />
     </InicioStack.Navigator>
   );
 }

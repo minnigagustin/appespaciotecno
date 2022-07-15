@@ -43,28 +43,8 @@ export default class Cources extends React.Component {
     };
   }
 
-  componentDidMount() {
-    const cursos = BASE_URL + "curso/";
-    axios.get(cursos).then((res) => {
-      const cursos = res.data;
-      this.setState({ categorias: cursos });
-      console.log(cursos);
-    });
-  }
-
-  onClickAddModal(data) {
-    this.setState({
-      modalOk: true,
-      dataModal: data,
-    });
-  }
 
   render() {
-    var today = new Date();
-    const fecha = moment(today).format("YYYY-MM-DD");
-    const markedDatesArray = {
-      [fecha]: { selected: true, selectedColor: "#00789d" },
-    };
 
     return (
       <ImageBackground

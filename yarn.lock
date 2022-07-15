@@ -5074,11 +5074,6 @@
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
   "version" "17.0.2"
 
-"react-native-app-intro-slider@^4.0.4":
-  "integrity" "sha512-Zkjaol6X3BbZkHUpVDj2LjdidpS6rCgKi0fx80xgGKa0pHxBRd4swWTv2bHnnvu5k1/HXwYk0mY2TbK+2jHl5w=="
-  "resolved" "https://registry.npmjs.org/react-native-app-intro-slider/-/react-native-app-intro-slider-4.0.4.tgz"
-  "version" "4.0.4"
-
 "react-native-calendars@^1.1279.0":
   "integrity" "sha512-vUKmYCT6IGg200VnhLbcraaNaIoOF2MrgkZVSQdYu/XkFFOtLUwYmpEMQ5CBEoENZ+9K8fgUNdmorvu/QnXmYA=="
   "resolved" "https://registry.npmjs.org/react-native-calendars/-/react-native-calendars-1.1279.0.tgz"
@@ -5212,11 +5207,6 @@
   "integrity" "sha512-8/C0htHrFWeUm9N8JegmadovUfgTWkGBkDPZ1N3YkXtDWb+98Ya2gThiKcu445r8c7YhcrBfnHz/mYsXIusaOQ=="
   "resolved" "https://registry.npmjs.org/react-native-size-matters/-/react-native-size-matters-0.4.0.tgz"
   "version" "0.4.0"
-
-"react-native-slideshow@^1.0.1":
-  "integrity" "sha1-Hqxr1dE2KqxSuKLzPz68H4jalAI="
-  "resolved" "https://registry.npmjs.org/react-native-slideshow/-/react-native-slideshow-1.0.1.tgz"
-  "version" "1.0.1"
 
 "react-native-svg-animations@^0.2.6":
   "integrity" "sha512-moApbBqFfFthKFtfgT4EEuVqB3w/HPkBpPcBCFKl2v7fo8FKMDmIJFnlqk81IYHtneYYRv5fTy+OT2U0Pdlpfg=="

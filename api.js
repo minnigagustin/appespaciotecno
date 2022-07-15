@@ -12,7 +12,6 @@ export const axiosLoggedInConfig = () => {
 
     axiosService.interceptors.request.use(async (config) => {
         const token = await AsyncStorage.getItem('lgac');
-        console.log(token)
 
         if (token !== null) {
             config.headers.Authorization = `Bearer ${token}`;
@@ -27,27 +26,24 @@ export const axiosLoggedInConfig = () => {
 
     const refreshAuthLogic = async (failedRequest) => {
         const refreshToken = await AsyncStorage.getItem('lgrf');
+        console.log(refreshToken);
         if (refreshToken !== null) {
             return axios
                 .post(
-                    'refreshtoken/',
+                    BASE_URL + 'refreshtoken/',
                     {
-                        refresh: refreshToken
-                    },
-                    {
-                        baseURL: BASE_URL
+                         refresh : refreshToken
                     }
                 )
                 .then((resp) => {
                     const { access } = resp.data;
+                    console.log('tuki');
                     failedRequest.response.config.headers.Authorization = `Bearer ${access}`;
                     AsyncStorage.setItem('lgac', access);
                 })
                 .catch((err) => {
-                    if (err.response && err.response.status === 400) {
-                        AsyncStorage.setItem('lgac', 'null');
-                        AsyncStorage.setItem('lgrf', 'null');
-                    }
+                    console.log('goood');
+                    console.log(err);
                 });
         }
     };
@@ -84,7 +80,7 @@ export const axiosLoggedInAndFileUploadConfig = () => {
         if (refreshToken !== null) {
             return axios
                 .post(
-                    'refreshtoken/',
+                    BASE_URL + 'refreshtoken/',
                     {
                         refresh: refreshToken
                     },

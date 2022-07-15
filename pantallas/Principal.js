@@ -22,11 +22,13 @@ import moment from "moment";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
 import global from "../componentes/global";
+import Loading from "./Loading";
 import axios from "axios";
 import { useState, useEffect } from "react";
  import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "react-native-vector-icons";
+import { set } from "react-native-reanimated";
 
 const { width, height } = Dimensions.get("window");
 LocaleConfig.locales["fr"] = {
@@ -76,9 +78,11 @@ export default function Principal({ route }) {
   const [perfil, setPerfil] = useState([]);
 
   const [slider, setSlider] = useState([]);
+  const [cursosfechas, setCursosFechas] = useState([]);
   const [modaldata, setModaldata] = useState([]);
   const [modaldataInfo, setModaldataInfo] = useState([]);
   const [modal, setModal] = useState(false);
+  const [modalLoading, setModalLoading] = useState(false);
   const [modalInfo, setModalInfo] = useState(false);
   const [modalCalendario, setModalCalendario] = useState(false);
   const [modalHorarios, setModalHorarios] = useState(false);
@@ -97,10 +101,8 @@ export default function Principal({ route }) {
     const cursos = BASE_URL + "curso/";
     axiosLoggedInConfig().get(cursos).then((res) => {
       const cursos = res.data;
-      console.log(cursos);
       const slid = cursos.filter((cat) => cat.banner);
       setSlider(slid);
-      console.log(cursos);
     });
     AsyncStorage.getItem("perfil").then((perfil) => {
       if (perfil !== null) {
@@ -108,23 +110,21 @@ export default function Principal({ route }) {
         setIsLogged(true);
         setPerfil(perfilparse);
       } else {
-        console.log("NO HAY NADAAA");
       }
     });
   }, []);
 
   useEffect(() => {
-    console.log("height:" + width / 2.5 + "width:" + (width - 20));
     global.authenticated = isLogged;
   }, [isLogged]);
 
   const desloguearUsuario = async () => {
     setIsLogged(false);
-    console.log("Se deslogueo correctamente. " + global.authenticated);
   };
 
   const abrirmodal = (item) => {
-    setModal(true);
+    setModalLoading(true);
+    setCursosFechas([]);
 
     const dias = [
       "Lunes",
@@ -158,9 +158,20 @@ export default function Principal({ route }) {
       dia: nombreDia,
       mes: nombreMes,
     };
+    const cursos = BASE_URL + "cursosbyfecha/?fecha=" + item.dateString;
+    axiosLoggedInConfig().get(cursos).then((res) => {
+      const cursos = res.data;
+      setCursosFechas(cursos);
+      if(cursos.length){setModal(true);
+      } else {
+        Alert.alert('Ups! No tenemos cursos', 'Lo sentimos, prueba con otra fecha y disfruta de Espacio Tecno ;)')
+      }
+      
+      setModalLoading(false);
+      
+    });
     setDia(traduccion);
     setModaldata(item);
-    console.log(item);
   };
 
   var today = new Date();
@@ -176,6 +187,16 @@ export default function Principal({ route }) {
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
       {/* COMIENZO MODALS  */}
+
+      <Modal
+        animationType="none"
+        transparent={true}
+        visible={modalLoading}
+      >
+        <View style={{flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",}}>
+        <Loading/></View>
+      </Modal>
 
       <Modal
         animationType="slide"
@@ -435,7 +456,7 @@ export default function Principal({ route }) {
       </Modal>
 
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modal}
         onRequestClose={() => {
@@ -485,7 +506,7 @@ export default function Principal({ route }) {
               Por favor seleccioná el taller al cual quisieras asistir:
             </Text>
             <View>
-              {slider.map((item, i) => {
+              {cursosfechas.map((item, i) => {
                 return (
                   <CourseList
                   key={i}

@@ -18,7 +18,7 @@ export default function App() {
 
   const handleBarCodeScanned = ({ data }) => {
     setScanned(true);
-    Alert.alert('Escaneado!', 'Su DNI es: ' + data.split('@')[4]);
+    Alert.alert('Escaneado!', 'Su URL es: ' + data.split('/')[4]);
   };
 
   if (hasPermission === null) {
@@ -60,8 +60,11 @@ export default function App() {
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={styles.absoluteFillObject}
+        barCodeTypes={[
+          BarCodeScanner.Constants.BarCodeType.qr
+        ]}
       />
-      {scanned && (
+      {scanned === true && (
         <Button title={"Presiona para escanear nuevamente"} onPress={() => setScanned(false)} />
       )}
       <View style={{position: 'absolute', bottom: 20, left: 0, right: 0}}>

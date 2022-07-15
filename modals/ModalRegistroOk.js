@@ -1,6 +1,9 @@
-import { StyleSheet, Text, View, Modal, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Modal, TouchableOpacity, Dimensions } from "react-native";
 import { FontAwesome } from "react-native-vector-icons";
 import { useNavigation } from "@react-navigation/native";
+
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 
 export const ModalRegistroOk = (props) => {
   const navigation = useNavigation();
@@ -50,14 +53,14 @@ const styles = StyleSheet.create({
   },
   titulo_style: {
     fontWeight: "bold",
-    fontSize: 40,
+    fontSize: width/20,
     fontFamily: "Roboto",
     marginBottom: 10,
     marginTop: 30,
   },
   subtitulo_style: {
     fontWeight: "normal",
-    fontSize: 18,
+    fontSize: width/20,
     marginBottom: 20,
     marginTop: 10,
   },

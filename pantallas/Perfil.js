@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, FlatList, Pressable, Dimensions } from "react-native";
+import { View, Text, Image, StyleSheet, FlatList, Pressable, Dimensions, ImageBackground, Linking, Alert } from "react-native";
 
 import { FontAwesome } from "react-native-vector-icons";
 
@@ -65,27 +65,31 @@ export default function Perfil({ route }) {
 
   return (
     <View style={{flex: 1, backgroundColor: 'white', alignItems: 'center'}}>
+      <ImageBackground
+          source={require("../assets/fondo_login.jpg")}
+          imageStyle={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 100}}
+          style={{ resizeMode: "stretch", width: width, paddingBottom: 20, borderRadius: 20}}
+        >
       <Text style={styles.header_text}>
         {" "}
         Bienvenido, {param_usuario.nombre} {param_usuario.apellido}
       </Text>
 
       <Image
-        source={{ uri: param_usuario.picture }}
+        source={{ uri: param_usuario.picture ? param_usuario.picture : 'https://espaciotecno.bahia.gob.ar/images/isotipo.jpg' }}
         style={{
           height: 150,
           width: 150,
+          overflow: "hidden",
+    borderWidth: 4,
+    borderColor: "white",
           borderRadius: 150,
           alignSelf: "center",
         }}
-      />
-      <View style={styles.header}>
-        <FontAwesome name="book" size={24} />
-        <Text style={styles.title_perfil}>Mis Cursos</Text>
-        <FontAwesome name="book" size={24} />
-      </View>
+      /></ImageBackground>
+      
 
-      <View style={styles.paneltab}>
+      {/* <View style={styles.paneltab}>
         <View style={{ flexDirection: "row" }}>
           <FontAwesome name="heart" size={18} />
           <TouchableOpacity
@@ -97,7 +101,7 @@ export default function Perfil({ route }) {
           </TouchableOpacity>
         </View>
 
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", borderRadius: 5, }}>
           <FontAwesome name="edit" size={18} />
           <TouchableOpacity
             onPress={() => {
@@ -112,45 +116,81 @@ export default function Perfil({ route }) {
             <Text style={{ fontSize: 18, marginLeft: 5 }}>Editar Perfil</Text>
           </TouchableOpacity>
         </View>
-      </View>
+          </View> */}
+
+          <TouchableOpacity onPress={() => {
+              Alert.alert('Ups! Estamos trabajando...', 'Proximamente vas a poder editar tu perfil en segundos ;)')
+            }} style={{flexDirection: "row",
+          backgroundColor: "rgba(0, 0, 0, 0.08)",
+          padding: 20,
+          width: width-40,
+          borderRadius: 20,
+          justifyContent: 'space-between',
+          alignItems: "center",
+          marginTop: 10,}}>
+            <View style={{flexDirection: "row"}}>
+            <FontAwesome name="user-o" size={18} />
+            <Text style={{marginLeft: 12 ,color: 'black', fontSize: 14, fontWeight: 'bold'}}>Editar Perfil</Text></View>
+            <View>
+            <FontAwesome name="angle-right" size={18} /></View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => {
+              navigation.navigate("Cate", { screen: "MisFavoritos" })
+            }}  style={{flexDirection: "row",
+          backgroundColor: "rgba(0, 0, 0, 0.08)",
+          padding: 20,
+          width: width-40,
+          borderRadius: 20,
+          justifyContent: 'space-between',
+          alignItems: "center",
+          marginTop: 10,}}>
+            <View style={{flexDirection: "row"}}>
+            <FontAwesome name="heart-o" size={18} />
+            <Text style={{marginLeft: 12 ,color: 'black', fontSize: 14, fontWeight: 'bold'}}>Favoritos</Text></View>
+            <View>
+            <FontAwesome name="angle-right" size={18} /></View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => {
+              navigation.navigate("Cate", { screen: "MisCursos" })
+            }} style={{flexDirection: "row",
+          backgroundColor: "rgba(0, 0, 0, 0.08)",
+          padding: 20,
+          width: width-40,
+          borderRadius: 20,
+          justifyContent: 'space-between',
+          alignItems: "center",
+          marginTop: 10,}}>
+            <View style={{flexDirection: "row"}}>
+            <FontAwesome name="calendar-o" size={18} />
+            <Text style={{marginLeft: 12 ,color: 'black', fontSize: 14, fontWeight: 'bold'}}>Cursos</Text></View>
+            <View>
+            <FontAwesome name="angle-right" size={18} /></View>
+          </TouchableOpacity>
+          
 
 
       <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("Principal", {
-                param_nombre: param_usuario.nombre,
-                param_apellido: param_usuario.apellido,
-                param_dni: param_usuario.numero_documento,
-                param_avatar: param_usuario.picture,
-              });
-            }}
-          >
-            <Text style={{ fontSize: 18, marginLeft: 5 }}>Volver</Text>
-          </TouchableOpacity>
-
-      {mostrarCursos && (
-        <FlatList
-          data={cursos}
-          renderItem={({ item }) => (
-            <Curso
-              nombre={item.nombre}
-              subtitulo={item.subtitulo}
-              descripcion={item.descripcion}
-              carga={item.carga_horaria_hs}
-              fecha={item.fecha_inicio}
-              profesor={item.profesor}
-            />
-          )}
-          keyExtractor={(item) => item.nombre}
-        />
-      )}
-      <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => {AsyncStorage.clear()}}
+                style={{flexDirection: "row",
+                backgroundColor: "rgba(0, 0, 0, 0.08)",
+                padding: 20,
+                width: width-40,
+                borderRadius: 20,
+                justifyContent: 'space-between',
+                alignItems: "center",
+                marginTop: 10,}}
+                onPress={() => {AsyncStorage.clear(), navigation.replace("LoginNavegacion");}}
               >
-                <Text style={styles.textStyle}>Cerrar sesion</Text>
-              </Pressable>
-      
+                <View style={{flexDirection: "row"}}>
+            <FontAwesome name="external-link" size={18} />
+            <Text style={{marginLeft: 12 ,color: 'black', fontSize: 14, fontWeight: 'bold'}}>Cerrar sesion</Text></View>
+            <View>
+            <FontAwesome name="angle-right" size={18} /></View>
+              </TouchableOpacity>
+          <TouchableOpacity  onPress={() => Linking.openURL('https://digital.bahia.gob.ar/')}>
+              <Image  source={{ uri: 'https://digital.bahia.gob.ar/espaciotecno/LOGO-APP.gif' }} style={{width: width/1.5, height: 120}} resizeMode="contain" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -161,6 +201,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     fontWeight: "bold",
     fontSize: 20,
+    color: 'white',
     fontFamily: "Roboto",
     textAlign: "center",
   },
