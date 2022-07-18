@@ -42,7 +42,8 @@ export default function Recuperar() {
       data: formData,
     }).then((result) => {
       if (result.status === 200) {
-        navigation.navigate("LoginNavegacion", {screen: 'PantallaToken'})
+        Alert.alert('Genial!', 'Te enviamos un acceso de recupero de contraseña en tu email ;)')
+        // navigation.navigate("LoginNavegacion", {screen: 'PantallaToken'})
       }
     });
   };

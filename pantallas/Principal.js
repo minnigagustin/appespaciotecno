@@ -86,12 +86,16 @@ export default function Principal({ route }) {
   const [modalInfo, setModalInfo] = useState(false);
   const [modalCalendario, setModalCalendario] = useState(false);
   const [modalHorarios, setModalHorarios] = useState(false);
+  const [fechadate, setFecha] = useState('')
   const [modalConfirmado, setModalConfirmado] = useState(false);
 
   const [isLogged, setIsLogged] = useState(global.authenticated);
-
+  const [diasdictado, setDiasDictado] = useState([]);
   const [catg, setCatg] = useState(0);
   const [selectcatg, setselectCatg] = useState(0);
+  const [horaseleccionada, sethoraseleccionada] = useState('')
+
+  const [selectHorario, setSelectHorario] = useState(0)
 
   const [dia, setDia] = useState([]);
 
@@ -157,7 +161,11 @@ export default function Principal({ route }) {
     const traduccion = {
       dia: nombreDia,
       mes: nombreMes,
+      numero: item.day,
+      year: item.year
     };
+    console.log(traduccion)
+    setFecha(item.dateString);
     const cursos = BASE_URL + "cursosbyfecha/?fecha=" + item.dateString;
     axiosLoggedInConfig().get(cursos).then((res) => {
       const cursos = res.data;
@@ -173,6 +181,68 @@ export default function Principal({ route }) {
     setDia(traduccion);
     setModaldata(item);
   };
+
+  const onClickHora = () => {
+    const dias = [
+      "Lunes",
+      "Martes",
+      "Miercoles",
+      "Jueves",
+      "Viernes",
+      "Sabado",
+      "Domingo",
+    ];
+
+    const monthNames = [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
+    ];
+    const numeroDia = new Date(fecha).getDay();
+    const numeroMes = new Date(fecha).getMonth();
+    const nombreDia = dias[numeroDia];
+    const nombreMes = monthNames[numeroMes];
+    const traduccion = {
+      dia: nombreDia,
+      mes: nombreMes,
+      numero: fecha.day,
+      year: fecha.year
+    };
+    const id = catg;
+    setModalLoading(true);
+    // this.setState({modalLoading: true, dia: traduccion});
+    const curso = BASE_URL + "horarioscursobyfechaandcursoid/?id_curso=" + id + "&fecha=" + fechadate;
+    axiosLoggedInConfig().get(curso).then((res) => {
+      setDiasDictado(res.data);
+      console.log(diasdictado);
+      setModal(false);
+      setModalHorarios(true);
+      setModalLoading(false);
+  });
+  }
+
+  const onClickRegistrado = () => {
+    const curso = BASE_URL + "inscripto/";
+    const comisionid = selectHorario;
+    console.log(comisionid);
+    axiosLoggedInConfig().post(curso, {comision: comisionid}).then((res) => {
+      console.log(res.data);
+      setModalHorarios(false);
+                setModalConfirmado(true); 
+
+  }).catch((err)=>{
+    Alert.alert('Ey! Ya estas inscripto', 'Ups, no te pudimos volver a inscribir ya que te inscribiste anteriormente')
+  })
+  }
 
   var today = new Date();
   const fecha = moment(today).format("YYYY-MM-DD");
@@ -206,9 +276,40 @@ export default function Principal({ route }) {
           setModalConfirmado(false);
         }}
       >
-        <TouchableOpacity onPressOut={() => setModalConfirmado(false)} activeOpacity={1} style={styles.centeredView}>
-          <View style={styles.modalView}>
-          
+        <View style={styles.centeredView}>
+          <View style={{ margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    paddingBottom: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,}}>
+          <ImageBackground
+          source={require("../assets/fondo-inscripcion.png")}
+          imageStyle={{ borderRadius: 20}}
+          style={{ resizeMode: "stretch", width: width-40, borderRadius: 20}}
+        >
+          <Image
+                source={{
+                  uri: modaldataInfo.picture
+                  ? modaldataInfo.picture
+                  : "http://espaciotecno.com.ar/img/espacio-tecno-bahia-blanca.png",
+                }}
+                resizeMode="contain"
+                style={{
+                  height: 100,
+                  width: 100,
+                  marginVertical: 40,
+                  alignSelf: "center",
+                }}
+              />
+        </ImageBackground>
             <Text
               style={{
                 textAlign: "center",
@@ -219,26 +320,68 @@ export default function Principal({ route }) {
                 color: 'green'
               }}
             >
-              ¡Curso registrado!
+              ¡Felicitaciones!
             </Text>
             <Text
               style={{
                 textAlign: "center",
-                fontSize: width / 23,
+                fontSize: width / 20,
                 marginHorizontal: 20,
+                marginHorizontal: 30,
+                color: '#282828',
                 marginTop: 5,
+              }}
+            >
+              Ya estás inscripto a
+            </Text>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: width / 20,
+                marginHorizontal: width/6,
+                color: '#282828',
+                fontWeight: 'bold'
               }}
             >
               {modaldataInfo.nombre}
             </Text>
-            <FontAwesome
-          name="check"
-          size={50}
-          color="green"
-        />
-            
+            <View style={{
+   borderBottomColor: '#282828',
+   marginVertical: 14,
+   borderBottomWidth: 0.8, 
+   width: width/2,}}>
+</View>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: width / 20,
+                marginHorizontal: 20,
+                color: '#282828',
+              }}
+            >
+              <Text style={{fontWeight: 'bold'}}>{dia.dia} {dia.numero} de {dia.mes}</Text> de {dia.year}
+            </Text>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: width / 20,
+                color: '#282828',
+                marginHorizontal: 20,
+              }}
+            >
+              Turno {horaseleccionada > '09:00:00' && horaseleccionada < '13:00:00' ? 'mañana' : 'tarde'
+              } | <Text style={{fontWeight: 'bold'}}>{moment(horaseleccionada, "H:mm:ss").format("HH:mm")}Hs</Text>
+            </Text>
+            <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() =>
+                  setModalConfirmado(false)
+                }
+              >
+                <Text style={styles.textStyle}>{"< "}VOLVER</Text>
+              </Pressable>
           </View>
-        </TouchableOpacity>
+        </View>
       </Modal>
 
       <Modal
@@ -278,7 +421,7 @@ export default function Principal({ route }) {
                   padding: 3,
                   marginVertical: 20,
                 }}
-              >
+              >{diasdictado.find((cat) => cat.dia_comision.horario_inicio > '09:00:00' && cat.dia_comision.horario_inicio < '13:00:00') && (
                 <View style={{ marginHorizontal: 10 }}>
                   <Text
                     style={{
@@ -289,53 +432,35 @@ export default function Principal({ route }) {
                   >
                     Mañana
                   </Text>
+                  {diasdictado.filter((cat) => cat.dia_comision.horario_inicio > '09:00:00' && cat.dia_comision.horario_inicio < '13:00:00').map((item, i) => {
+                  return (
                   <TouchableOpacity
-                    onPress={() => setselectCatg(1)}
+                    onPress={() => { setSelectHorario(item.comision_id), sethoraseleccionada(item.dia_comision.horario_inicio)}}
                   >
                     <Text
                       style={{
                         fontWeight: "bold",
                         fontSize: 24,
                         backgroundColor:
-                          selectcatg=== 1
+                          selectHorario === item.comision_id
                             ? "#0088c2"
                             : "transparent",
-                        color: selectcatg === 1 ? "white" : "gray",
+                        color: selectHorario === item.comision_id ? "white" : "gray",
                         paddingHorizontal: 8,
                         paddingVertical: 3,
                         marginTop: 5,
                         borderRadius: 6,
                       }}
                     >
-                      09:00Hs
+                      {moment(item.dia_comision.horario_inicio, "H:mm:ss").format("HH:mm")}Hs
                     </Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity>);
+                })}
 
-                  <TouchableOpacity
-                    onPress={() => setselectCatg(2)}
-                  >
-                    <Text
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: 24,
-                        color: selectcatg=== 2 ? "white" : "gray",
-                        backgroundColor:
-                          selectcatg === 2
-                            ? "#0088c2"
-                            : "transparent",
-                        paddingHorizontal: 8,
-                        paddingVertical: 3,
-                        marginTop: 5,
-                        borderRadius: 6,
-                      }}
-                    >
-                      12:30Hs
-                    </Text>
-                  </TouchableOpacity>
                 </View>
-
-                <View style={{ borderWidth: 0.3, borderColor: "black" }} />
-
+                )}
+                  <View style={{ borderWidth: 0.3, borderColor: "black" }} />
+                  {diasdictado.find((cat) => cat.dia_comision.horario_inicio > '12:59:00' && cat.dia_comision.horario_inicio < '23:59:00') && (
                 <View style={{ marginHorizontal: 10 }}>
                   <Text
                     style={{
@@ -346,57 +471,40 @@ export default function Principal({ route }) {
                   >
                     Tarde
                   </Text>
+                  {diasdictado.filter((cat) => cat.dia_comision.horario_inicio > '12:59:00' && cat.dia_comision.horario_inicio < '23:59:00').map((item, i) => {
+                  return (
                   <TouchableOpacity
-                    onPress={() => setselectCatg(3)}
+                  onPress={() => { setSelectHorario(item.comision_id), sethoraseleccionada(item.dia_comision.horario_inicio)}}
                   >
                     <Text
                       style={{
                         fontWeight: "bold",
                         fontSize: 24,
                         backgroundColor:
-                          selectcatg === 3
+                          selectHorario === item.comision_id
                             ? "#0088c2"
                             : "transparent",
-                        color: selectcatg === 3 ? "white" : "gray",
+                        color: selectHorario === item.comision_id ? "white" : "gray",
                         paddingHorizontal: 8,
                         paddingVertical: 3,
                         marginTop: 5,
                         borderRadius: 6,
                       }}
                     >
-                      16:30Hs
+                      {moment(item.dia_comision.horario_inicio, "H:mm:ss").format("HH:mm")}Hs
                     </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => setselectCatg(4)}
-                  >
-                    <Text
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: 24,
-                        color: selectcatg === 4 ? "white" : "gray",
-                        backgroundColor:
-                          selectcatg === 4
-                            ? "#0088c2"
-                            : "transparent",
-                        paddingHorizontal: 8,
-                        paddingVertical: 3,
-                        marginTop: 5,
-                        borderRadius: 6,
-                      }}
-                    >
-                      18:00Hs
-                    </Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity>);
+                })}
+                  
                 </View>
+                )}
               </View>
 
               <Pressable
                 style={[styles.button, styles.buttonClose, {marginTop: 2, backgroundColor:
-                  selectcatg > 0 ? "#0086bf" : "rgba(0, 0, 0, 0.15)"}]}
-                onPress={() => {setModalHorarios(false);
-                setModalConfirmado(true);}}
-                disabled={selectcatg === 0 ? true : false}
+                  selectHorario > 0 ? "#0086bf" : "rgba(0, 0, 0, 0.15)"}]}
+                onPress={() => {onClickRegistrado();}}
+                disabled={selectHorario === 0 ? true : false}
               >
                 <Text style={styles.textStyle}>INSCRIBIRME {">"}</Text>
               </Pressable>
@@ -529,8 +637,7 @@ export default function Principal({ route }) {
                   catg > 0 ? "#0086bf" : "rgba(0, 0, 0, 0.15)",
               },]}
               onPress={() => {
-                setModalInfo(true);
-                setModal(false);
+                onClickHora();
               }}
               disabled={catg === 0 ? true : false}
             >

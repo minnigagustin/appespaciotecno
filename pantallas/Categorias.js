@@ -631,70 +631,7 @@ this.state.dataFechas.forEach((val) => {
           </View>
         </Modal>
 
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalHoras}
-          onRequestClose={() => {
-            this.setState({ modalHoras: false });
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: width / 15,
-                  marginHorizontal: 20,
-                  marginTop: 0,
-                  fontWeight: "bold",
-                }}
-              >Arduino + bloques
-              </Text>
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: width / 23,
-                  marginHorizontal: 20,
-                  marginTop: 5,
-                }}
-              >
-                Por favor seleccioná la fecha en la cual quisieras asistir:
-              </Text>
-              <Calendar
-                enableSwipeMonths
-                minDate={fecha}
-                theme={{
-                  calendarBackground: "white",
-                  todayTextColor: "white",
-                  monthTextColor: "black",
-                  dayTextColor: "black",
-                  textMonthFontSize: 20,
-                  arrowColor: "black",
-                  dotColor: "black",
-                  todayTextColor: "#00789d",
-                  textDayHeaderFontSize: 20,
-                  textSectionTitleColor: "black",
-                  textMonthFontWeight: "bold",
-                  selectedDayTextColor: "white",
-                }}
-                // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-                // Handler which gets executed when visible month changes in calendar. Default = undefined
-                onMonthChange={(month) => {
-                  console.log("month changed", month);
-                }}
-                firstDay={1}
-                markedDates={markedDatesArray}
-              />
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => this.setState({ modalH: false })}
-              >
-                <Text style={styles.textStyle}>SIGUIENTE {">"}</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
+        
         <Image
           source={require("../assets/DESCUBRIR-VERTICAL-01.png")}
           resizeMode="contain"
