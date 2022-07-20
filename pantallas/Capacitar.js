@@ -180,7 +180,7 @@ this.state.dataFechas.forEach((val) => {
 
     return (
       <ImageBackground
-        source={require("../assets/FONDO-CAPACITAR.jpg")}
+        source={require("../assets/FONDO-CAPACITAR.webp")}
         style={{ width: "100%", height: "100%", flex: 1 }}
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1,}}>
@@ -520,7 +520,7 @@ this.state.dataFechas.forEach((val) => {
     shadowRadius: 4,
     elevation: 5,}}>
           <ImageBackground
-          source={require("../assets/fondo-inscripcion.png")}
+          source={require("../assets/fondo-inscripcion.webp")}
           imageStyle={{ borderRadius: 20}}
           style={{ resizeMode: "stretch", width: width-40, borderRadius: 20}}
         >
@@ -614,7 +614,7 @@ this.state.dataFechas.forEach((val) => {
       </Modal>
 
         <Image
-          source={require("../assets/CAPACITAR-CABEZAL.png")}
+          source={require("../assets/CAPACITAR-CABEZAL.webp")}
           resizeMode="contain"
           style={{
             width: scale(200),

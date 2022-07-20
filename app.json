@@ -4,15 +4,7 @@
     "slug": "EspacioTecno",
     "version": "1.0.0",
     "orientation": "portrait",
-    "plugins": [
-      [
-        "expo-image-picker",
-        {
-          "photosPermission": "Para escanear QR necesitamos permiso en tu celular."
-        }
-      ]
-    ],
-    "icon": "./assets/1024.png",
+    "icon": "./assets/icon.png",
     "updates": {
       "enabled": true,
       "checkAutomatically": "ON_LOAD",
@@ -26,15 +18,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/1024.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "ar.gob.bahia.espaciotecno",
-        "versionCode": 5,
+        "versionCode": 6,
         "permissions": ["CAMERA"]
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     }
   }
 }

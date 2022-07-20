@@ -258,15 +258,8 @@ export default function Principal({ route }) {
     <ScrollView style={{ backgroundColor: "white" }}>
       {/* COMIENZO MODALS  */}
 
-      <Modal
-        animationType="none"
-        transparent={true}
-        visible={modalLoading}
-      >
-        <View style={{flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",}}>
-        <Loading/></View>
-      </Modal>
+      
+        <Loading visible={modalLoading}/>
 
       <Modal
         animationType="slide"
@@ -291,7 +284,7 @@ export default function Principal({ route }) {
     shadowRadius: 4,
     elevation: 5,}}>
           <ImageBackground
-          source={require("../assets/fondo-inscripcion.png")}
+          source={require("../assets/fondo-inscripcion.webp")}
           imageStyle={{ borderRadius: 20}}
           style={{ resizeMode: "stretch", width: width-40, borderRadius: 20}}
         >
@@ -845,7 +838,7 @@ export default function Principal({ route }) {
           >
             <View>
               <Image
-                source={require("../assets/DESCUBRIRACCESO.png")}
+                source={require("../assets/DESCUBRIRACCESO.webp")}
                 style={{ width: 110, height: 110 }}
               />
             </View>
@@ -865,7 +858,7 @@ export default function Principal({ route }) {
           >
             <View>
               <Image
-                source={require("../assets/CAPACITARACCESO.png")}
+                source={require("../assets/CAPACITARACCESO.webp")}
                 style={{ width: 110, height: 110 }}
               />
             </View>
@@ -884,7 +877,7 @@ export default function Principal({ route }) {
           >
             <View>
               <Image
-                source={require("../assets/EMPRENDERACCESO.png")}
+                source={require("../assets/EMPRENDERACCESO.webp")}
                 style={{ width: 110, height: 110 }}
               />
             </View>

@@ -67,7 +67,7 @@ const eliminarCursos = (i) => {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center', backgroundColor: 'white' }}>
       <ImageBackground
-          source={require("../assets/fondo_login.jpg")}
+          source={require("../assets/fondo_login.webp")}
           imageStyle={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 100}}
           style={{ resizeMode: "stretch", width: width, paddingBottom: 20, borderRadius: 20}}
         >

@@ -24,7 +24,7 @@ function LogoTitle() {
   return (
     <Image
       style={{ width: 130, height: 50, marginLeft: -20 }}
-      source={require("./assets/LOGO-ESPACIOTECNO-HORIZONTAL-01.png")}
+      source={require("./assets/LOGO-ESPACIOTECNO-HORIZONTAL-01.webp")}
     />
   );
 } 

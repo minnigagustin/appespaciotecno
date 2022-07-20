@@ -56,14 +56,14 @@ export default function Recuperar() {
 
   return (
     <ImageBackground
-      source={require("../assets/fondo_login.jpg")}
+      source={require("../assets/fondo_login.webp")}
       style={{ resizeMode: "stretch", width: width, height: height }}
     >
       <View style={styles.container}>
         <Image
           style={styles.imagen_style}
           resizeMode="contain"
-          source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
+          source={require("../assets/ESPACIO-TECNO-LOGIN.webp")}
         />
 
         <Text

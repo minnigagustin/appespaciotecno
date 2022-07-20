@@ -22,9 +22,7 @@ export default class Home extends React.Component {
         this.props.navigation.replace("HomeInicio");
         }, 1000);
       } else {
-        setTimeout(() => {
         this.props.navigation.replace("LoginNavegacion");
-      }, 1000);
       }
     });
   }
@@ -39,7 +37,7 @@ export default class Home extends React.Component {
   render() {
     return (
       <ImageBackground
-      source={require("../assets/fondo_login.jpg")}
+      source={require("../assets/fondo_login.webp")}
       style={{ resizeMode: "stretch", width: width, height: height+30 }}>
       <View style={{justifyContent: 'center', //Centered horizontally
        alignItems: 'center', //Centered vertically

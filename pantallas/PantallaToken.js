@@ -12,7 +12,6 @@ import {
 import React from "react";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { ModalCambiarPsw } from "../modals/ModalCambiarPsw";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -41,14 +40,14 @@ export default function PantallaToken({}) {
 
   return (
     <ImageBackground
-      source={require("../assets/fondo_login.jpg")}
+      source={require("../assets/fondo_login.webp")}
       style={{ resizeMode: "stretch", width: width, height: height }}
     >
       <View style={styles.container}>
         <Image
           style={styles.imagen_style}
           resizeMode="contain"
-          source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
+          source={require("../assets/ESPACIO-TECNO-LOGIN.webp")}
         />
 
         <Text
@@ -83,9 +82,6 @@ export default function PantallaToken({}) {
           <Text style={styles.ingresar_text}>VERIFICAR CÓDIGO</Text>
         </TouchableOpacity>
 
-        {modalCambioPsw && (
-          <ModalCambiarPsw state = {modalCambioPsw}></ModalCambiarPsw>
-        )}
       </View>
     </ImageBackground>
   );

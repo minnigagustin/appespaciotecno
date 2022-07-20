@@ -358,7 +358,7 @@ export default function Login({ }) {
   }
   return (
     <ImageBackground
-      source={require("../assets/fondo_login.jpg")}
+      source={require("../assets/fondo_login.webp")}
       style={{ resizeMode: "stretch", width: width, height: height + 30 }}
     >
       <View style={styles.container}>
@@ -370,7 +370,7 @@ export default function Login({ }) {
             setModalVisible(!modalVisible);
           }}
         ><ImageBackground
-          source={require("../assets/fondo_login.jpg")}
+          source={require("../assets/fondo_login.webp")}
           style={{ resizeMode: "stretch", width: width, height: height + 30 }}
         >
             <View style={styles.centeredView}>
@@ -442,7 +442,7 @@ export default function Login({ }) {
             setModalDocumento(!modalDocumento);
           }}
         ><ImageBackground
-          source={require("../assets/fondo_login.jpg")}
+          source={require("../assets/fondo_login.webp")}
           style={{ resizeMode: "stretch", width: width, height: height + 30 }}
         >
             <View style={styles.centeredView}>
@@ -505,7 +505,7 @@ export default function Login({ }) {
           <Image
             style={styles.imagen_style}
             resizeMode="contain"
-            source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
+            source={require("../assets/ESPACIO-TECNO-LOGIN.webp")}
           />
           <TextInput
             style={styles.input_style}

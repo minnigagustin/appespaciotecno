@@ -187,21 +187,13 @@ this.state.dataFechas.forEach((val) => {
 
     return (
       <ImageBackground
-        source={require("../assets/FONDO-DESCUBRIR.jpg")}
+        source={require("../assets/FONDO-DESCUBRIR.webp")}
         style={{ width: "100%", height: "100%" }}
       >
         <ScrollView  contentContainerStyle={{ flexGrow: 1,}}>
         {/* CONFIRMACION */}
 
-        <Modal
-        animationType="none"
-        transparent={true}
-        visible={this.state.modalLoading}
-      >
-        <View style={{flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",}}>
-        <Loading/></View>
-      </Modal>
+        <Loading visible={this.state.modalLoading}/>
 
         <Modal
         animationType="slide"
@@ -226,7 +218,7 @@ this.state.dataFechas.forEach((val) => {
     shadowRadius: 4,
     elevation: 5,}}>
           <ImageBackground
-          source={require("../assets/fondo-inscripcion.png")}
+          source={require("../assets/fondo-inscripcion.webp")}
           imageStyle={{ borderRadius: 20}}
           style={{ resizeMode: "stretch", width: width-40, borderRadius: 20}}
         >
@@ -633,7 +625,7 @@ this.state.dataFechas.forEach((val) => {
 
         
         <Image
-          source={require("../assets/DESCUBRIR-VERTICAL-01.png")}
+          source={require("../assets/DESCUBRIR-VERTICAL-01.webp")}
           resizeMode="contain"
           style={{
             width: scale(200),
@@ -656,7 +648,7 @@ this.state.dataFechas.forEach((val) => {
               onPress={() =>
                 this.setState({ multimedia: !this.state.multimedia })
               }
-              img={require("../assets/fondo-multimedia.png")}
+              img={require("../assets/fondo-multimedia.webp")}
               title="MULTIMEDIA"
               bg="#FFFFFF"
               activado={this.state.multimedia}
@@ -681,7 +673,7 @@ this.state.dataFechas.forEach((val) => {
               onPress={() =>
                 this.setState({ fabricacion: !this.state.fabricacion })
               }
-              img={require("../assets/fondo-fabricacion.png")}
+              img={require("../assets/fondo-fabricacion.webp")}
               title="FABRICACIÓN"
               bg="#F3D64D"
               activado={this.state.fabricacion}
@@ -705,7 +697,7 @@ this.state.dataFechas.forEach((val) => {
 
             <CategoriasList
               onPress={() => this.setState({ minilab: !this.state.minilab })}
-              img={require("../assets/fondo-minilab.png")}
+              img={require("../assets/fondo-minilab.webp")}
               title="MINILAB"
               bg="#7E4487"
               activado={this.state.minilab}
@@ -729,7 +721,7 @@ this.state.dataFechas.forEach((val) => {
 
             <CategoriasList
               onPress={() => this.setState({ ciencias: !this.state.ciencias })}
-              img={require("../assets/fondo-ciencia.png")}
+              img={require("../assets/fondo-ciencia.webp")}
               title="CIENCIAS"
               bg="#F2D94B"
               activado={this.state.ciencias}
@@ -753,7 +745,7 @@ this.state.dataFechas.forEach((val) => {
 
             <CategoriasList
               onPress={() => this.setState({ sonidos: !this.state.sonidos })}
-              img={require("../assets/fondo-sonidos.png")}
+              img={require("../assets/fondo-sonidos.webp")}
               title="SONIDOS"
               bg="#E2004B"
               activado={this.state.sonidos}

@@ -66,7 +66,7 @@ export default function Perfil({ route }) {
   return (
     <View style={{flex: 1, backgroundColor: 'white', alignItems: 'center'}}>
       <ImageBackground
-          source={require("../assets/fondo_login.jpg")}
+          source={require("../assets/fondo_login.webp")}
           imageStyle={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 100}}
           style={{ resizeMode: "stretch", width: width, paddingBottom: 20, borderRadius: 20}}
         >

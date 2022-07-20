@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
   Modal,
+  Animated,
   ScrollView,
   ActivityIndicator,
   Alert,
@@ -26,7 +27,6 @@ import { Entypo } from "react-native-vector-icons"
 
 import axios from "axios";
 
-import { ModalRegistroOk } from "../modals/ModalRegistroOk";
 
 import { BASE_URL, axiosLoggedOutConfig, axiosLoggedInConfig } from "../api";
 
@@ -56,6 +56,10 @@ export default function Registro() {
   const [loading, setLoading] = useState(false);
 
   const [modalOk, setModalOk] = useState(false);
+  const [animationLineHeight, setAnimationLineHeight] = useState(0)
+  const [focusLineAnimation, setFocusLineAnimation] = useState(
+    new Animated.Value(0),
+  )
 
   const navigation = useNavigation();
 
@@ -176,7 +180,22 @@ export default function Registro() {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
+    animateLine();
   }, []);
+
+  const animateLine = () => {
+    Animated.sequence([
+      Animated.timing(focusLineAnimation, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: false,
+      }), Animated.timing(focusLineAnimation, {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: false,
+      }),
+    ]).start(animateLine)
+  }
 
   const handleBarCodeScanned = ({ data }) => {
     setDni(data.split('@')[4]);
@@ -195,43 +214,82 @@ export default function Registro() {
 
   return (
     <ImageBackground
-      source={require("../assets/fondo_login.jpg")}
+      source={require("../assets/fondo_login.webp")}
       style={{ resizeMode: "stretch", width: width, height: height+30 }}
     >
         <ScrollView>
         <Modal
-        animationType="slide"
-        visible={modalVisible}
+          animationType="slide"
+          visible={modalVisible}
         onRequestClose={() => {
           Alert.alert("Login cancelado", "No ingresaste tu DNI");
           setModalVisible(!modalVisible);
         }}
-      ><ImageBackground
-      source={require("../assets/fondo_login.jpg")}
-      style={{ resizeMode: "stretch", width: width, height: height + 30 }}
-    >
-        <View style={styles.centeredView}>
-        <Text style={{color: "white",
-    fontSize: width/20,
-    marginBottom: 20,
-    textAlign: "center",
-    fontFamily: "Roboto",}}>Ingresa tu <Text style={{fontWeight: 'bold', color: 'white'}}>DNI</Text></Text>
-          <View style={[styles.modalView, {
-    backgroundColor: escanea ? "white" : null,}]}>
-            <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={{height: width*0.80, width: width*0.65}}
-      />
-         
-          </View>
+        ><ImageBackground
+          source={require("../assets/fondo_login.webp")}
+          style={{ resizeMode: "stretch", width: width, height: height + 30 }}
+        >
+            <View style={styles.centeredView}>
+              <Text style={{
+                color: "white",
+                fontSize: width / 20,
+                marginBottom: 20,
+                textAlign: "center",
+                fontFamily: "Roboto",
+              }}>Escanea tu <Text style={{ fontWeight: 'bold', color: 'white' }}>DNI</Text></Text>
+              <View style={[styles.modalView, {
+                backgroundColor: escanea ? "white" : null,
+              }]}>
+                <BarCodeScanner
+                  onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                  barCodeTypes={[
+                    BarCodeScanner.Constants.BarCodeType.pdf417
+                  ]}
+                  style={{ width: 1000, height: 1000 }}
+                />
+                <View style={styles.overlay}>
+                  <View style={styles.unfocusedContainer}></View>
+                  <View style={styles.middleContainer}>
+                    <View style={styles.unfocusedContainer}></View><View
+                      onLayout={e => setAnimationLineHeight(e.nativeEvent.layout.height)}
+                      style={styles.focusedContainer}><Text style={{
+                color: "white",
+                fontSize: width / 20,
+                textAlign: "center",
+                top: 15,
+                justifyContent: 'center',
+                elevation: 3, position: 'absolute',
+                fontFamily: "Roboto",
+              }}>Escanea tu <Text style={{ fontWeight: 'bold', color: 'white' }}>DNI</Text></Text>
+                      {!scanned && (
+                        <Animated.View
+                          style={[
+                            styles.animationLineStyle,
+                            {
+                              transform: [
+                                {
+                                  translateY: focusLineAnimation.interpolate({
+                                    inputRange: [0, 1],
+                                    outputRange: [0, animationLineHeight],
+                                  }),
+                                },
+                              ],
+                            },
+                          ]}
+                        />
+                      )}
+                    </View><View style={styles.unfocusedContainer}></View></View><View style={styles.unfocusedContainer}></View></View>
 
-        </View>
-        </ImageBackground>
-      </Modal>
+              </View>
+            </View>
+          </ImageBackground>
+        </Modal>
+        
+
           <Image
             style={styles.imagen_style}
             resizeMode="contain"
-            source={require("../assets/ESPACIO-TECNO-LOGIN.png")}
+            source={require("../assets/ESPACIO-TECNO-LOGIN.webp")}
           /><TouchableOpacity onPress={() => setModalVisible(true)} style={{borderRadius: 30,
             borderColor: "black",
             paddingVertical: 6,
@@ -389,13 +447,7 @@ export default function Registro() {
             )}
         </ScrollView>
       {loading && <ActivityIndicator size="small" color="#0000ff" />}
-      {modalOk && (
-        <ModalRegistroOk
-          state={modalOk}
-          restore={restoreModalOk}
-          user={formData}
-        />
-      )}
+      
     </ImageBackground>
   );
 }
@@ -529,5 +581,10 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center"
-  }
+  },
+  overlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, }, unfocusedContainer: { flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', }, middleContainer: { flexDirection: 'row', flex: 0.5, }, focusedContainer: { flex: 6, }, animationLineStyle: {
+    height: 4, width: '100%', backgroundColor: 'red',
+    elevation:20,
+    color: 'red'
+  }, rescanIconContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', },
 });

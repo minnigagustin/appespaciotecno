@@ -48,12 +48,12 @@ export default class Cources extends React.Component {
 
     return (
       <ImageBackground
-        source={require("../assets/EMPRENDER-FONDO.jpg")}
+        source={require("../assets/EMPRENDER-FONDO.webp")}
         style={{ width: "100%", height: "100%" }}
       >
 
         <Image
-          source={require("../assets/EMPRENDER-CABEZAL.png")}
+          source={require("../assets/EMPRENDER-CABEZAL.webp")}
           resizeMode="contain"
           style={{
             width: scale(200),
@@ -69,7 +69,7 @@ export default class Cources extends React.Component {
 
 <CategoriasList
               onPress={() => Linking.openURL('https://espaciotecno.bahia.gob.ar/#emprender')}
-              img={require("../assets/fondo-emprender.png")}
+              img={require("../assets/fondo-emprender.webp")}
               title="¡EMPRENDER!"
               bg="white"
             />
