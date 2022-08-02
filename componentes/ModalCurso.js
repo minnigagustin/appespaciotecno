@@ -9,42 +9,64 @@ const height = Dimensions.get("window").height;
 export default function curso(props) {
   return (
 
-    <View style={styles.divpadre}>
-      <View style={styles.div}>
-        <FontAwesome
-          name="calendar-check-o"
-          size={20}
-          color="#fff"
-          style={{ top: 5, left: 5, position: "absolute" }}
-        />
-        <FontAwesome
-          name="heart"
-          size={20}
-          color="#fff"
-          style={{ top: 5, right: 10, position: "absolute" }}
-        />
-        <View style={{ left: -15, marginBottom: 5 }}>
-          <Text style={{ fontWeight: "bold", fontSize: 24 }}>
-            {props.nombre}
-          </Text>
-          <Text style={{ fontWeight: "500", fontSize: 20 }}>
-            {props.subtitulo}
-          </Text>
-        </View>
-        <Text style={{ fontWeight: "300", fontSize: 14 }}>
-          Descripcion:{props.descripcion}
-        </Text>
-        <Text style={{ fontWeight: "300", fontSize: 14 }}>
-          Carga horaria: {props.carga}
-        </Text>
-        <Text style={{ fontWeight: "300", fontSize: 14 }}>
-          Profesor: {props.profesor}
-        </Text>
-      </View>
-      <View style={styles.divlargo}>
-        <Text style={{ fontWeight: "bold", fontSize: 20 }}>{props.fecha}</Text>
-      </View>
-    </View>
+    <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.modalOk}
+          onRequestClose={() => {
+            this.setState({ modalOk: false });
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}><TouchableOpacity onPress={() => {
+            this.addFavorite();
+          }} style={{position: 'absolute', right: 10, top: 10, backgroundColor: 'white', borderRadius: 30, padding: 5, justifyContent: 'center', alignItems: 'center'}}><FontAwesome
+        name={this.state.favoritos ? 'heart' : 'heart-o'}
+        color={this.state.favoritos ? 'red' : 'black'}
+        size={30}
+      /></TouchableOpacity>
+              <Image
+                source={{
+                  uri: this.state.dataModal.picture
+                    ? this.state.dataModal.picture
+                    : "http://espaciotecno.com.ar/img/espacio-tecno-bahia-blanca.png",
+                }}
+                resizeMode="contain"
+                style={{ width: 100, height: 100, borderRadius: 10 }}
+              />
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: (width / 15)-2,
+                  marginHorizontal: 20,
+                  marginTop: 8,
+                  fontWeight: "bold",
+                }}
+              >{this.state.dataModal.nombre}
+              </Text>
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: width / 23,
+                  marginHorizontal: 20,
+                  color: 'gray',
+                  marginTop: 5,
+                }}
+              >
+                {this.state.dataModal.descripcion}
+              </Text>
+
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() =>
+                  this.setState({ modalOk: false, modalVisible: true })
+                }
+              >
+                <Text style={styles.textStyle}>INSCRIBIRME {">"}</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
   );
 }
 

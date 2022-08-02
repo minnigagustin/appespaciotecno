@@ -349,13 +349,6 @@ export default function Login({ }) {
 
     );
   };
-
-  if (hasPermission === null) {
-    return <Text>Admita el permiso a la camara</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>Sin acceso a camara</Text>;
-  }
   return (
     <ImageBackground
       source={require("../assets/fondo_login.webp")}

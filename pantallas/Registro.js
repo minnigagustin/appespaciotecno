@@ -205,12 +205,6 @@ export default function Registro() {
     setModalVisible(false);
   };
 
-  if (hasPermission === null) {
-    return <Text>Admita el permiso a la camara</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>Sin acceso a camara</Text>;
-  }
 
   return (
     <ImageBackground

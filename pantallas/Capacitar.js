@@ -5,7 +5,6 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  Modal,
   Dimensions,
   StyleSheet,
   Pressable,
@@ -14,9 +13,11 @@ import {
 } from "react-native";
 import { Modalize } from "react-native-modalize";
 import CourseList from "../componentes/CourseList";
+import Modal from "react-native-modal";
 import axios from "axios";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Loading from "./Loading";
 import CategoriasList from "../componentes/CategoriasList";
 import { BASE_URL, axiosLoggedInConfig } from "../api";
 import { FontAwesome } from "react-native-vector-icons";
@@ -53,10 +54,11 @@ export default class Cources extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({ modalLoading: true });
     const cursos = BASE_URL + "curso/";
     axiosLoggedInConfig().get(cursos).then((res) => {
       const cursos = res.data.filter((cat) => cat.origen.id === 2);
-      this.setState({ categorias: cursos });
+      this.setState({ categorias: cursos, modalLoading: false });
       console.log(cursos);
     });
   }
@@ -184,10 +186,15 @@ this.state.dataFechas.forEach((val) => {
         style={{ width: "100%", height: "100%", flex: 1 }}
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1,}}>
+        <Loading visible={this.state.modalLoading}/>
         <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalOk}
+        isVisible={this.state.modalOk}
+        animationIn="bounceInUp"
+                animationOut="slideOutRight"
+                backdropTransitionOutTiming={0}
+                onBackdropPress={() => {
+                  this.setState({modalOk: false});
+                }}
           onRequestClose={() => {
             this.setState({ modalOk: false });
           }}
@@ -243,9 +250,13 @@ this.state.dataFechas.forEach((val) => {
         </Modal>
 
         <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalHorarios}
+          isVisible={this.state.modalHorarios}
+          animationIn="bounceInUp"
+                  animationOut="slideOutRight"
+                  backdropTransitionOutTiming={0}
+                  onBackdropPress={() => {
+                    this.setState({modalHorarios: false});
+                  }}
           onRequestClose={() => {
             this.setState({ modalHorarios: false });
           }}
@@ -371,9 +382,13 @@ this.state.dataFechas.forEach((val) => {
         </Modal>
 
         <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalVisible}
+          isVisible={this.state.modalVisible}
+          animationIn="bounceInUp"
+                  animationOut="slideOutRight"
+                  backdropTransitionOutTiming={0}
+                  onBackdropPress={() => {
+                    this.setState({modalVisible: false});
+                  }}
           onRequestClose={() => {
             this.setState({ modalVisible: false });
           }}
@@ -434,9 +449,13 @@ this.state.dataFechas.forEach((val) => {
         </Modal>
 
         <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalHoras}
+          isVisible={this.state.modalHoras}
+          animationIn="bounceInUp"
+                  animationOut="slideOutRight"
+                  backdropTransitionOutTiming={0}
+                  onBackdropPress={() => {
+                    this.setState({modalHoras: false});
+                  }}
           onRequestClose={() => {
             this.setState({ modalHoras: false });
           }}
@@ -498,9 +517,13 @@ this.state.dataFechas.forEach((val) => {
           </View>
         </Modal>
         <Modal
-        animationType="slide"
-        transparent={true}
-        visible={this.state.modalConfirmadoCheck}
+        isVisible={this.state.modalConfirmadoCheck}
+        animationIn="bounceInUp"
+                animationOut="slideOutRight"
+                backdropTransitionOutTiming={0}
+                onBackdropPress={() => {
+                  this.setState({modalConfirmadoCheck: false});
+                }}
         onRequestClose={() => {
           this.setState({modalConfirmadoCheck: false});
         }}
@@ -663,7 +686,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalView: {
     margin: 20,

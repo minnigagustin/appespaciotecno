@@ -1,0 +1,22 @@
+diff --git a/node_modules/react-native-svg-animations/components/AnimatedSVGPaths/index.js b/node_modules/react-native-svg-animations/components/AnimatedSVGPaths/index.js
+index 618b81c..b63e428 100644
+--- a/node_modules/react-native-svg-animations/components/AnimatedSVGPaths/index.js
++++ b/node_modules/react-native-svg-animations/components/AnimatedSVGPaths/index.js
+@@ -59,7 +59,7 @@ class AnimatedSVGPaths extends Component {
+           strokeColor={strokeColor}
+           duration={duration}
+           delay={delay}
+-          scale={scale}
++          scale={0.38}
+           fill={fill}
+           key={index}
+           loop={loop}
+@@ -70,7 +70,7 @@ class AnimatedSVGPaths extends Component {
+     });
+ 
+     return (
+-      <Svg height={height * scale + 5} width={width * scale + 5}>
++      <Svg height="50%" width="50%" viewBox="0 0 100 100">
+         {svgPaths}
+       </Svg>
+     );

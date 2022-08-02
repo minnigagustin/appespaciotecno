@@ -7,6 +7,7 @@ import React, { useEffect } from "react";
 import Curso from "../componentes/curso";
 
 import { useState } from "react";
+import Loading from "./Loading";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -31,6 +32,7 @@ export default function Perfil({ route }) {
   const [asistencia, setAsistencia] = useState(0);
   const [perfil, setPerfil] = useState([]);
   const [mostrarCursos, setMostrarCursos] = useState(false);
+  const [modalLoading, setModalLoading] = useState(false);
 
   const abrirFavoritos = () => {
     getCursos();
@@ -53,6 +55,7 @@ export default function Perfil({ route }) {
     });
   };
   useEffect(() => {
+    setModalLoading(true);
   AsyncStorage.getItem("perfil").then((perfil) => {
     if (perfil !== null) {
       const perfilparse = JSON.parse(perfil);
@@ -63,6 +66,7 @@ export default function Perfil({ route }) {
       const cursos = res.data;
       setCursos(cursos);
       console.log(cursos);
+      setModalLoading(false);
     });
     const asistencia = BASE_URL + "porcentajeasistenciacursos/";
     axiosLoggedInConfig().get(asistencia).then((res) => {
@@ -78,6 +82,7 @@ export default function Perfil({ route }) {
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center', backgroundColor: 'white' }}>
+      <Loading visible={modalLoading}/>
       <ImageBackground
           source={require("../assets/fondo_login.webp")}
           imageStyle={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 100}}
@@ -108,7 +113,7 @@ export default function Perfil({ route }) {
     
 
           {cursos.map((item, key)=>{
-        return(<View style={{width: width-40,
+        return(<View key={key} style={{width: width-40,
           borderRadius: 10,padding: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'white', elevation: 4, marginTop: 10}}>
             <View>
             <Image source={{ uri: 'https://tecnotest.bahia.gob.ar' + item.picture }}

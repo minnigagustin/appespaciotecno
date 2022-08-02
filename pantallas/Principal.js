@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  Modal,
   StyleSheet,
   Pressable,
   Dimensions,
@@ -20,7 +19,7 @@ import { BASE_URL, axiosLoggedInConfig } from "../api";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import moment from "moment";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
-
+import Modal from "react-native-modal";
 import global from "../componentes/global";
 import Loading from "./Loading";
 import axios from "axios";
@@ -88,12 +87,13 @@ export default function Principal({ route }) {
   const [modalHorarios, setModalHorarios] = useState(false);
   const [fechadate, setFecha] = useState('')
   const [modalConfirmado, setModalConfirmado] = useState(false);
-
+  const [dataFechas, setDataFechas] = useState([]);
   const [isLogged, setIsLogged] = useState(global.authenticated);
   const [diasdictado, setDiasDictado] = useState([]);
   const [catg, setCatg] = useState(0);
   const [selectcatg, setselectCatg] = useState(0);
   const [horaseleccionada, sethoraseleccionada] = useState('')
+  const [modalFechas, setModalFechas] = useState(false);
 
   const [selectHorario, setSelectHorario] = useState(0)
 
@@ -129,6 +129,8 @@ export default function Principal({ route }) {
   const abrirmodal = (item) => {
     setModalLoading(true);
     setCursosFechas([]);
+    setCatg(0);
+setModaldataInfo([]);
 
     const dias = [
       "Lunes",
@@ -207,6 +209,8 @@ export default function Principal({ route }) {
       "Noviembre",
       "Diciembre",
     ];
+    setSelectHorario(0);
+    sethoraseleccionada('');
     const numeroDia = new Date(fecha).getDay();
     const numeroMes = new Date(fecha).getMonth();
     const nombreDia = dias[numeroDia];
@@ -230,6 +234,55 @@ export default function Principal({ route }) {
   });
   }
 
+  const onClickHoraModal = (fecha, id) => {
+    const dias = [
+      "Lunes",
+      "Martes",
+      "Miercoles",
+      "Jueves",
+      "Viernes",
+      "Sabado",
+      "Domingo",
+    ];
+
+    const monthNames = [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
+    ];
+    const numeroDia = new Date(fecha).getDay();
+    const numeroMes = new Date(fecha).getMonth();
+    const nombreDia = dias[numeroDia];
+    const nombreMes = monthNames[numeroMes];
+    setSelectHorario(0);
+    sethoraseleccionada('');
+    const traduccion = {
+      dia: nombreDia,
+      mes: nombreMes,
+      numero: fecha.day,
+      year: fecha.year
+    };
+    setDia(traduccion);
+    setModalLoading(true);
+    const curso = BASE_URL + "horarioscursobyfechaandcursoid/?id_curso=" + id + "&fecha=" + fecha.dateString;
+    axiosLoggedInConfig().get(curso).then((res) => {
+      setDiasDictado(res.data);
+      console.log(diasdictado);
+      setModalFechas(false);
+      setModalHorarios(true);
+      setModalLoading(false);
+  });
+  }
+
   const onClickRegistrado = () => {
     const curso = BASE_URL + "inscripto/";
     const comisionid = selectHorario;
@@ -244,6 +297,18 @@ export default function Principal({ route }) {
   })
   }
 
+  const buscarFecha = (data) => {
+    setModalLoading(true);
+    const curso = BASE_URL + "fechasdictadobycursoid/?id_curso=" + data.id;
+    axiosLoggedInConfig().get(curso).then((res) => {
+      console.log(res.data)
+      setModaldataInfo(data);
+      setDataFechas(res.data);
+      setModalFechas(true);
+      setModalLoading(false);
+  });
+  }
+
   var today = new Date();
   const fecha = moment(today).format("YYYY-MM-DD");
   const markedDatesArray = {
@@ -254,6 +319,11 @@ export default function Principal({ route }) {
     [fecha]: { selected: true, selectedColor: "#055c6e" },
   };
 
+  let markedDatesCursosArray = {};
+dataFechas.forEach((val) => {
+  markedDatesCursosArray[val] = { selected: true, selectedColor: "#00789d", disableTouchEvent: false };
+});
+
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
       {/* COMIENZO MODALS  */}
@@ -261,10 +331,89 @@ export default function Principal({ route }) {
       
         <Loading visible={modalLoading}/>
 
+        <Modal
+          isVisible={modalFechas}
+          animationIn="bounceInUp"
+                  animationOut="slideOutRight"
+                  backdropTransitionOutTiming={0}
+                  onBackdropPress={() => {
+                    setModalFechas(false);
+                  }}
+          onRequestClose={() => {
+            setModalFechas(false);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: width / 15,
+                  marginHorizontal: 20,
+                  marginTop: 0,
+                  fontWeight: "bold",
+                }}
+              >{modaldataInfo.nombre}
+              </Text>
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: width / 23,
+                  marginHorizontal: 20,
+                  marginTop: 5,
+                }}
+              >
+                Por favor seleccioná la fecha en la cual quisieras asistir:
+              </Text>
+              <Calendar
+                enableSwipeMonths
+                disabledByDefault={true}
+                disableAllTouchEventsForDisabledDays={true}
+                onDayPress={(day) => {
+                  onClickHoraModal(day, modaldataInfo.id)
+                }}
+                theme={{
+                  calendarBackground: "white",
+                  todayTextColor: "white",
+                  monthTextColor: "black",
+                  dayTextColor: "black",
+                  textMonthFontSize: 20,
+                  arrowColor: "black",
+                  dotColor: "black",
+                  todayTextColor: "#00789d",
+                  textDayHeaderFontSize: 20,
+                  textSectionTitleColor: "black",
+                  textMonthFontWeight: "bold",
+                  selectedDayTextColor: "white",
+                }}
+                // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+                // Handler which gets executed when visible month changes in calendar. Default = undefined
+                onMonthChange={(month) => {
+                  console.log("month changed", month);
+                }}
+                firstDay={1}
+                markedDates={markedDatesCursosArray}
+              />
+              {/* <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() =>
+                  this.setState({ modalVisible: false, modalHorarios: true })
+                }
+              >
+                <Text style={styles.textStyle}>SIGUIENTE {">"}</Text>
+              </Pressable> */}
+            </View>
+          </View>
+        </Modal>
+
       <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalConfirmado}
+        isVisible={modalConfirmado}
+        animationIn="bounceInUp"
+                animationOut="slideOutRight"
+                backdropTransitionOutTiming={0}
+                onBackdropPress={() => {
+                  setModalConfirmado(false);
+                }}
         onRequestClose={() => {
           setModalConfirmado(false);
         }}
@@ -378,9 +527,13 @@ export default function Principal({ route }) {
       </Modal>
 
       <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalHorarios}
+          isVisible={modalHorarios}
+          animationIn="bounceInUp"
+                  animationOut="slideOutRight"
+                  backdropTransitionOutTiming={0}
+                  onBackdropPress={() => {
+                    setModalHorarios(false);
+                  }}
           onRequestClose={() => {
             setModalHorarios(false);
           }}
@@ -506,9 +659,13 @@ export default function Principal({ route }) {
         </Modal>
 
       <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalInfo}
+        isVisible={modalInfo}
+        animationIn="bounceInUp"
+                animationOut="slideOutRight"
+                backdropTransitionOutTiming={0}
+                onBackdropPress={() => {
+                  setModalInfo(false);
+                }}
         onRequestClose={() => {
           setModalInfo(false);
         }}
@@ -557,10 +714,14 @@ export default function Principal({ route }) {
       </Modal>
 
       <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modal}
+        isVisible={modal}
         onRequestClose={() => {
+          setModal(false);
+        }}
+        animationIn="bounceInUp"
+        animationOut="slideOutRight"
+        backdropTransitionOutTiming={0}
+        onBackdropPress={() => {
           setModal(false);
         }}
       >
@@ -641,9 +802,14 @@ export default function Principal({ route }) {
       </Modal>
 
       <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalCalendario}
+        
+        animationIn="bounceInUp"
+                animationOut="slideOutRight"
+                backdropTransitionOutTiming={0}
+                onBackdropPress={() => {
+                  setModalCalendario(false);
+                }}
+        isVisible={modalCalendario}
         onRequestClose={() => {
           setModalCalendario(false);
         }}
@@ -745,10 +911,9 @@ export default function Principal({ route }) {
       data={slider}
       renderItem={({ item }) => (
         <TouchableOpacity
-        onPress={() =>{
-         setModaldataInfo(item)
-         setModalInfo(true)}
-        }
+        onPress={() => {
+          buscarFecha(item);
+        }}
         style={{
           flexDirection: "row",
           backgroundColor: "transparent",
@@ -962,7 +1127,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalView: {
     margin: 20,

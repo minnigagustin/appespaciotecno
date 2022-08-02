@@ -85,7 +85,7 @@ function TabNavigator() {
           headerTitleAlign: "left",
         }}
       />
-      {/* ANDA <Tab.Screen
+      <Tab.Screen
         name="Escanea"
         component={Qr}
         options={{
@@ -108,7 +108,7 @@ function TabNavigator() {
           ),
           headerTitle: (props) => <LogoTitle {...props} />,
         }}
-      /> */}
+      />
       <Tab.Screen name="Mi Perfil" component={Perfil} options={{
           headerTitle: (props) => <LogoTitle {...props} />,
         }} />

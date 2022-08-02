@@ -1,37 +1,81 @@
-import { StyleSheet, Text, View, Modal, TouchableOpacity, Dimensions, Pressable, Image } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Pressable, Image, Alert } from "react-native";
 import { FontAwesome } from "react-native-vector-icons";
+import Modal from "react-native-modal";
 import { useNavigation } from "@react-navigation/native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useState } from "react";
 const { width, height } = Dimensions.get("window");
 
 export const ModalDetallesCurso = (props) => {
   const navigation = useNavigation();
+  const [favoritos, setFavoritos] = useState(false);
+
+  const addFavorite = () => {
+    const item = props.data;
+    AsyncStorage.getItem('favoritos').then((datafavoritos)=>{
+      if (datafavoritos !== null) {
+        // We have data!!
+        
+        const cart = JSON.parse(datafavoritos);
+        const buscar = cart.find(o => o.id === item.id);
+        if(buscar){
+          Alert.alert('¡Atencion!', 'Este curso fue guardado con anterioridad');
+        } else {
+        cart.push(item)
+        AsyncStorage.setItem('favoritos',JSON.stringify(cart));
+        setFavoritos(true);
+        Alert.alert('¡Curso guardado!', 'Puedes encontrarlo en tu perfil, en la seccion de favoritos');
+        }
+      }
+      else{
+        const cart  = []
+        cart.push(item)
+        AsyncStorage.setItem('favoritos',JSON.stringify(cart));
+        setFavoritos(true);
+      }
+    })
+    .catch((err)=>{
+      alert(err)
+    })
+  }
+
   const img = "https://i0.wp.com/imagenesparapeques.com/wp-content/uploads/2021/05/ROBLOX-CLIPARTS-8.png?ssl=1";
 
   return (
     <Modal
-          animationType="slide"
-          transparent={true}
-          visible={props.visibilidad}
+    isVisible={props.visibilidad}
+      animationIn="bounceInUp"
+              animationOut="slideOutRight"
+              backdropTransitionOutTiming={0}
+              onBackdropPress={() => {
+                props.salir(false);
+              }}
           onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            props.visibilidad(false);
+            props.salir(false);
           }}
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-            <Image
-          source={{
-            uri: img
-              ? img
-              : "http://espaciotecno.com.ar/img/espacio-tecno-bahia-blanca.png",
-          }}
-          style={{ width: 100, height: 100, borderRadius: 10 }}
-        />
+              <TouchableOpacity onPress={() => {
+            addFavorite();
+          }} style={{position: 'absolute', right: 10, top: 10, backgroundColor: 'white', borderRadius: 30, padding: 5, justifyContent: 'center', alignItems: 'center'}}><FontAwesome
+        name={favoritos ? 'heart' : 'heart-o'}
+        color={favoritos ? 'red' : 'black'}
+        size={30}
+      /></TouchableOpacity>
+              <Image
+                source={{
+                  uri: props.data.picture
+                    ? 'https://tecnotest.bahia.gob.ar/' + props.data.picture
+                    : "http://espaciotecno.com.ar/img/espacio-tecno-bahia-blanca.png",
+                }}
+                style={{ width: width/4, height: width/4, borderRadius: 10 }}
+              />
               <Text
                 style={{
                   textAlign: "center",
-                  fontSize: width / 15,
+                  fontSize: (width / 17)-2,
                   marginHorizontal: 20,
                   marginTop: 0,
                   fontWeight: "bold",
@@ -48,14 +92,14 @@ export const ModalDetallesCurso = (props) => {
               >
                 {props.data.descripcion}
               </Text>
-              
+
               <Pressable
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => this.setState({ modalH: false })}
+                onPress={props.siguiente}
               >
                 <Text style={styles.textStyle}>INSCRIBIRME {">"}</Text>
               </Pressable>
-            </View>
+              </View>
           </View>
         </Modal>
   );
@@ -66,13 +110,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalView: {
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    paddingVertical: 24,
+    paddingHorizontal: 10,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -85,21 +129,21 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 10,
-    marginTop: 14,
+    marginTop: 24,
     padding: 10,
-    width: 240,
+    width: width/1.3,
   },
   buttonOpen: {
     backgroundColor: "#F194FF",
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: "#0086bf",
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 22,
   },
   modalText: {
     marginBottom: 15,

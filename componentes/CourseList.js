@@ -28,7 +28,7 @@ export default class CourseList extends React.Component {
       });
   }
   render() {
-    const { img, title, bg, onPressComun, onPress } = this.props;
+    const { img, title, bg, onPressComun, onPress, id } = this.props;
 
     const verificarRegistro = () => {
       if (checkCampos()) {

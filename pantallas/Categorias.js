@@ -5,7 +5,6 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  Modal,
   Dimensions,
   StyleSheet,
   Pressable,
@@ -21,6 +20,7 @@ import CategoriasList from "../componentes/CategoriasList";
 import Loading from "./Loading";
 import { BASE_URL, axiosLoggedInConfig } from "../api";
 import { ModalDetallesCurso } from "../modals/ModalDetallesCurso";
+import Modal from "react-native-modal";
 import moment from "moment";
 import { FontAwesome } from "react-native-vector-icons";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
@@ -55,10 +55,11 @@ export default class Cources extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({ modalLoading: true });
     const cursos = BASE_URL + "curso/";
     axiosLoggedInConfig().get(cursos).then((res) => {
       const cursos = res.data.filter((cat) => cat.categoria && cat.origen.id === 1);
-      this.setState({ categorias: cursos });
+      this.setState({ categorias: cursos, modalLoading: false });
       console.log(cursos);
     });
   }
@@ -196,9 +197,13 @@ this.state.dataFechas.forEach((val) => {
         <Loading visible={this.state.modalLoading}/>
 
         <Modal
-        animationType="slide"
-        transparent={true}
-        visible={this.state.modalConfirmadoCheck}
+        isVisible={this.state.modalConfirmadoCheck}
+        animationIn="bounceInUp"
+                animationOut="slideOutRight"
+                backdropTransitionOutTiming={0}
+                onBackdropPress={() => {
+                  this.setState({modalConfirmadoCheck: false});
+                }}
         onRequestClose={() => {
           this.setState({modalConfirmadoCheck: false});
         }}
@@ -313,9 +318,13 @@ this.state.dataFechas.forEach((val) => {
 
 
         <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalConfirmado}
+         isVisible={this.state.modalConfirmado}
+         animationIn="bounceInUp"
+                 animationOut="slideOutRight"
+                 backdropTransitionOutTiming={0}
+                 onBackdropPress={() => {
+                   this.setState({modalConfirmado: false});
+                 }}
           onRequestClose={() => {
             this.setState({ modalConfirmado: false });
           }}
@@ -366,9 +375,13 @@ this.state.dataFechas.forEach((val) => {
 
 
         <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalOk}
+          isVisible={this.state.modalOk}
+          animationIn="bounceInUp"
+                  animationOut="slideOutRight"
+                  backdropTransitionOutTiming={0}
+                  onBackdropPress={() => {
+                    this.setState({modalOk: false});
+                  }}
           onRequestClose={() => {
             this.setState({ modalOk: false });
           }}
@@ -425,9 +438,13 @@ this.state.dataFechas.forEach((val) => {
         </Modal>
 
         <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalHorarios}
+         isVisible={this.state.modalHorarios}
+         animationIn="bounceInUp"
+                 animationOut="slideOutRight"
+                 backdropTransitionOutTiming={0}
+                 onBackdropPress={() => {
+                   this.setState({modalHorarios: false});
+                 }}
           onRequestClose={() => {
             this.setState({ modalHorarios: false });
           }}
@@ -553,9 +570,13 @@ this.state.dataFechas.forEach((val) => {
         </Modal>
 
         <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalVisible}
+          isVisible={this.state.modalVisible}
+          animationIn="bounceInUp"
+                  animationOut="slideOutRight"
+                  backdropTransitionOutTiming={0}
+                  onBackdropPress={() => {
+                    this.setState({modalVisible: false});
+                  }}
           onRequestClose={() => {
             this.setState({ modalVisible: false });
           }}
@@ -779,7 +800,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalView: {
     margin: 20,

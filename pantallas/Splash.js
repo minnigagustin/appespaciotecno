@@ -22,7 +22,9 @@ export default class Home extends React.Component {
         this.props.navigation.replace("HomeInicio");
         }, 1000);
       } else {
+        setTimeout(() => {
         this.props.navigation.replace("LoginNavegacion");
+      }, 1000);
       }
     });
   }
@@ -30,9 +32,6 @@ export default class Home extends React.Component {
   //cuando se deje de usar clase, crear un state que consulte si el usuario esta logueado, si es true, entonces mostrar el texto
   //de abandonar sesión, en cambio si es falso (por defecto), no muestra nada
 
-  async desloguearUsuario() {
-    await axios.get("http://128.0.202.248:8011/logout/");
-  }
 
   render() {
     return (
