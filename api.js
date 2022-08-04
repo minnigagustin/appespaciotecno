@@ -37,12 +37,10 @@ export const axiosLoggedInConfig = () => {
                 )
                 .then((resp) => {
                     const { access } = resp.data;
-                    console.log('tuki');
                     failedRequest.response.config.headers.Authorization = `Bearer ${access}`;
                     AsyncStorage.setItem('lgac', access);
                 })
                 .catch((err) => {
-                    console.log('goood');
                     console.log(err);
                 });
         }

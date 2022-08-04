@@ -10,6 +10,7 @@ import {
   Modal,
   Animated,
   ScrollView,
+  KeyboardAvoidingView,
   ActivityIndicator,
   Alert,
 } from "react-native";
@@ -210,8 +211,10 @@ export default function Registro() {
     <ImageBackground
       source={require("../assets/fondo_login.webp")}
       style={{ resizeMode: "stretch", width: width, height: height+30 }}
-    >
+    ><KeyboardAvoidingView behavior="position" keyboardVerticalOffset={15} enabled>
         <ScrollView>
+          <View>
+        
         <Modal
           animationType="slide"
           visible={modalVisible}
@@ -279,7 +282,7 @@ export default function Registro() {
           </ImageBackground>
         </Modal>
         
-
+        
           <Image
             style={styles.imagen_style}
             resizeMode="contain"
@@ -437,11 +440,13 @@ export default function Registro() {
             >
               <Text style={styles.ingresar_text}>REGISTRARSE</Text>
             </TouchableOpacity>
+           
             </View>
-            )}
+            )} 
+            </View>
         </ScrollView>
       {loading && <ActivityIndicator size="small" color="#0000ff" />}
-      
+      </KeyboardAvoidingView>
     </ImageBackground>
   );
 }

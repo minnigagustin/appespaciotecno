@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button, Alert, Pressable, Dimensions, TouchableOpacity, Animated } from "react-native";
+import { Text, View, StyleSheet, Button, Alert, Pressable, Dimensions, TouchableOpacity, Animated, Image } from "react-native";
 import Modal from "react-native-modal";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { BASE_URL, axiosLoggedInConfig } from "../api";
 import {ModalDetallesCurso} from "../modals/ModalDetallesCurso";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {ModalConfirmadoComponent} from "../modals/ModalConfirmado";
 import moment from "moment";
 import Loading from "./Loading";
@@ -22,11 +23,13 @@ export default function App() {
   const [modalLoading, setModalLoading] = useState(false);
   const [dataCurso, setData] = useState([]);
   const [modalHorarios, setModalHorarios] = useState(false);
+  const [modalEaster, setModalEaster] = useState(false);
   const [dataFechas, setDataFechas] = useState([]);
   const [diasdictado, setDiasDictado] = useState([]);
   const [modalcurso, setModalCurso] = useState(false);
   const [modalConfirmado, setModalConfirmado] = useState(false);
   const [modalFechas, setModalFechas] = useState(false);
+  const [dni, setDni] = useState("");
   const [horaseleccionada, sethoraseleccionada] = useState('')
   const [dia, setDia] = useState([]);
 
@@ -39,6 +42,13 @@ export default function App() {
 
 
   useEffect(() => {
+    AsyncStorage.getItem("perfil").then((perfil) => {
+      if (perfil !== null) {
+        const perfilparse = JSON.parse(perfil);
+        setDni(perfilparse.numero_documento)
+      } else {
+      }
+    });
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");
@@ -62,6 +72,7 @@ export default function App() {
 
   const handleBarCodeScanned = ({ data }) => {
     setScanned(true);
+    if(data.split('/')[3] === 'curso') {
     const curso = BASE_URL + "infocursobycursoid/?id_curso=" + data.split('/')[4];
     axiosLoggedInConfig().get(curso).then((res) => {
       console.log(res.data.curso);
@@ -77,7 +88,83 @@ export default function App() {
     Alert.alert('Ey! No encontramos el curso', 'Asegurate de estar escaneando un QR valido');
     setScanned(false);
   });
+  
+} else if(data === 'eastereggsistemas') {
+  setModalEaster(true);
+} else if(data.split('/')[3] === 'presente') {
+  handleSubmit();
+} else {
+  Alert.alert('Ey! No encontramos el curso', 'Asegurate de estar escaneando un QR valido');
+    setScanned(false);
+}
   };
+
+  const handleSubmit = () => {
+    const formData = {};
+    formData.documento = dni;
+    console.log(formData);
+    const cursofecha = BASE_URL + "diascomisionbyalumnotoday/";
+    console.log(cursofecha);
+    axiosLoggedInConfig().post(cursofecha, formData).then((res) => {
+      console.log(res.data);
+  }).catch((err)=>{
+    console.log(err);
+    Alert.alert('Ey! No encontramos el curso', 'Asegurate de estar escaneando un QR valido');
+    setScanned(false);
+  });
+
+  };
+
+  const control = (resp) => {
+
+    if (resp.length > 0) {
+      if (resp.length === 1) {
+        handleClick(resp[0]);
+      } else {
+      console.log(resp)
+        console.log('aca abriria modal');
+      }
+    } else {
+      console.log('no completada CONTROL, no hay comisiones')
+    }
+  };
+
+  const handleClick = () => {
+
+    console.log("hola");
+
+    const array = [];
+    array.push(dni);
+    const formData = new FormData();
+    formData.append("documentos", JSON.stringify(array));
+    formData.append("dia_comision", comision.id);
+    axiosLoggedInConfig().post(
+      BASE_URL + "asistencia/",
+      formData
+    ).then((resp) => {
+  
+    if (resp != null) {
+      if (resp.status === 200) {
+
+        if (resp.data.validadas.length === 0) {
+          console.log('la asistencia ya fue registrada anteriormente')
+        } else {
+          console.log('ASISTENCIA COMPLETADA')
+
+        }
+
+      } else {
+        console.log('error en handleclick')
+      }
+    }
+  }).catch((err)=>{
+    Alert.alert('Ey! No encontramos el curso', 'Asegurate de estar escaneando un QR valido');
+    setScanned(false);
+  });
+    setAsistenciaModal(false);
+  };
+
+
 
   const onClickHoraModal = (fecha, id) => {
     const dias = [
@@ -151,6 +238,37 @@ dataFechas.forEach((val) => {
   return (
     <View style={styles.container}>
       <Loading visible={modalLoading}/>
+      <Modal isVisible={modalEaster}
+      animationIn="bounceInUp"
+              animationOut="slideOutRight"
+              backdropTransitionOutTiming={0}
+              onBackdropPress={() => {
+                setModalEaster(false);
+                setScanned(false);
+
+              }}
+          onRequestClose={() => {
+            setModalEaster(false);
+            setScanned(false);
+          }}>
+        <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+          <Text style={{
+                  textAlign: "center",
+                  fontSize: (width / 17)-2,
+                  marginHorizontal: 20,
+                  marginTop: 0,
+                  fontWeight: "bold",
+                }}>¿No podes hacerlo vos?</Text>
+          <Image
+                source={{
+                  uri: 'https://i.pinimg.com/originals/97/b2/e6/97b2e6934ac45ce601ec4787278fdf7d.png',
+                }}
+                style={{ width: width/3, height: width/3, borderRadius: 10 }}
+              />
+        </View>
+        </View>
+      </Modal>
       <ModalDetallesCurso data={dataCurso} visibilidad={modalcurso} salir={() => {setModalCurso(false), setScanned(false)}} siguiente={() => {setModalCurso(false), setScanned(false), setModalFechas(true);}} />
       <ModalConfirmadoComponent visibilidad={modalConfirmado} data={dataCurso} dia={dia} horaseleccionada={horaseleccionada}   siguiente={() => {setModalConfirmado(false), setScanned(false)}} />
 

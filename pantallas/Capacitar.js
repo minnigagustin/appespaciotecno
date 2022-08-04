@@ -59,7 +59,6 @@ export default class Cources extends React.Component {
     axiosLoggedInConfig().get(cursos).then((res) => {
       const cursos = res.data.filter((cat) => cat.origen.id === 2);
       this.setState({ categorias: cursos, modalLoading: false });
-      console.log(cursos);
     });
   }
 
