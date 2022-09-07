@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, FlatList, Pressable, Dimensions, ImageBackground, Linking, Alert } from "react-native";
+import { View, Text, Image, StyleSheet, FlatList, Pressable, Dimensions, ImageBackground, Linking, Alert, Switch, ScrollView } from "react-native";
 
 import { FontAwesome } from "react-native-vector-icons";
 
@@ -10,12 +10,14 @@ import { useState } from "react";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
+import Loading from "./Loading";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { useNavigation } from "@react-navigation/native";
-
-import { BASE_URL } from "../api";
+import { ModalTutor } from "../modals/ModalTutor";
+import * as Notifications from 'expo-notifications';
+import { axiosLoggedInConfig, BASE_URL } from "../api";
+import moment from "moment";
 
 const { width, height } = Dimensions.get("window");
 import global from "../componentes/global"
@@ -26,10 +28,26 @@ export default function Perfil({ route }) {
  
 
   const [cursos, setCursos] = useState([]);
-
+  const [modalLoading, setModalLoading] = useState(false);
   const [cursosFavoritos, setCursosFavoritos] = useState([]);
   const [perfil, setPerfil] = useState([]);
   const [mostrarCursos, setMostrarCursos] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [TutorVisible, setTutorVisible] = useState(false);
+  const toggleSwitch = async () => {
+    setModalLoading(true);
+    axiosLoggedInConfig().patch(
+      BASE_URL + "user/" + perfil.id + '/',
+      {token_push: isEnabled ? null : (await Notifications.getExpoPushTokenAsync()).data }
+    ).then((resp) => {
+      console.log(resp);
+      setModalLoading(false);
+  }).catch((err)=>{
+    console.log(err);
+    setModalLoading(false);
+  });
+    setIsEnabled(previousState => !previousState)
+  };
 
   const abrirFavoritos = () => {
     getCursos();
@@ -52,19 +70,31 @@ export default function Perfil({ route }) {
     });
   };
   useEffect(() => {
+    setModalLoading(true);
   AsyncStorage.getItem("perfil").then((perfil) => {
     if (perfil !== null) {
       const perfilparse = JSON.parse(perfil);
       console.log(perfilparse)
       setPerfil(perfilparse);
+    axiosLoggedInConfig().get(BASE_URL + `user/` + perfilparse.id).then((res) => {
+        console.log(res.data);
+        setIsEnabled(perfilparse.token_push ? true : false);
+      });
+      setModalLoading(false);
     } else {
       console.log("NO HAY NADAAA");
     }
   });
 }, []);
 
+var nacimiento=moment(perfil.fecha_nacimiento);
+var hoy=moment();
+var anios= hoy.diff(nacimiento,"years");
+
   return (
-    <View style={{flex: 1, backgroundColor: 'white', alignItems: 'center'}}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center', backgroundColor: 'white' }}>
+      <ModalTutor visibilidad={TutorVisible} salir={() => {setTutorVisible(false)}} />
+      <Loading visible={modalLoading}/>
       <ImageBackground
           source={require("../assets/fondo_login.webp")}
           imageStyle={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 100}}
@@ -76,7 +106,7 @@ export default function Perfil({ route }) {
       </Text>
 
       <Image
-        source={{ uri: param_usuario.picture ? param_usuario.picture : 'https://espaciotecno.bahia.gob.ar/images/isotipo.jpg' }}
+        source={{ uri: param_usuario.picture ? param_usuario.picture : (param_usuario.genero_persona === 'Masculino' ? 'https://cdn.icon-icons.com/icons2/1736/PNG/512/4043238-avatar-boy-kid-person_113284.png' : 'https://cdn.icon-icons.com/icons2/1736/PNG/512/4043250-avatar-child-girl-kid_113270.png') }}
         style={{
           height: 150,
           width: 150,
@@ -86,8 +116,23 @@ export default function Perfil({ route }) {
           borderRadius: 150,
           alignSelf: "center",
         }}
-      /></ImageBackground>
-      
+      /></ImageBackground>{anios < 18 &&
+      <TouchableOpacity onPress={() => {
+              setTutorVisible(true);
+            }} style={{flexDirection: "row",
+          backgroundColor: "rgba(255, 204, 0, 1)",
+          padding: 20,
+          width: width-40,
+          borderRadius: 20,
+          justifyContent: 'space-between',
+          alignItems: "center",
+          top: -10}}>
+            <View style={{flexDirection: "row"}}>
+            <FontAwesome name="exclamation-triangle" size={18} />
+            <Text style={{marginLeft: 12 ,color: 'black', fontSize: 14, fontWeight: 'bold'}}>Tu tutor debe verificar tu identidad</Text></View>
+            <View>
+            <FontAwesome name="angle-right" size={18} /></View>
+          </TouchableOpacity>}
 
       {/* <View style={styles.paneltab}>
         <View style={{ flexDirection: "row" }}>
@@ -117,6 +162,7 @@ export default function Perfil({ route }) {
           </TouchableOpacity>
         </View>
           </View> */}
+
 
           <TouchableOpacity onPress={() => {
               Alert.alert('Ups! Estamos trabajando...', 'Proximamente vas a poder editar tu perfil en segundos ;)')
@@ -168,6 +214,28 @@ export default function Perfil({ route }) {
             <View>
             <FontAwesome name="angle-right" size={18} /></View>
           </TouchableOpacity>
+
+          <TouchableOpacity onPress={toggleSwitch} style={{flexDirection: "row",
+          backgroundColor: "rgba(0, 0, 0, 0.08)",
+          padding: 20,
+          width: width-40,
+          borderRadius: 20,
+          justifyContent: 'space-between',
+          alignItems: "center",
+          marginTop: 10,}}>
+            <View style={{flexDirection: "row"}}>
+            <FontAwesome name="bell-o" size={18} />
+            <Text style={{marginLeft: 12 ,color: 'black', fontSize: 14, fontWeight: 'bold'}}>Notificaciones</Text></View>
+            <View>
+            <Switch
+            style={{margin: -12}}
+            trackColor={{ false: "#767577", true: "#a1b94b" }}
+        thumbColor={isEnabled ? "white" : "#f4f3f4"}
+        ios_backgroundColor="#3e3e3e"
+        onValueChange={toggleSwitch}
+        value={isEnabled}
+      /></View>
+          </TouchableOpacity>
           
 
 
@@ -188,10 +256,10 @@ export default function Perfil({ route }) {
             <View>
             <FontAwesome name="angle-right" size={18} /></View>
               </TouchableOpacity>
-          <TouchableOpacity  onPress={() => Linking.openURL('https://digital.bahia.gob.ar/')}>
+          <TouchableOpacity >
               <Image  source={{ uri: 'https://digital.bahia.gob.ar/espaciotecno/LOGO-APP.gif' }} style={{width: width/1.5, height: 120}} resizeMode="contain" />
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 

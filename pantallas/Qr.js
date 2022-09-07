@@ -6,9 +6,10 @@ import { BASE_URL, axiosLoggedInConfig } from "../api";
 import {ModalDetallesCurso} from "../modals/ModalDetallesCurso";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {ModalConfirmadoComponent} from "../modals/ModalConfirmado";
+import CourseList from "../componentes/CoursePrincipal";
 import moment from "moment";
 import Loading from "./Loading";
-import { Calendar, LocaleConfig } from "react-native-calendars";
+import { Calendar, CalendarUtils, LocaleConfig } from "react-native-calendars";
 import QRCode from 'react-native-qrcode-svg';
 import { set } from "react-native-reanimated";
 
@@ -20,8 +21,10 @@ export default function App() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [qrmodal, setQr] = useState(false);
+  const [modal, setModal] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const [dataCurso, setData] = useState([]);
+  const [cursosfechas, setCursosFechas] = useState([]);
   const [modalHorarios, setModalHorarios] = useState(false);
   const [modalEaster, setModalEaster] = useState(false);
   const [dataFechas, setDataFechas] = useState([]);
@@ -30,6 +33,7 @@ export default function App() {
   const [modalConfirmado, setModalConfirmado] = useState(false);
   const [modalFechas, setModalFechas] = useState(false);
   const [dni, setDni] = useState("");
+  const [catg, setCatg] = useState(0);
   const [horaseleccionada, sethoraseleccionada] = useState('')
   const [dia, setDia] = useState([]);
 
@@ -100,56 +104,45 @@ export default function App() {
   };
 
   const handleSubmit = () => {
-    const formData = {};
-    formData.documento = dni;
-    console.log(formData);
     const cursofecha = BASE_URL + "diascomisionbyalumnotoday/";
-    console.log(cursofecha);
-    axiosLoggedInConfig().post(cursofecha, formData).then((res) => {
-      console.log(res.data);
+    axiosLoggedInConfig().post(cursofecha, {documento: dni}).then((res) => {
+      control(res.data);
   }).catch((err)=>{
     console.log(err);
-    Alert.alert('Ey! No encontramos el curso', 'Asegurate de estar escaneando un QR valido');
+    Alert.alert('Ey!', 'No tienes cursos registrados para hoy, intenta mas tarde');
     setScanned(false);
   });
 
   };
 
   const control = (resp) => {
-
     if (resp.length > 0) {
-      if (resp.length === 1) {
-        handleClick(resp[0]);
-      } else {
-      console.log(resp)
-        console.log('aca abriria modal');
-      }
+      console.log(resp);
+        setCursosFechas(resp);
+        setModal(true);
     } else {
-      console.log('no completada CONTROL, no hay comisiones')
+      Alert.alert('Ups!', 'Ocurrio un error, lo estamos solucionando');
+      setScanned(false);
     }
   };
 
   const handleClick = () => {
 
-    console.log("hola");
-
-    const array = [];
-    array.push(dni);
-    const formData = new FormData();
-    formData.append("documentos", JSON.stringify(array));
-    formData.append("dia_comision", comision.id);
+    const arraydni = [];
+    arraydni.push(dni);
     axiosLoggedInConfig().post(
       BASE_URL + "asistencia/",
-      formData
+      {dia_comision : dataCurso.id, documentos: JSON.stringify(arraydni)}
     ).then((resp) => {
   
     if (resp != null) {
       if (resp.status === 200) {
-
         if (resp.data.validadas.length === 0) {
-          console.log('la asistencia ya fue registrada anteriormente')
+          Alert.alert('Ups!', 'Ya habias confirmado la asistencia anteriormente')
+          setScanned(false);
         } else {
-          console.log('ASISTENCIA COMPLETADA')
+          Alert.alert('Genial!', 'Gracias por confirmar tu asistencia')
+          setScanned(false);
 
         }
 
@@ -158,11 +151,13 @@ export default function App() {
       }
     }
   }).catch((err)=>{
+    console.log(err);
     Alert.alert('Ey! No encontramos el curso', 'Asegurate de estar escaneando un QR valido');
     setScanned(false);
   });
-    setAsistenciaModal(false);
+    setModal(false);
   };
+  
 
 
 
@@ -238,6 +233,78 @@ dataFechas.forEach((val) => {
   return (
     <View style={styles.container}>
       <Loading visible={modalLoading}/>
+      <Modal
+        isVisible={modal}
+        animationIn="bounceInUp"
+        animationOut="slideOutRight"
+        backdropTransitionOutTiming={0}
+        onBackdropPress={() => {
+          setModal(false);
+          setScanned(false);
+
+        }}
+    onRequestClose={() => {
+      setModal(false);
+      setScanned(false);
+    }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: (width / 15)-2,
+                marginHorizontal: 20,
+                marginTop: 0,
+                fontWeight: "bold",
+              }}
+            >
+              Talleres Disponibles
+            </Text>
+
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: (width / 20)-2,
+                marginHorizontal: 20,
+                marginTop: 5,
+              }}
+            >
+              Por favor seleccioná el taller al cual quisieras asistir: 
+            </Text>
+            <View>
+              {cursosfechas.map((item, i) => {
+                return (
+                  <CourseList
+                  key={i}
+                    onPress={() => {
+                      setCatg(item.id);
+                      setData(item);
+                    }}
+                    img={'https://tecnotest.bahia.gob.ar/' + item.comision.curso.picture}
+                    title={item.comision.curso.nombre}
+                    categoria={item.comision.curso.categoria}
+                    bg="#fdddf3"
+                    seleccionado={catg === item.id ? true : false}
+                  />
+                );
+              })}
+            </View>
+            <Pressable
+              style={[styles.button, styles.buttonClose, {
+                backgroundColor:
+                  catg > 0 ? "#0086bf" : "rgba(0, 0, 0, 0.15)",
+              },]}
+              onPress={() => {
+                handleClick();
+              }}
+              disabled={catg === 0 ? true : false}
+            >
+              <Text style={styles.textStyle}>SIGUIENTE {">"}</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
       <Modal isVisible={modalEaster}
       animationIn="bounceInUp"
               animationOut="slideOutRight"

@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  ActivityIndicator,
   Pressable,
   Dimensions,
   Alert,
@@ -23,7 +24,9 @@ import Modal from "react-native-modal";
 import global from "../componentes/global";
 import Loading from "./Loading";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import { useState, useEffect, useRef } from "react";
  import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "react-native-vector-icons";
@@ -117,6 +120,8 @@ export default function Principal({ route }) {
       }
     });
   }, []);
+
+  
 
   useEffect(() => {
     global.authenticated = isLogged;
@@ -227,6 +232,7 @@ setModaldataInfo([]);
     const curso = BASE_URL + "horarioscursobyfechaandcursoid/?id_curso=" + id + "&fecha=" + fechadate;
     axiosLoggedInConfig().get(curso).then((res) => {
       setDiasDictado(res.data);
+      console.log('hecho')
       console.log(diasdictado);
       setModal(false);
       setModalHorarios(true);
@@ -567,7 +573,7 @@ dataFechas.forEach((val) => {
                   padding: 3,
                   marginVertical: 20,
                 }}
-              >{diasdictado.find((cat) => cat.dia_comision.horario_inicio > '09:00:00' && cat.dia_comision.horario_inicio < '13:00:00') && (
+              >{diasdictado.find((cat) => cat.dia_comision.horario_inicio > '01:00:00' && cat.dia_comision.horario_inicio < '13:00:00') && (
                 <View style={{ marginHorizontal: 10 }}>
                   <Text
                     style={{
@@ -578,7 +584,7 @@ dataFechas.forEach((val) => {
                   >
                     Mañana
                   </Text>
-                  {diasdictado.filter((cat) => cat.dia_comision.horario_inicio > '09:00:00' && cat.dia_comision.horario_inicio < '13:00:00').map((item, i) => {
+                  {diasdictado.filter((cat) => cat.dia_comision.horario_inicio > '01:00:00' && cat.dia_comision.horario_inicio < '13:00:00').map((item, i) => {
                   return (
                   <TouchableOpacity
                     onPress={() => { setSelectHorario(item.comision_id), sethoraseleccionada(item.dia_comision.horario_inicio)}}
@@ -776,6 +782,7 @@ dataFechas.forEach((val) => {
                       setCatg(item.id);
                       setModaldataInfo(item);
                     }}
+                    descripcion={item.descripcion}
                     img={item.picture}
                     title={item.nombre}
                     categoria={item.categoria}
@@ -1051,7 +1058,7 @@ dataFechas.forEach((val) => {
         <Text
           style={{
             color: "#055c6e",
-            fontSize: (width / 18)-2,
+            fontSize: width * 0.051,
             marginTop: 23,
             paddingHorizontal: 20,
             paddingVertical: 10,

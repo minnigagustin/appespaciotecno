@@ -13,9 +13,6 @@ import React, { useState } from "react";
 
 import { useNavigation } from "@react-navigation/native";
 
-import { ModalCambiosConfirmados } from "../modals/ModalCambiosConfirmados";
-
-import { ModalConfirmarCambios } from "../modals/ModalConfirmarCambios";
 
 import { ScrollView } from "react-native-gesture-handler";
 

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "512066996517",
+    "project_id": "espacio-tecno",
+    "storage_bucket": "espacio-tecno.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512066996517:android:aec7875853d0467b9432cc",
+        "android_client_info": {
+          "package_name": "ar.gob.bahia.espaciotecno"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "512066996517-08cf4feh575dv2m72i37sd2e8ass3ncl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6myAsqBgj2Lv2aJpkxhrwMXY8Q_a8TuE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "512066996517-08cf4feh575dv2m72i37sd2e8ass3ncl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

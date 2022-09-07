@@ -45,7 +45,7 @@ export default function Registro() {
 
   const [localidad, setLocalidad] = useState("");
 
-  const [genero, setGenero] = useState("");
+  const [genero, setGenero] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [escanea, setEscanea] = useState(false);
   const [scanned, setScanned] = useState(false);
@@ -102,7 +102,7 @@ export default function Registro() {
       apellido !== "" &&
       dni !== "" &&
       localidad !== "" &&
-      genero !== "" &&
+      genero !== 0 &&
       contrasenia !== ""
     )
       return true;
@@ -171,7 +171,7 @@ export default function Registro() {
 
     setLocalidad("");
 
-    setGenero("");
+    setGenero(0);
 
     setContrasenia("");
   };
@@ -202,7 +202,7 @@ export default function Registro() {
     setDni(data.split('@')[4]);
     setApellido(data.split('@')[1]);
     setNombre(data.split('@')[2].split(' ')[0]);
-    setGenero(data.split('@')[3]);
+    setGenero(data.split('@')[3] === 'M' ? 1 : 2);
     setModalVisible(false);
   };
 
@@ -249,15 +249,7 @@ export default function Registro() {
                   <View style={styles.middleContainer}>
                     <View style={styles.unfocusedContainer}></View><View
                       onLayout={e => setAnimationLineHeight(e.nativeEvent.layout.height)}
-                      style={styles.focusedContainer}><Text style={{
-                color: "white",
-                fontSize: width / 20,
-                textAlign: "center",
-                top: 15,
-                justifyContent: 'center',
-                elevation: 3, position: 'absolute',
-                fontFamily: "Roboto",
-              }}>Escanea tu <Text style={{ fontWeight: 'bold', color: 'white' }}>DNI</Text></Text>
+                      style={styles.focusedContainer}>
                       {!scanned && (
                         <Animated.View
                           style={[
@@ -278,6 +270,26 @@ export default function Registro() {
                     </View><View style={styles.unfocusedContainer}></View></View><View style={styles.unfocusedContainer}></View></View>
 
               </View>
+            </View>
+            <View style={{ position: 'absolute',
+            top: '10%', width: width, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{
+                color: "white",
+                fontSize: width * 0.05,
+                textAlign: "center",
+                justifyContent: 'center',
+                fontFamily: "Roboto",
+              }}>Escanea tu <Text style={{ fontWeight: 'bold', color: 'white' }}>DNI</Text></Text>
+            </View>
+            <View style={{ position: 'absolute',
+            bottom: '10%', width: width, justifyContent: 'center', alignItems: 'center'}}>
+               <Text style={{
+                color: "white",
+                fontSize: width * 0.04,
+                textAlign: "center",
+                justifyContent: 'center',
+                fontFamily: "Roboto",
+              }}>Apunta la camara al <Text style={{ fontWeight: 'bold', color: 'white' }}>QR</Text> en tu documento</Text>
             </View>
           </ImageBackground>
         </Modal>
@@ -397,21 +409,21 @@ export default function Registro() {
             >
               <TouchableOpacity
                 onPress={() => {
-                  setGenero("M");
+                  setGenero(1);
                 }}
-                style={{backgroundColor: genero === "M" ? "#055c6e" : 'white', padding: genero === "M" ? 11: 8, margin: genero === "M" ? 0 : 3}}
+                style={{backgroundColor: genero === 1 ? "#055c6e" : 'white', padding: genero === 1 ? 11: 8, margin: genero === 1 ? 0 : 3}}
               >
-                <Text style={{fontSize: width/20, color: genero === "M" ? 'white' : 'black'}}> Masculino </Text>
+                <Text style={{fontSize: width/20, color: genero === 1 ? 'white' : 'black'}}> Masculino </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 onPress={() => {
-                  setGenero("F");
+                  setGenero(2);
                 }}
                 backgroundColor="#ffff"
-                style={{backgroundColor: genero === "F" ? "#055c6e" : 'white', padding: genero === "F" ? 11 : 8, margin: genero === "F" ? 0 : 3}}
+                style={{backgroundColor: genero === 2 ? "#055c6e" : 'white', padding: genero === 2 ? 11 : 8, margin: genero === 2 ? 0 : 3}}
               >
-                <Text style={{fontSize: width/20, color: genero === "F" ? 'white' : 'black'}}> Femenino </Text>
+                <Text style={{fontSize: width/20, color: genero === 2 ? 'white' : 'black'}}> Femenino </Text>
               </TouchableOpacity>
             </View>
             <TextInput

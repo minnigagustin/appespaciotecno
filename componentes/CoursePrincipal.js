@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity, View, Image, Dimensions } from "react-native";
+import { Text, TouchableOpacity, View, Image, Dimensions, Alert } from "react-native";
 import ProgressCircle from "react-native-progress-circle";
 import { Entypo } from "react-native-vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -29,7 +29,7 @@ export default class CourseList extends React.Component {
       });
   }
   render() {
-    let { img, title, bg, onPress, seleccionado, categoria } = this.props;
+    let { img, title, bg, onPress, seleccionado, categoria, descripcion } = this.props;
     if(categoria){
       categoria = categoria.descripcion;
     } else {
@@ -54,6 +54,7 @@ export default class CourseList extends React.Component {
     return (
       <TouchableOpacity
         onPress={onPress}
+        onLongPress={()=> Alert.alert(title, descripcion)}
         style={{
           flexDirection: "row",
           backgroundColor: "#d9eefb",

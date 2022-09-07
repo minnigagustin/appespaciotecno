@@ -8,10 +8,10 @@ import Curso from "../componentes/curso";
 
 import { useState } from "react";
 import Loading from "./Loading";
-
+import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-
+import Modal from "react-native-modal";
+import { Calendar, LocaleConfig } from "react-native-calendars";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
 import { useNavigation } from "@react-navigation/native";
@@ -32,6 +32,8 @@ export default function Perfil({ route }) {
   const [asistencia, setAsistencia] = useState(0);
   const [perfil, setPerfil] = useState([]);
   const [mostrarCursos, setMostrarCursos] = useState(false);
+  const [dataFechas, setDataFechas] = useState([]);
+  const [modalCalendario, setModalCalendario] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
 
   const abrirFavoritos = () => {
@@ -48,11 +50,11 @@ export default function Perfil({ route }) {
   };
   const param_usuario  = perfil;
 
-  const getCursosFavoritos = () => {
-    BASE_URL.get(`comisionesbypersona/` + param_usuario.id).then((res) => {
-      const cursos = res.data;
-      setCursosFavoritos(cursos);
-    });
+  const getComisionesData = (fechas) => {
+    setDataFechas(fechas);
+    console.log(fechas);
+    setModalCalendario(true);
+   
   };
   useEffect(() => {
     setModalLoading(true);
@@ -61,7 +63,7 @@ export default function Perfil({ route }) {
       const perfilparse = JSON.parse(perfil);
       console.log(perfilparse)
       setPerfil(perfilparse);
-      const cursos = BASE_URL + "cursosinscriptobyalumno/";
+      const cursos = BASE_URL + "comisionesbyalumno/";
     axiosLoggedInConfig().get(cursos).then((res) => {
       const cursos = res.data;
       setCursos(cursos);
@@ -71,7 +73,8 @@ export default function Perfil({ route }) {
     const asistencia = BASE_URL + "porcentajeasistenciacursos/";
     axiosLoggedInConfig().get(asistencia).then((res) => {
       const asistenciadata = res.data;
-      setAsistencia(asistenciadata.porcentaje_asistencia.split(' ')[0]);
+      const asisnum = asistenciadata.porcentaje_asistencia.split(' ')[0];
+      setAsistencia(Number(asisnum).toFixed(2));
       console.log(asistenciadata);
     });
     } else {
@@ -79,9 +82,83 @@ export default function Perfil({ route }) {
     }
   });
 }, []);
+var today = new Date();
+const fecha = moment(today).format("YYYY-MM-DD");
+let markedDatesCursosArray = {};
+dataFechas.forEach((val) => {
+  markedDatesCursosArray[val.fecha] = { selected: true, selectedColor: "#00789d", disableTouchEvent: false };
+});
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center', backgroundColor: 'white' }}>
+      <Modal
+        
+        animationIn="bounceInUp"
+                animationOut="slideOutRight"
+                backdropTransitionOutTiming={0}
+                onBackdropPress={() => {
+                  setModalCalendario(false);
+                }}
+        isVisible={modalCalendario}
+        onRequestClose={() => {
+          setModalCalendario(false);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: width / 15,
+                marginHorizontal: 20,
+                marginTop: 0,
+                fontWeight: "bold",
+              }}
+            >
+              Selecciona una fecha
+            </Text>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: width / 23,
+                marginHorizontal: 20,
+                marginTop: 5,
+              }}
+            >
+              Estas son las fechas a las que estas inscripto:
+            </Text>
+            <Calendar
+              enableSwipeMonths
+              disabledByDefault={true}
+              disableAllTouchEventsForDisabledDays={true}
+              onDayPress={(day) => {
+               console.log(day);
+              }}
+              theme={{
+                calendarBackground: "white",
+                todayTextColor: "white",
+                monthTextColor: "black",
+                dayTextColor: "black",
+                textMonthFontSize: 20,
+                arrowColor: "black",
+                dotColor: "black",
+                todayTextColor: "#00789d",
+                textDayHeaderFontSize: 20,
+                textSectionTitleColor: "black",
+                textMonthFontWeight: "bold",
+                selectedDayTextColor: "white",
+              }}
+              // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+              // Handler which gets executed when visible month changes in calendar. Default = undefined
+              onMonthChange={(month) => {
+                console.log("month changed", month);
+              }}
+              firstDay={1}
+              markedDates={markedDatesCursosArray}
+            />
+          </View>
+        </View>
+      </Modal>
       <Loading visible={modalLoading}/>
       <ImageBackground
           source={require("../assets/fondo_login.webp")}
@@ -94,7 +171,7 @@ export default function Perfil({ route }) {
       </Text>
 
       <Image
-        source={{ uri: param_usuario.picture ? param_usuario.picture : 'https://espaciotecno.bahia.gob.ar/images/isotipo.jpg' }}
+        source={{ uri: param_usuario.picture ? param_usuario.picture : (param_usuario.genero_persona === 'Masculino' ? 'https://cdn.icon-icons.com/icons2/1736/PNG/512/4043238-avatar-boy-kid-person_113284.png' : 'https://cdn.icon-icons.com/icons2/1736/PNG/512/4043250-avatar-child-girl-kid_113270.png') }}
         style={{
           height: 150,
           width: 150,
@@ -113,10 +190,10 @@ export default function Perfil({ route }) {
     
 
           {cursos.map((item, key)=>{
-        return(<View key={key} style={{width: width-40,
+        return(<TouchableOpacity onPress={() => getComisionesData(item.fechas)} key={key} style={{width: width-40,
           borderRadius: 10,padding: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'white', elevation: 4, marginTop: 10}}>
             <View>
-            <Image source={{ uri: 'https://tecnotest.bahia.gob.ar' + item.picture }}
+            <Image source={{ uri: 'https://tecnotest.bahia.gob.ar' + item.curso.picture }}
         style={{
           height: 60,
           width: 60,
@@ -124,17 +201,17 @@ export default function Perfil({ route }) {
           alignSelf: "center", 
         }} /></View>
         <View><View>
-            <Text style={{fontSize: 14 ,color: 'black', fontWeight: 'bold'}}>{item.nombre}</Text></View>
-            <View><Text style={{fontSize: 12, color: 'black'}}>{item.subtitulo}</Text></View></View>
+            <Text style={{fontSize: 14 ,color: 'black', fontWeight: 'bold'}}>{item.curso.nombre}</Text></View>
+            <View><Text style={{fontSize: 12, color: 'black'}}>{item.curso.subtitulo}</Text></View></View>
             <View style={{backgroundColor: "rgba(0, 0, 0, 0.02)", padding: 2, borderRadius: 8}}>
             <Entypo name={'magnifying-glass'} size={35} color="green" />
             </View>
-          </View>)
+          </TouchableOpacity>)
                })
              }
 
       
-          <TouchableOpacity  onPress={() => Linking.openURL('https://digital.bahia.gob.ar/')}>
+          <TouchableOpacity>
               <Image  source={{ uri: 'https://digital.bahia.gob.ar/espaciotecno/LOGO-APP.gif' }} style={{width: width/1.5, height: 120}} resizeMode="contain" />
       </TouchableOpacity>
     </ScrollView>
@@ -192,5 +269,26 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 22,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    paddingVertical: 24,
+    paddingHorizontal: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });

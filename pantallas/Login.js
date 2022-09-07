@@ -20,8 +20,10 @@ import React from "react";
 
 import { useNavigation } from "@react-navigation/native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-
-import { useState, useEffect } from "react";
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import { useState, useEffect, useRef } from "react";
+import moment from "moment";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import * as Facebook from 'expo-facebook';
 
@@ -73,6 +75,56 @@ export default function Login({ }) {
     setContrasenia(text_contra);
   };
 
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+    
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
+  async function registerForPushNotificationsAsync() {
+    let token;
+    if (Device.isDevice) {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Hubo un error con el token de notificaciones!');
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      console.log(token);
+    } else {
+      alert('Estas usando un emulador, no son validas las notificaciones');
+      return;
+    }
+  
+    if (Platform.OS === 'android') {
+      await Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+  
+    return token;
+  }
+
   async function logIn() {
     try {
       await Facebook.initializeAsync({
@@ -105,6 +157,7 @@ export default function Login({ }) {
         formFace.apellido = data.name.split(' ').slice(1).join(' ');
         formFace.registrado_desde = 1;
         formFace.tipo = 1;
+        formFace.token_push = expoPushToken ? expoPushToken: null;
         console.log(formFace);
         setFacebook(formFace);
         console.log('HASTA ACA LLEGA')
@@ -184,11 +237,13 @@ export default function Login({ }) {
     formData.numero_documento = dni;
     formData.password = contrasenia;
     formData.email = '';
+    formData.token_push = expoPushToken ? expoPushToken: null;
     console.log(formData);
     axiosLoggedOutConfig.post(url_login, formData)
       .then((response) => {
         if (response.status === 200) {
           global.authenticated = true;
+          console.log(response.data);
           console.log(global.authenticated);
           setLoading(false);
           AsyncStorage.setItem("perfil", JSON.stringify(response.data));
@@ -215,22 +270,21 @@ export default function Login({ }) {
     setContrasenia("");
   };
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
 
   const handleBarCodeScanned = ({ data }) => {
-    enviarRegistro(data.split('@')[4]);
+    enviarRegistro(data.split('@')[4], moment(data.split('@')[6], "DD/MM/YYYY").format("YYYY-MM-DD"));
     setModalVisible(false);
   };
 
   const handleBarDocumentoScanned = ({ data }) => {
+    if(data.split('@')[4]) {
     setModalDocumento(false);
     setLoading(true);
     loginDocumento(data);
+  } else {
+    setModalDocumento(false);
+    Alert.alert('Error', 'No es un documento valido.')
+  }
   };
   const loginDocumento = async (data) => {
     const formDoc = {};
@@ -241,11 +295,14 @@ export default function Login({ }) {
     console.log(url_login);
     formDoc.numero_documento = data.split('@')[4];
     formDoc.password = data.split('@')[0];
+    formDoc.genero_persona = data.split('@')[3] === 'M' ? 1 : 2;
+    formDoc.fecha_nacimiento = moment(data.split('@')[6], "DD/MM/YYYY").format("YYYY-MM-DD");
     formDoc.email = null;
     formDoc.nombre = nombre.split(' ')[0];
     formDoc.apellido = apellido;
     formDoc.registrado_desde = 3;
     formDoc.tipo = 1;
+    formDoc.token_push = expoPushToken ? expoPushToken: null;
     console.log(formDoc);
 
     axiosLoggedOutConfig.post(url_login, formDoc)
@@ -311,10 +368,11 @@ export default function Login({ }) {
     );
   };
 
-  const enviarRegistro = async (numerito) => {
+  const enviarRegistro = async (numerito, nacimiento) => {
     const facebookform = facebook;
     const url_login = BASE_URL + "login/";
     facebookform.numero_documento = numerito ? numerito : dni;
+    facebookform.fecha_nacimiento = nacimiento;
     console.log(facebookform);
     axiosLoggedOutConfig.post( BASE_URL + "user/", facebookform).then((result) => {
       if (result.status === 201) {
@@ -349,6 +407,16 @@ export default function Login({ }) {
 
     );
   };
+
+  const abrirDocumento = async () => {
+    const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+      setModalDocumento(status=== 'granted');
+      if (status !== 'granted') {
+        Alert.alert('Error', 'Rechazaste el permiso de camara.');
+      }
+  };
+
   return (
     <ImageBackground
       source={require("../assets/fondo_login.webp")}
@@ -367,13 +435,6 @@ export default function Login({ }) {
           style={{ resizeMode: "stretch", width: width, height: height + 30 }}
         >
             <View style={styles.centeredView}>
-              <Text style={{
-                color: "white",
-                fontSize: width / 20,
-                marginBottom: 20,
-                textAlign: "center",
-                fontFamily: "Roboto",
-              }}>Ingresa tu <Text style={{ fontWeight: 'bold', color: 'white' }}>DNI</Text></Text>
               <View style={[styles.modalView, {
                 backgroundColor: escanea ? "white" : null,
               }]}>
@@ -434,18 +495,12 @@ export default function Login({ }) {
             Alert.alert("Login cancelado", "No escaneaste tu DNI");
             setModalDocumento(!modalDocumento);
           }}
-        ><ImageBackground
+        >
+          <ImageBackground
           source={require("../assets/fondo_login.webp")}
           style={{ resizeMode: "stretch", width: width, height: height + 30 }}
         >
             <View style={styles.centeredView}>
-              <Text style={{
-                color: "white",
-                fontSize: width / 20,
-                marginBottom: 20,
-                textAlign: "center",
-                fontFamily: "Roboto",
-              }}>Escanea tu <Text style={{ fontWeight: 'bold', color: 'white' }}>DNI</Text></Text>
               <View style={[styles.modalView, {
                 backgroundColor: escanea ? "white" : null,
               }]}>
@@ -457,6 +512,14 @@ export default function Login({ }) {
                   style={{ width: 1000, height: 1000 }}
                 />
                 <View style={styles.overlay}>
+                 {/* <Text style={{
+                color: "white",
+                fontSize: width / 20,
+                marginBottom: 20,
+                textAlign: "center",
+                fontFamily: "Roboto",
+                position: "absolute"
+              }}>Escanea tu <Text style={{ fontWeight: 'bold', color: 'white' }}>DNI</Text></Text> */}
                   <View style={styles.unfocusedContainer}></View>
                   <View style={styles.middleContainer}>
                     <View style={styles.unfocusedContainer}></View><View
@@ -490,6 +553,30 @@ export default function Login({ }) {
                     </View><View style={styles.unfocusedContainer}></View></View><View style={styles.unfocusedContainer}></View></View>
 
               </View>
+            </View>
+            <View style={{ position: 'absolute',
+            top: '10%', width: width, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{
+                color: "white",
+                fontSize: width * 0.05,
+                textAlign: "center",
+                justifyContent: 'center',
+                fontFamily: "Roboto",
+              }}>Escanea tu <Text style={{ fontWeight: 'bold', color: 'white' }}>DNI</Text></Text>
+              <Image
+            style={{width: width * 0.6, height: width * 0.3, marginTop: 8}}
+            source={require("../assets/documentovector.webp")}
+          />
+            </View>
+            <View style={{ position: 'absolute',
+            bottom: '10%', width: width, justifyContent: 'center', alignItems: 'center'}}>
+               <Text style={{
+                color: "white",
+                fontSize: width * 0.04,
+                textAlign: "center",
+                justifyContent: 'center',
+                fontFamily: "Roboto",
+              }}>Apunta la camara al <Text style={{ fontWeight: 'bold', color: 'white' }}>QR</Text> en tu documento</Text>
             </View>
           </ImageBackground>
         </Modal>
@@ -563,7 +650,7 @@ export default function Login({ }) {
             paddingVertical: 10,
             paddingHorizontal: 10, marginTop: 10,
             borderRadius: 20, alignItems: 'center'
-          }} onPress={() => setModalDocumento(true)}>
+          }} onPress={() => abrirDocumento()}>
             <Text style={{ color: "#fff", fontSize: width / 28 }}><Entypo name={'credit-card'} size={16} color="white" /> Inicia sesion con tu <Text style={{ fontWeight: 'bold' }}>Documento</Text></Text>
           </TouchableOpacity>
         </KeyboardAvoidingView>

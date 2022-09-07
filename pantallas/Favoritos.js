@@ -77,7 +77,7 @@ const eliminarCursos = (i) => {
       </Text>
 
       <Image
-        source={{ uri: param_usuario.picture ? param_usuario.picture : 'https://espaciotecno.bahia.gob.ar/images/isotipo.jpg' }}
+        source={{ uri: param_usuario.picture ? param_usuario.picture : (param_usuario.genero_persona === 'Masculino' ? 'https://cdn.icon-icons.com/icons2/1736/PNG/512/4043238-avatar-boy-kid-person_113284.png' : 'https://cdn.icon-icons.com/icons2/1736/PNG/512/4043250-avatar-child-girl-kid_113270.png') }}
         style={{
           height: 150,
           width: 150,
@@ -117,7 +117,7 @@ const eliminarCursos = (i) => {
           </TouchableOpacity>
         </View>
           </View> */}
-        
+        {!cursosFavoritos.length && <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 20 }}>No tienes <Text style={{ color: "#a1b94b" }}>cursos favoritos</Text> actualmente</Text>}
         {cursosFavoritos.map((item, key)=>{
         return(<TouchableOpacity onLongPress={() => { eliminarCursos(key)}} key={key} style={{width: width-40,
           borderRadius: 10,padding: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'white', elevation: 4, marginTop: 10}}>
@@ -145,7 +145,7 @@ const eliminarCursos = (i) => {
 
 
       
-          <TouchableOpacity  onPress={() => Linking.openURL('https://digital.bahia.gob.ar/')}>
+          <TouchableOpacity>
               <Image  source={{ uri: 'https://digital.bahia.gob.ar/espaciotecno/LOGO-APP.gif' }} style={{width: width/1.5, height: 120}} resizeMode="contain" />
       </TouchableOpacity>
     </ScrollView>

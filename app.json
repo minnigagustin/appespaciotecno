@@ -6,9 +6,20 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "androidStatusBar": {
-    "barStyle": "dark-content",
-    "backgroundColor": "#FFFFFF"
+      "barStyle": "dark-content",
+      "backgroundColor": "#FFFFFF"
     },
+    "notification": {
+      "icon": "./assets/notificationi.png"
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notificationi.png"
+        }
+      ]
+    ],
     "updates": {
       "enabled": true,
       "checkAutomatically": "ON_LOAD",
@@ -21,13 +32,21 @@
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "ar.gob.bahia.espaciotecno",
-        "versionCode": 8,
-        "permissions": ["CAMERA"]
+      "versionCode": 9,
+      "permissions": [
+        "CAMERA"
+      ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0af6f9de-60ed-4f30-b039-ec7061e2c594"
+      }
     }
   }
 }
