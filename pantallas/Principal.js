@@ -611,7 +611,6 @@ dataFechas.forEach((val) => {
 
                 </View>
                 )}
-                  <View style={{ borderWidth: 0.3, borderColor: "black" }} />
                   {diasdictado.find((cat) => cat.dia_comision.horario_inicio > '12:59:00' && cat.dia_comision.horario_inicio < '23:59:00') && (
                 <View style={{ marginHorizontal: 10 }}>
                   <Text

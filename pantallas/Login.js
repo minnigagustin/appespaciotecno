@@ -135,7 +135,7 @@ export default function Login({ }) {
           permissions: ['public_profile', 'email'],
         });
       if (type === 'success') {
-        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,about,picture.type(large)`);
+        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,about,picture.type(large),birthday`);
         const data = await response.json();
         // Alert.alert('Usted esta logueado!', 'Bienvenido ' + data.name + ' su email es ' + data.email);
         console.log(data);

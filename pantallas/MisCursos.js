@@ -202,7 +202,7 @@ dataFechas.forEach((val) => {
         }} /></View>
         <View><View>
             <Text style={{fontSize: 14 ,color: 'black', fontWeight: 'bold'}}>{item.curso.nombre}</Text></View>
-            <View><Text style={{fontSize: 12, color: 'black'}}>{item.curso.subtitulo}</Text></View></View>
+            <View style={{width: width/1.8}}><Text style={{flex: 1, fontSize: 12, color: 'black', }} numberOfLines = {1}>{item.curso.subtitulo}sss</Text></View></View>
             <View style={{backgroundColor: "rgba(0, 0, 0, 0.02)", padding: 2, borderRadius: 8}}>
             <Entypo name={'magnifying-glass'} size={35} color="green" />
             </View>
