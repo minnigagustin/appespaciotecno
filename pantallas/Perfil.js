@@ -5,7 +5,7 @@ import { FontAwesome } from "react-native-vector-icons";
 import React, { useEffect } from "react";
 
 import Curso from "../componentes/curso";
-
+import * as ImagePicker from 'expo-image-picker';
 import { useState } from "react";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -86,6 +86,55 @@ export default function Perfil({ route }) {
     }
   });
 }, []);
+async function takeAndUploadPhotoAsync() {
+  // Display the camera to the user and wait for them to take a photo or to cancel
+  // the action
+  let result = await ImagePicker.launchCameraAsync({
+    allowsEditing: true,
+    aspect: [4, 3],
+  });
+
+  if (result.cancelled) {
+    return;
+  }
+
+  // ImagePicker saves the taken photo to disk and returns a local URI to it
+  let localUri = result.uri;
+  let filename = localUri.split('/').pop();
+
+  // Infer the type of the image
+  let match = /\.(\w+)$/.exec(filename);
+  let type = match ? `image/${match[1]}` : `image`;
+
+  // Upload the image using the fetch and FormData APIs
+  let formData = new FormData();
+  // Assume "photo" is the name of the form field the server expects
+  formData.append('picture', { uri: localUri, name: filename, type });
+
+  return await axiosLoggedInConfig().patch(
+    BASE_URL + "user/" + perfil.id + '/',
+    formData
+  ).then((resp) => {
+    console.log(resp);
+    setModalLoading(false);
+}).catch((err)=>{
+  console.log(err);
+  setModalLoading(false);
+});
+}
+
+const elegirFoto = () => {
+  Alert.alert(
+    'Cambiar foto de perfil',
+    '',
+    [
+      {text: 'Tomar foto', onPress: () => takeAndUploadPhotoAsync()},
+      {text: 'Elegir de galeria', onPress: () => this._pickImage()},
+    ],
+    {cancelable: true},
+  );
+};
+
 
 var nacimiento=moment(perfil.fecha_nacimiento);
 var hoy=moment();
@@ -102,9 +151,9 @@ var anios= hoy.diff(nacimiento,"years");
         >
       <Text style={styles.header_text}>
         {" "}
-        Bienvenido, {param_usuario.nombre} {param_usuario.apellido}
+        Bienvenido, {param_usuario.nombre}
       </Text>
-
+    <TouchableOpacity onPress={elegirFoto}>
       <Image
         source={{ uri: param_usuario.picture ? param_usuario.picture : (param_usuario.genero_persona === 'Masculino' ? 'https://cdn.icon-icons.com/icons2/1736/PNG/512/4043238-avatar-boy-kid-person_113284.png' : 'https://cdn.icon-icons.com/icons2/1736/PNG/512/4043250-avatar-child-girl-kid_113270.png') }}
         style={{
@@ -116,7 +165,7 @@ var anios= hoy.diff(nacimiento,"years");
           borderRadius: 150,
           alignSelf: "center",
         }}
-      /></ImageBackground>{anios < 18 &&
+      /></TouchableOpacity></ImageBackground>{anios < 18 && !perfil.declaracion_jurada &&
       <TouchableOpacity onPress={() => {
               setTutorVisible(true);
             }} style={{flexDirection: "row",
@@ -163,8 +212,12 @@ var anios= hoy.diff(nacimiento,"years");
         </View>
           </View> */}
 
+          
+          {/* onPress={() => {
+              navigation.navigate("Cate", { screen: "EditarPerfil" })
+            }} */}
 
-          <TouchableOpacity onPress={() => {
+          <TouchableOpacity  onPress={() => {
               Alert.alert('Ups! Estamos trabajando...', 'Proximamente vas a poder editar tu perfil en segundos ;)')
             }} style={{flexDirection: "row",
           backgroundColor: "rgba(0, 0, 0, 0.08)",
@@ -215,7 +268,9 @@ var anios= hoy.diff(nacimiento,"years");
             <FontAwesome name="angle-right" size={18} /></View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={toggleSwitch} style={{flexDirection: "row",
+          <TouchableOpacity onPress={() => {
+              navigation.navigate("Cate", { screen: "Notificaciones" })
+            }} style={{flexDirection: "row",
           backgroundColor: "rgba(0, 0, 0, 0.08)",
           padding: 20,
           width: width-40,
@@ -227,14 +282,8 @@ var anios= hoy.diff(nacimiento,"years");
             <FontAwesome name="bell-o" size={18} />
             <Text style={{marginLeft: 12 ,color: 'black', fontSize: 14, fontWeight: 'bold'}}>Notificaciones</Text></View>
             <View>
-            <Switch
-            style={{margin: -12}}
-            trackColor={{ false: "#767577", true: "#a1b94b" }}
-        thumbColor={isEnabled ? "white" : "#f4f3f4"}
-        ios_backgroundColor="#3e3e3e"
-        onValueChange={toggleSwitch}
-        value={isEnabled}
-      /></View>
+            <FontAwesome name="angle-right" size={18} />
+            </View>
           </TouchableOpacity>
           
 

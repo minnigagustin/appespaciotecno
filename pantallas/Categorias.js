@@ -401,7 +401,7 @@ this.state.dataFechas.forEach((val) => {
                     : "http://espaciotecno.com.ar/img/espacio-tecno-bahia-blanca.png",
                 }}
                 resizeMode="contain"
-                style={{ width: 100, height: 100, borderRadius: 10 }}
+                style={{ width: width/4, height: width/4, borderRadius: 10 }}
               />
               <Text
                 style={{
@@ -724,7 +724,7 @@ this.state.dataFechas.forEach((val) => {
             />
             <View style={{ display: this.state.minilab ? "flex" : "none" }}>
               {this.state.categorias
-                .filter((cat) => cat.categoria.id === 3)
+                .filter((cat) => cat.categoria.id === 5)
                 .map((item, i) => {
                   return (
                     <CourseList
@@ -748,7 +748,7 @@ this.state.dataFechas.forEach((val) => {
             />
             <View style={{ display: this.state.ciencias ? "flex" : "none" }}>
               {this.state.categorias
-                .filter((cat) => cat.categoria.id ===  4)
+                .filter((cat) => cat.categoria.id ===  3)
                 .map((item, i) => {
                   return (
                     <CourseList
@@ -772,7 +772,7 @@ this.state.dataFechas.forEach((val) => {
             />
             <View style={{ display: this.state.sonidos ? "flex" : "none" }}>
               {this.state.categorias
-                .filter((cat) => cat.categoria.id === 5)
+                .filter((cat) => cat.categoria.id === 4)
                 .map((item, i) => {
                   return (
                     <CourseList

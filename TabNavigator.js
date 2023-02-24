@@ -7,6 +7,7 @@ import Qr from "./pantallas/Qr";
 import Perfil from "./pantallas/Perfil";
 import EditarPerfil from "./pantallas/EditarPerfil";
 import Login from "./pantallas/Login";
+import prueba from "./pantallas/prueba";
 import Categorias from "./pantallas/Categorias";
 import Capacitar from "./pantallas/Capacitar";
 import Emprender from "./pantallas/Emprender";
@@ -14,6 +15,7 @@ import Registro from "./pantallas/Registro";
 import Splash from "./pantallas/Splash";
 import PantallaToken from "./pantallas/PantallaToken";
 import MisCursos from "./pantallas/MisCursos";
+import Notificaciones from "./pantallas/Notificaciones";
 import Favoritos from "./pantallas/Favoritos";
 import Recuperar from "./pantallas/Recuperar";
 import { FontAwesome } from "react-native-vector-icons";
@@ -58,6 +60,8 @@ function InicioStackScreen() {
       <InicioStack.Screen name="Mi Perfil" component={Home} />
       <InicioStack.Screen name="Mis Cursos" component={Perfil} />
       <InicioStack.Screen name="MisCursos" component={MisCursos} />
+      <InicioStack.Screen name="EditarPerfil" component={EditarPerfil} />
+      <InicioStack.Screen name="Notificaciones" component={Notificaciones} />
       <InicioStack.Screen name="MisFavoritos" component={Favoritos} />
       <InicioStack.Screen name="Categorias" component={Categorias} />
       <InicioStack.Screen name="Capacitar" component={Capacitar} />
@@ -72,7 +76,14 @@ function TabNavigator() {
       initialRouteName="Principal"
       screenOptions={{
         drawerPosition: "left",
+        drawerStyle: {
+          backgroundColor: '#751c61',
+        },
+        drawerActiveTintColor : 'white',
+        drawerInactiveTintColor: 'white',
+        drawerActiveBackgroundColor: '#ffffff26'
       }}
+      
     >
       <Tab.Screen
         name="Principal"

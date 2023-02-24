@@ -38,7 +38,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "ar.gob.bahia.espaciotecno",
-      "versionCode": 9,
+      "versionCode": 10,
       "permissions": [
         "CAMERA"
       ]

@@ -6,11 +6,27 @@ import { Calendar, LocaleConfig } from "react-native-calendars";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { TextInput } from "react-native-paper";
+import { axiosLoggedInConfig, BASE_URL } from "../api";
 const { width, height } = Dimensions.get("window");
 
 export const ModalTutor = (props) => {
   const navigation = useNavigation();
   const [favoritos, setFavoritos] = useState(false);
+  const [email, setEmail] = useState("");
+
+  const resendEmail = () => {
+    props.salir(false);
+    ToastAndroid.show('Se envio un email a su tutor.', ToastAndroid.SHORT);
+    const curso = BASE_URL + "resenddeclaracionjurada/";
+    axiosLoggedInConfig().post(curso, {email_padre: email}).then((res) => {
+      console.log(res.data);
+      setModalHorarios(false);
+                setModalConfirmado(true); 
+
+  }).catch((err)=>{
+    Alert.alert('Ey! Ya estas inscripto', 'Ups, no te pudimos volver a inscribir ya que te inscribiste anteriormente')
+  })
+  };
 
   const addFavorite = () => {
     const item = props.data;
@@ -59,15 +75,15 @@ export const ModalTutor = (props) => {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text  style={{fontSize: width * 0.04}}>Debes ingresar el <Text style={{fontWeight: 'bold'}}>email de tu madre/padre o tutor</Text> para validar tus datos.</Text>
-              <TextInput placeholder="Email | tutor@bahia.gob.ar..." mode="outline" style={{width: width * 0.8, marginVertical: 8}} activeUnderlineColor={'#017185'}/>
+              <TextInput placeholder="Email | tutor@bahia.gob.ar..." mode="outline" value={email} onChangeText={(text_email) => setEmail(text_email)}  style={{width: width * 0.8, marginVertical: 8}} activeUnderlineColor={'#017185'}/>
               <TouchableOpacity
+              onPress={() => {resendEmail()}}
               style={[
                 styles.ingresar_style,
                 {
                   backgroundColor: "#017185" ,
                 },
               ]}
-              onPress={() => {  ToastAndroid.show('Se envio un email a su tutor.', ToastAndroid.SHORT); props.salir(false) }}
             >
               <Text style={styles.ingresar_text}>INGRESAR</Text>
             </TouchableOpacity>

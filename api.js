@@ -2,7 +2,7 @@
 import axios from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-export const BASE_URL = "https://tecnotest.bahia.gob.ar/";
+export const BASE_URL = "https://espaciotecnoapi.bahia.gob.ar/";
 export const axiosLoggedInConfig = () => {
     const axiosService = axios.create({
         headers: {
@@ -54,7 +54,7 @@ export const axiosLoggedInConfig = () => {
 export const axiosLoggedInAndFileUploadConfig = () => {
     const axiosService = axios.create({
         headers: {
-            Authorization: `Bearer ${localStorage.getItem('lgac')}`,
+            Authorization: `Bearer ${AsyncStorage.getItem('lgac')}`,
             'Content-Type': 'multipart/form-data'
         }
     });

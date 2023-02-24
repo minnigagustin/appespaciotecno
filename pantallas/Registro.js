@@ -117,7 +117,8 @@ export default function Registro() {
     formDoc.nombre = nombre;
     formDoc.apellido = apellido;
     formDoc.registrado_desde = 2;
-    formDoc.tipo = 1;
+    formDoc.tipo = 2;
+    formDoc.email_padre = null;
     console.log(formDoc);
     axiosLoggedOutConfig.post( BASE_URL + "user/", formDoc).then((result) => {
       if (result.status === 201) {

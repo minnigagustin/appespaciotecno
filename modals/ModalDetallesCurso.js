@@ -67,7 +67,7 @@ export const ModalDetallesCurso = (props) => {
               <Image
                 source={{
                   uri: props.data.picture
-                    ? 'https://tecnotest.bahia.gob.ar/' + props.data.picture
+                    ? 'https://espaciotecnoapi.bahia.gob.ar/' + props.data.picture
                     : "http://espaciotecno.com.ar/img/espacio-tecno-bahia-blanca.png",
                 }}
                 style={{ width: width/4, height: width/4, borderRadius: 10 }}

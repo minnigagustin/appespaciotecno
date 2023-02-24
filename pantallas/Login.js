@@ -156,7 +156,7 @@ export default function Login({ }) {
         formFace.nombre = data.name.split(' ')[0];
         formFace.apellido = data.name.split(' ').slice(1).join(' ');
         formFace.registrado_desde = 1;
-        formFace.tipo = 1;
+        formFace.tipo = 2;
         formFace.token_push = expoPushToken ? expoPushToken: null;
         console.log(formFace);
         setFacebook(formFace);
@@ -256,9 +256,9 @@ export default function Login({ }) {
         }
       })
 
-      .catch(function () {
+      .catch(function (error) {
         // handle error
-
+        console.log(error)
         Alert.alert("ALERTA!", "DNI O CONTRASEÑA INCORRECTA");
 
         setLoading(false);
@@ -301,9 +301,8 @@ export default function Login({ }) {
     formDoc.nombre = nombre.split(' ')[0];
     formDoc.apellido = apellido;
     formDoc.registrado_desde = 3;
-    formDoc.tipo = 1;
+    formDoc.tipo = 2;
     formDoc.token_push = expoPushToken ? expoPushToken: null;
-    console.log(formDoc);
 
     axiosLoggedOutConfig.post(url_login, formDoc)
       .then((response) => {
@@ -332,7 +331,9 @@ export default function Login({ }) {
   const registraDocumento = async (data) => {
     const dataDoc = data;
     dataDoc.email = dataDoc.numero_documento + '@documento.com';
+    dataDoc.email_padre = null;
     const url_login = BASE_URL + "login/";
+    console.log(dataDoc);
     axiosLoggedOutConfig.post( BASE_URL + "user/", dataDoc).then((result) => {
       if (result.status === 201) {
         dataDoc.email = null;
@@ -360,8 +361,9 @@ export default function Login({ }) {
 
           });
       }
-    }).catch(function () {
+    }).catch(function (err) {
       setLoading(false);
+      console.log(err)
       Alert.alert('Error', 'Este usuario ya tiene una cuenta aqui.')
     }
 
@@ -373,6 +375,7 @@ export default function Login({ }) {
     const url_login = BASE_URL + "login/";
     facebookform.numero_documento = numerito ? numerito : dni;
     facebookform.fecha_nacimiento = nacimiento;
+    facebookform.email_padre = null;
     console.log(facebookform);
     axiosLoggedOutConfig.post( BASE_URL + "user/", facebookform).then((result) => {
       if (result.status === 201) {

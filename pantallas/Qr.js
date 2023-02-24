@@ -281,7 +281,7 @@ dataFechas.forEach((val) => {
                       setCatg(item.id);
                       setData(item);
                     }}
-                    img={'https://tecnotest.bahia.gob.ar/' + item.comision.curso.picture}
+                    img={'https://espaciotecnoapi.bahia.gob.ar/' + item.comision.curso.picture}
                     title={item.comision.curso.nombre}
                     categoria={item.comision.curso.categoria}
                     bg="#fdddf3"
